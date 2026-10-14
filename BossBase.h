@@ -6,37 +6,38 @@ public:
 
 	virtual ~BossBase() = default;
 
-	//ƒZƒbƒ^[
+	//ã‚»ãƒƒã‚¿ãƒ¼
 	void SetTexture(KdTexture* a_pTex) { m_pTex = a_pTex; }
 	
-	//ƒQƒbƒ^[
-	
+	//ã‚²ãƒƒã‚¿ãƒ¼
+	Math::Vector2 GetPos(){return m_pos;}
+	Math::Vector2 GetMove(){return m_move;}
+	bool GetAlive(){return m_bAlive;}
+	float GetAngle(){return m_angle;}
 
 protected:
-	//•K{ƒˆ‰¼‘zŠÖ”
+	//å¿…é ˆç´”ç²‹ä»®æƒ³é–¢æ•°
 	virtual void Update() = 0;
 	virtual void Move() = 0;
 	virtual void MatrixUpdate() = 0;
 	virtual void Draw() = 0;
 	virtual void Init() = 0;
 
-	//ó‘Ô
+	//çŠ¶æ…‹
 	bool m_bAlive;
 	float m_xScale;
 	float m_yScale;
 	float m_angle;
 	KdTexture* m_pTex;
 
-	//À•W
+	//åº§æ¨™
 	Math::Vector2 m_pos;
 	Math::Vector2 m_move;
 	Math::Vector2 m_draw;
 
-	//s—ñ
+	//è¡Œåˆ—
 	Math::Matrix m_mat;
 	Math::Matrix m_tMat;
 	Math::Matrix m_sMat;
 	Math::Matrix m_rMat;
-
-	S_Boss m_boss;
 };
