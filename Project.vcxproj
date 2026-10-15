@@ -164,6 +164,7 @@
     <ClInclude Include="Src\Boss\Boss.h" />
     <ClInclude Include="Src\Boss\BossBase.h" />
     <ClInclude Include="Src\Boss\BossConstants.h" />
+    <ClInclude Include="Src\Constans\Constants.h" />
     <ClInclude Include="Src\Enemy\enemy.h" />
     <ClInclude Include="Src\Map\IntParseResult.h" />
     <ClInclude Include="Src\Map\Map.h" />
