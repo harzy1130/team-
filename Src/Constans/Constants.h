@@ -42,7 +42,7 @@ struct S_Boss
 };
 static const float MOVE_SPEED = 10.0f;
 
-//HitBase’è”==================
+//HitBase’è”=================================
 struct S_HitBase
 {
 	RECT rect;
