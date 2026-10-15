@@ -9,7 +9,6 @@ public:
 	void Draw();
 	void Update();
 	void Move();
-	void MatrixUpdate();
 	void Init();
 
 private:
