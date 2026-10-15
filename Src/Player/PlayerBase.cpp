@@ -56,14 +56,14 @@ float C_PlayerBase::DefCalc(float a_DMG, float a_DEF, float a_penet)
 void C_PlayerBase::HPRegeneCalc()
 {
 	//ˆê•b‚Éˆê‰ñ‰ñ•œ
-	m_HPRegeneCT--;
-	if (m_HPRegeneCT <= 0) {
-		m_HPRegeneCT = 0;
+	m_HPRegeneCD--;
+	if (m_HPRegeneCD <= 0) {
+		m_HPRegeneCD = 0;
 	}
-	if (m_HPRegeneCT > 0)return;
+	if (m_HPRegeneCD > 0)return;
 
 	m_HP += m_HPRegene;
-	m_HPRegeneCT = 60;
+	m_HPRegeneCD = 60;
 	return;
 }
 
