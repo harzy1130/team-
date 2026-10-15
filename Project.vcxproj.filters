@@ -55,6 +55,9 @@
     <Filter Include="Src\Enemy">
       <UniqueIdentifier>{6640927a-e25d-4be3-b5eb-21cf6bdcb8a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Constants">
+      <UniqueIdentifier>{a90a0268-78e7-4166-9526-de47fb28514f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -176,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="Src\Map\StringUtility.h">
       <Filter>Src\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Constans\Constants.h">
+      <Filter>Src\Constants</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
