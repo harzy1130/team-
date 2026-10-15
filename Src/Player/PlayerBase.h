@@ -11,7 +11,7 @@ public:
 
 	//ゲッター
 	//生存
-	virtual bool getAFlg()final { return m_Aflg; }
+	virtual bool getAFlg()final { return m_bAlive; }
 	//画像サイズ
 	virtual float getTexSize()final { return m_TexSize; }
 	//移動
@@ -27,12 +27,12 @@ public:
 	//特殊ステータス
 	virtual float getLifStl()final { return m_LifStl; }
 	virtual float getMS()final { return m_MSUP; }
-	virtual float getCrtDmg()final { return m_CrtDmg; }
+	virtual float getCrtDmg()final { return m_CrtDmgP; }
 	virtual float getCrtRate()final { return m_CrtRate; }
 
 	//セッター
 	//生存
-	virtual void setAFlg(bool a_flg)final { m_Aflg = a_flg; }
+	virtual void setAFlg(bool a_flg)final { m_bAlive = a_flg; }
 	//画像
 	virtual void setTex(KdTexture* a_tex)final { m_pTex = a_tex; }
 	//移動
@@ -52,13 +52,13 @@ public:
 	virtual void setLifStl(float a_LS)final { m_LifStl = a_LS; }
 	virtual void setMS(float a_MS)final { m_MSUP = a_MS; }
 	virtual void setHPRegene(float a_HPR)final { m_HPRegene = a_HPR; }
-	virtual void setCrtDmg(float a_CD)final { m_CrtDmg = a_CD; }
+	virtual void setCrtDmg(float a_CD)final { m_CrtDmgP = a_CD; }
 	virtual void setCrtRate(float a_CR)final { m_CrtRate = a_CR; }
 
 
 protected:
 	//生存
-	bool m_Aflg;
+	bool m_bAlive;
 
 	//移動用
 	Math::Vector2 m_pos;
@@ -87,11 +87,11 @@ protected:
 	float m_LifStl;		//ライフスティール
 	float m_MSUP;		//移動速度
 	float m_HPRegene;	//ライフリジェネ
-	float m_CrtDmg;		//クリティカルダメージ
+	float m_CrtDmgP;		//クリティカルダメージ
 	float m_CrtRate;	//クリティカル率
 
 	//タイマー変数
-	float m_HPRegeneCT=0;
+	float m_HPRegeneCD=0;
 
 	//計算関数
 	virtual float DefCalc(float a_DMG, float a_DEF,float a_penet)final;
@@ -100,7 +100,7 @@ protected:
 	virtual float MoveSpeedCalc(float a_speed, float a_MS)final;
 
 	//操作
-	virtual void PlayerInput()final;
+	virtual void PlayerInput();
 
 	//行列合成
 	virtual void MatCalc()final;
