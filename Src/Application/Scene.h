@@ -1,14 +1,22 @@
 #pragma once
+#include"Boss/Boss.h"
+#include"Enemy/enemy.h"
+#include"Player/PlayerBase.h"
+#include"Map/Map.h"
 
 class Scene
 {
 private:
+	KdTexture m_playerTex;
+	KdTexture m_bossTex;
+	KdTexture m_chipTex;
+	KdTexture m_backTex;
 
-	// テクスチャ ・・・ 画像データ
-	KdTexture charaTex;
+	C_PlayerBase m_player;
+	Boss m_boss;
+	Enemy m_enemy;
+	Map m_map;
 
-	// 行列 ・・・ 座標などの情報
-	Math::Matrix matrix;
 
 public:
 
@@ -40,3 +48,4 @@ public:
 };
 
 #define SCENE Scene::GetInstance()
+

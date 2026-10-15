@@ -3,25 +3,51 @@
 
 void Scene::Draw2D()
 {
-	// •¶š—ñ•\¦
-	SHADER.m_spriteShader.DrawString(0, 0, "Hello World", Math::Vector4(1, 1, 0, 1));
+	SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(0, 0, 0));
+	SHADER.m_spriteShader.DrawTex(&m_backTex, Math::Rectangle(0, 0, 1280, 720), 1.0f);
+	m_map.Draw();
+	m_enemy.Draw();
+	m_boss.Draw();
+	m_player.Draw();
 }
 
 void Scene::Update()
 {
-	
+	m_map.Update();
+	m_enemy.Update();
+	m_boss.Update();
+	m_player.Update();
 }
 
 void Scene::Init()
 {
-	// ‰æ‘œ‚Ì“Ç‚İ‚İˆ—
-	charaTex.Load("player.png");
+	m_backTex.Load("Texture/back1.png");
+	m_chipTex.Load("Texture/MapChip.png");
+	m_bossTex.Load("Texture/boss.png");
+	m_playerTex.Load("Texture/Chara.png");
+	m_map.SetTexture(&m_chipTex);
+	m_boss.SetTexture(&m_bossTex);
+	m_player.setTex(&m_playerTex);
+
+	if (!m_enemy.Init(0.0f, 0.0f, -200.0f, 200.0f))
+	{
+		OutputDebugStringA("Enemy texture load failed: Texture/Chara.png\n");
+	}
+	m_enemy.SetHp(100);
+	m_enemy.SetAtk(10);
+	m_enemy.SetMoveSpeed(2.0f);
+	m_map.Load();
+	m_map.Create();
+	m_player.Init();
+	m_boss.Init();
 }
 
 void Scene::Release()
 {
-	// ‰æ‘œ‚Ì‰ğ•úˆ—
-	charaTex.Release();
+	m_backTex.Release();
+	m_chipTex.Release();
+	m_bossTex.Release();
+	m_playerTex.Release();
 }
 
 void Scene::ImGuiUpdate()
