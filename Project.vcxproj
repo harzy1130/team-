@@ -165,7 +165,9 @@
     <ClInclude Include="Src\Boss\BossBase.h" />
     <ClInclude Include="Src\Boss\BossConstants.h" />
     <ClInclude Include="Src\Constans\Constants.h" />
-    <ClInclude Include="Src\Enemy\enemy.h" />
+    <ClInclude Include="Src\Enemy\Enemy1.h" />
+    <ClInclude Include="Src\Enemy\EnemyBase.h" />
+    <ClInclude Include="Src\hit\HitBase.h" />
     <ClInclude Include="Src\Map\IntParseResult.h" />
     <ClInclude Include="Src\Map\Map.h" />
     <ClInclude Include="Src\Map\MapConstants.h" />
@@ -198,7 +200,9 @@
     <ClCompile Include="Src\Application\main.cpp" />
     <ClCompile Include="Src\Boss\Boss.cpp" />
     <ClCompile Include="Src\Boss\BossBase.cpp" />
-    <ClCompile Include="Src\Enemy\enemy.cpp" />
+    <ClCompile Include="Src\Enemy\Enemy1.cpp" />
+    <ClCompile Include="Src\Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Src\hit\HitBase.cpp" />
     <ClCompile Include="Src\Map\Map.cpp" />
     <ClCompile Include="Src\Player\PlayerBase.cpp" />
     <ClCompile Include="Src\System\Audio\KdAudio.cpp" />

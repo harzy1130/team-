@@ -1,6 +1,6 @@
 #pragma once
 #include"Boss/Boss.h"
-#include"Enemy/enemy.h"
+#include"Enemy/Enemy1.h"
 #include"Player/PlayerBase.h"
 #include"Map/Map.h"
 
@@ -14,7 +14,7 @@ private:
 
 	C_PlayerBase m_player;
 	Boss m_boss;
-	Enemy m_enemy;
+	Enemy1 m_enemy;
 	Map m_map;
 
 

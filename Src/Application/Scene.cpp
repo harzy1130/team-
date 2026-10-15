@@ -29,7 +29,7 @@ void Scene::Init()
 	m_boss.SetTexture(&m_bossTex);
 	m_player.setTex(&m_playerTex);
 
-	if (!m_enemy.Init(0.0f, 0.0f, -200.0f, 200.0f))
+	if (!m_enemy.Init())
 	{
 		OutputDebugStringA("Enemy texture load failed: Texture/Chara.png\n");
 	}

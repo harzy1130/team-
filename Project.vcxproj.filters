@@ -58,6 +58,9 @@
     <Filter Include="Src\Constants">
       <UniqueIdentifier>{a90a0268-78e7-4166-9526-de47fb28514f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\hit">
+      <UniqueIdentifier>{755f7420-8ad5-493d-a134-7602654f7cde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -153,9 +156,6 @@
     <ClInclude Include="Src\Application\Scene.h">
       <Filter>Src\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Enemy\enemy.h">
-      <Filter>Src\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Boss\Boss.h">
       <Filter>Src\Boss</Filter>
     </ClInclude>
@@ -182,6 +182,15 @@
     </ClInclude>
     <ClInclude Include="Src\Constans\Constants.h">
       <Filter>Src\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Enemy\Enemy1.h">
+      <Filter>Src\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Enemy\EnemyBase.h">
+      <Filter>Src\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\hit\HitBase.h">
+      <Filter>Src\hit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,9 +257,6 @@
     <ClCompile Include="Src\Application\Scene.cpp">
       <Filter>Src\Application</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Enemy\enemy.cpp">
-      <Filter>Src\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Boss\Boss.cpp">
       <Filter>Src\Boss</Filter>
     </ClCompile>
@@ -262,6 +268,15 @@
     </ClCompile>
     <ClCompile Include="Src\Map\Map.cpp">
       <Filter>Src\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Enemy\Enemy1.cpp">
+      <Filter>Src\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Enemy\EnemyBase.cpp">
+      <Filter>Src\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\hit\HitBase.cpp">
+      <Filter>Src\hit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

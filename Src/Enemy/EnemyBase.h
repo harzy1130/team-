@@ -1,8 +1,8 @@
 #pragma once
-#include "../hit/HitBase.h"
+#include "hit/HitBase.h"
 
 // Horizontal patrol enemy; shared collision data comes from HitBase.
-class EnemyBase : public HitBase
+class EnemyBase  : public HitBase
 {
 public:
     EnemyBase();
