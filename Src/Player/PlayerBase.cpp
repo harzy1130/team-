@@ -3,7 +3,7 @@
 
 void C_PlayerBase::Init()
 {
-	m_Aflg = true;
+	m_bAlive = true;
 	m_pos = { 0,0 };
 	m_speed = 10;
 	m_jumpFlg = false;
@@ -17,7 +17,7 @@ void C_PlayerBase::Init()
 	m_LifStl = 0;
 	m_MSUP = 0;
 	m_HPRegene = 0;
-	m_CrtDmg = 150;
+	m_CrtDmgP = 150;
 	m_CrtRate = 0;
 }
 
@@ -40,7 +40,7 @@ void C_PlayerBase::Update()
 
 void C_PlayerBase::Draw()
 {
-	if (!m_Aflg)return;
+	if (!m_bAlive)return;
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(
 		m_pTex, Math::Rectangle(0, 0, 64, 64), 1.0f);
@@ -88,13 +88,13 @@ float C_PlayerBase::MoveSpeedCalc(float a_speed, float a_MS)
 //ÉLÅ[ëÄçÏ
 void C_PlayerBase::PlayerInput()
 {
-	if (!m_Aflg)return;
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	if (!m_bAlive)return;
+	if ((GetAsyncKeyState(VK_RIGHT) & 0x8000)||(GetAsyncKeyState('D') & 0x8000))
 	{
 		m_move.x += 8.0f;
 		m_scaleX = 1;
 	}
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	if ((GetAsyncKeyState(VK_LEFT) & 0x8000) || (GetAsyncKeyState('A') & 0x8000))
 	{
 		m_move.x -= 8.0f;
 		m_scaleX = -1;

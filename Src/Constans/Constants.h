@@ -54,3 +54,7 @@ struct S_HitBase
 	Math::Vector2 Move;
 	float radius;
 };
+
+//ƒJƒƒ‰ˆÚ“®’è”==============================
+
+static const float CAMERA_SPEED = 0.5f;

@@ -13,10 +13,12 @@ void Scene::Draw2D()
 
 void Scene::Update()
 {
+	m_camera.Update();
 	m_map.Update();
 	m_enemy.Update();
 	m_boss.Update();
 	m_player.Update();
+	m_camera.SetTurget(m_player.getPos());
 }
 
 void Scene::Init()
@@ -40,6 +42,7 @@ void Scene::Init()
 	m_map.Create();
 	m_player.Init();
 	m_boss.Init();
+	m_camera.Init();
 }
 
 void Scene::Release()
@@ -52,7 +55,6 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-	return;
 
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);
@@ -61,6 +63,8 @@ void Scene::ImGuiUpdate()
 	if (ImGui::Begin("Debug Window"))
 	{
 		ImGui::Text("FPS : %d", APP.m_fps);
+		ImGui::Text("%.3f", m_camera.GetPos().x);
 	}
 	ImGui::End();
+	return;
 }
