@@ -3,6 +3,7 @@
 #include"Enemy/Enemy1.h"
 #include"Player/PlayerBase.h"
 #include"Map/Map.h"
+#include"Camera/Camera.h"
 
 class Scene
 {
@@ -16,7 +17,7 @@ private:
 	Boss m_boss;
 	Enemy1 m_enemy;
 	Map m_map;
-
+	C_Camera m_camera;
 
 public:
 
