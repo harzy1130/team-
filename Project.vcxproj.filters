@@ -58,11 +58,11 @@
     <Filter Include="Src\Constants">
       <UniqueIdentifier>{a90a0268-78e7-4166-9526-de47fb28514f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\hit">
-      <UniqueIdentifier>{755f7420-8ad5-493d-a134-7602654f7cde}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Camera">
       <UniqueIdentifier>{ca3b29fd-0d6a-48cd-91b9-aa862c354a6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Hit">
+      <UniqueIdentifier>{755f7420-8ad5-493d-a134-7602654f7cde}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -187,13 +187,13 @@
       <Filter>Src\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Src\hit\HitBase.h">
-      <Filter>Src\hit</Filter>
+      <Filter>Src\Hit</Filter>
     </ClInclude>
     <ClInclude Include="Src\Camera\Camera.h">
       <Filter>Src\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Src\hit\hit.h">
-      <Filter>Src\hit</Filter>
+    <ClInclude Include="Src\hit\HIt.h">
+      <Filter>Src\Hit</Filter>
     </ClInclude>
     <ClInclude Include="Src\Map\MapConstants.h">
       <Filter>Src\Map</Filter>
@@ -282,13 +282,13 @@
       <Filter>Src\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Src\hit\HitBase.cpp">
-      <Filter>Src\hit</Filter>
+      <Filter>Src\Hit</Filter>
     </ClCompile>
     <ClCompile Include="Src\Camera\Camera.cpp">
       <Filter>Src\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Src\hit\hit.cpp">
-      <Filter>Src\hit</Filter>
+    <ClCompile Include="Src\hit\HIt.cpp">
+      <Filter>Src\Hit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -329,8 +329,14 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Src\GUI"><UniqueIdentifier>{a2855877-aec3-4f05-aaeb-6e90ca6542ae}</UniqueIdentifier></Filter>
-    <ClInclude Include="Src\GUI\CharacterGUI.h"><Filter>Src\GUI</Filter></ClInclude>
-    <ClCompile Include="Src\GUI\CharacterGUI.cpp"><Filter>Src\GUI</Filter></ClCompile>
+    <Filter Include="Src\GUI">
+      <UniqueIdentifier>{a2855877-aec3-4f05-aaeb-6e90ca6542ae}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="Src\GUI\CharacterGUI.h">
+      <Filter>Src\GUI</Filter>
+    </ClInclude>
+    <ClCompile Include="Src\GUI\CharacterGUI.cpp">
+      <Filter>Src\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
