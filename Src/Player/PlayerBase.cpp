@@ -3,6 +3,7 @@
 
 void C_PlayerBase::Init()
 {
+	//à⁄ìÆ
 	m_bAlive = true;
 	m_pos = { 0,0 };
 	m_speed = 10;
@@ -19,6 +20,9 @@ void C_PlayerBase::Init()
 	m_HPRegene = 0;
 	m_CrtDmgP = 150;
 	m_CrtRate = 0;
+	//âÊëú
+	m_TexSize = 64;
+	m_TexRadius = 32;
 }
 
 void C_PlayerBase::Update()
@@ -27,6 +31,12 @@ void C_PlayerBase::Update()
 	m_move.y -= m_Gravity;
 
 	PlayerInput();
+
+	//ìñÇΩÇËîªíË
+	HitBaseSet();
+
+
+	HitBaseResult();
 
 	//ç¿ïWämíË
 	m_pos.x += m_move.x;
@@ -108,6 +118,27 @@ void C_PlayerBase::PlayerInput()
 			m_move.y = m_JumpPower;
 		}
 	}
+}
+
+void C_PlayerBase::HitBaseResult()
+{
+	m_pos = m_hitBase.pos;
+	m_move = m_hitBase.Move;
+}
+
+void C_PlayerBase::HitBaseSet()
+{
+	m_hitBase.pos = m_pos;
+	m_hitBase.Move = m_move;
+	m_hitBase.hitTop = false;
+	m_hitBase.hitBottom = false;
+	m_hitBase.hitLeft = false;
+	m_hitBase.hitRight = false;
+	m_hitBase.rect.top = m_pos.y + m_TexRadius;
+	m_hitBase.rect.bottom = m_pos.y - m_TexRadius;
+	m_hitBase.hitRight = m_pos.x + m_TexRadius;
+	m_hitBase.hitLeft = m_pos.x - m_TexRadius;
+	m_hitBase.radius = m_TexRadius;
 }
 
 //çsóÒçáê¨
