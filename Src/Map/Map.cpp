@@ -125,6 +125,12 @@ bool Map::GetCollisionFlg(int h, int w)
 	return m_chip[h][w].collisionFlg;
 }
 
+Math::Vector2 Map::GetPosition(int h, int w)
+{
+	if (h >= MAP_HEIGHT || w >= MAP_WIDTH)return Math::Vector2{ 0,0 };
+	return m_chip[h][w].pos;
+}
+
 std::pair<int, int> Map::GetIndex(Math::Vector2 a_pos)
 {
 	std::pair<int, int> index;

@@ -10,8 +10,8 @@ const float LEFT_EDGE     = -SCREEN_WIDTH  / 2;
 //マップ定数====================================
 static const int  MAP_HEIGHT  = 12;
 static const int  MAP_WIDTH   = 32;
-const int		  CTEX_SIZE   = 64;
-const int		  CHIP_RADIUS = CHIP_RADIUS / 2;
+const int		  CHIP_SIZE   = 64;
+const int		  CHIP_RADIUS = CHIP_SIZE / 2;
 const std::string NEXT_ROW    = "NEXT_ROW";
 
 struct S_ChipData
@@ -65,10 +65,10 @@ struct S_HitBase
 	bool hitLeft;
 	bool hitRight;
 	Math::Vector2 pos;
-	Math::Vector2 Move;
+	Math::Vector2 move;
 	float radius;
 };
 
 //カメラ移動定数==============================
 
-static const float CAMERA_SPEED = 0.5f;
+static const float CAMERA_SPEED = 0.3f;
