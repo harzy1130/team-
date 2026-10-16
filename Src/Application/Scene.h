@@ -4,6 +4,7 @@
 #include"Player/PlayerBase.h"
 #include"Map/Map.h"
 #include"Camera/Camera.h"
+#include"hit/hit.h"
 
 class Scene
 {
@@ -18,6 +19,7 @@ private:
 	Enemy1 m_enemy;
 	Map m_map;
 	C_Camera m_camera;
+	C_Hit m_hit;
 
 public:
 

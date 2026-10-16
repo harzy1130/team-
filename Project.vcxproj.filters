@@ -165,9 +165,6 @@
     <ClInclude Include="Src\Boss\BossBase.h">
       <Filter>Src\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Boss\BossConstants.h">
-      <Filter>Src\Boss</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Player\PlayerBase.h">
       <Filter>Src\Player</Filter>
     </ClInclude>
@@ -175,9 +172,6 @@
       <Filter>Src\Map</Filter>
     </ClInclude>
     <ClInclude Include="Src\Map\Map.h">
-      <Filter>Src\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Map\MapConstants.h">
       <Filter>Src\Map</Filter>
     </ClInclude>
     <ClInclude Include="Src\Map\StringUtility.h">
@@ -197,6 +191,12 @@
     </ClInclude>
     <ClInclude Include="Src\Camera\Camera.h">
       <Filter>Src\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\hit\hit.h">
+      <Filter>Src\hit</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Map\MapConstants.h">
+      <Filter>Src\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="Src\Camera\Camera.cpp">
       <Filter>Src\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\hit\hit.cpp">
+      <Filter>Src\hit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
