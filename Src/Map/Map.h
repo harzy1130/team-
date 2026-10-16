@@ -1,5 +1,6 @@
 #pragma once
 #include"MapConstants.h"
+#include<utility>
 
 struct ChipData
 {
@@ -14,7 +15,7 @@ class Map
 public:
 	Map() {};
 	~Map() {};
-
+	
 	void Init();
 	void Update();
 	void Draw(Math::Vector2 a_pos);
@@ -24,7 +25,8 @@ public:
 	void SetTexture(KdTexture* a_pTex) { m_pTex = a_pTex; }
 
 	Math::Vector2 GetPosition(int h, int w);
-	int GetStageNum() { return stageNum; }
+	std::pair<int, int> GetIndex(Math::Vector2 a_pos);
+	std::pair<int, int> GetIdxMaxMin() { return std::make_pair(MapWidth - 1, MapHeight - 1); }
 private:
 
 	KdTexture*    m_pTex;

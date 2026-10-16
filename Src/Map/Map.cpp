@@ -117,11 +117,11 @@ void Map::Load()
 	}
 }
 
-Math::Vector2 Map::GetPosition(int h, int w)
+std::pair<int, int> Map::GetIndex(Math::Vector2 a_pos)
 {
-	Math::Vector2 pos;
-	pos.x = LeftEdge + w * TexSize;
-	pos.y = TopEdge - h * TexSize;
+	std::pair<int, int> index;
+	index.first  = (a_pos.x - LeftEdge) / TexSize;
+	index.second = (TopEdge - a_pos.y)  / TexSize;
 
-	return pos;
+	return index;
 }
