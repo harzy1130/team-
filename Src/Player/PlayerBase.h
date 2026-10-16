@@ -1,4 +1,5 @@
 #pragma once
+#include"Constans/Constants.h"
 class C_PlayerBase
 {
 public:
@@ -29,6 +30,8 @@ public:
 	virtual float getMS()final { return m_MSUP; }
 	virtual float getCrtDmg()final { return m_CrtDmgP; }
 	virtual float getCrtRate()final { return m_CrtRate; }
+	//当たり判定用
+	virtual S_HitBase getHitBase()final { return m_hitBase; }
 
 	//セッター
 	//生存
@@ -54,6 +57,8 @@ public:
 	virtual void setHPRegene(float a_HPR)final { m_HPRegene = a_HPR; }
 	virtual void setCrtDmg(float a_CD)final { m_CrtDmgP = a_CD; }
 	virtual void setCrtRate(float a_CR)final { m_CrtRate = a_CR; }
+	//当たり判定用
+	virtual void setHitBase(S_HitBase a_hitbase) { m_hitBase = a_hitbase; }
 
 
 protected:
@@ -74,7 +79,8 @@ protected:
 	Math::Matrix m_mat;
 	Math::Matrix m_transMat;
 	Math::Matrix m_scaleMat;
-	static const int m_TexSize = 64;
+	int m_TexSize;
+	int m_TexRadius;
 
 	//基礎ステータス
 	float m_HP;		//現在体力
@@ -87,8 +93,12 @@ protected:
 	float m_LifStl;		//ライフスティール
 	float m_MSUP;		//移動速度
 	float m_HPRegene;	//ライフリジェネ
-	float m_CrtDmgP;		//クリティカルダメージ
+	float m_CrtDmgP;	//クリティカルダメージ
 	float m_CrtRate;	//クリティカル率
+
+	//当たり判定用
+	S_HitBase m_hitBase;
+
 
 	//タイマー変数
 	float m_HPRegeneCD=0;
@@ -101,6 +111,10 @@ protected:
 
 	//操作
 	virtual void PlayerInput();
+
+	//hitBaseから値移し
+	virtual void HitBaseResult();
+	virtual void HitBaseSet();
 
 	//行列合成
 	virtual void MatCalc()final;
