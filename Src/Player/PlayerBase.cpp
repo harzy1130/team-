@@ -1,5 +1,5 @@
 #include "PlayerBase.h"
-
+#include "hit/hit.h"
 
 void C_PlayerBase::Init()
 {
@@ -35,8 +35,7 @@ void C_PlayerBase::Update()
 
 	//ìñÇΩÇËîªíË
 	HitBaseSet();
-
-
+	m_hitBase = m_pHit->HitCheck(m_hitBase);
 	HitBaseResult();
 
 	//ç¿ïWämíË
@@ -125,21 +124,22 @@ void C_PlayerBase::PlayerInput()
 void C_PlayerBase::HitBaseResult()
 {
 	m_pos = m_hitBase.pos;
-	m_move = m_hitBase.Move;
+	m_move = m_hitBase.move;
+	m_jumpFlg = !m_hitBase.hitBottom;
 }
 
 void C_PlayerBase::HitBaseSet()
 {
 	m_hitBase.pos = m_pos;
-	m_hitBase.Move = m_move;
+	m_hitBase.move = m_move;
 	m_hitBase.hitTop = false;
 	m_hitBase.hitBottom = false;
 	m_hitBase.hitLeft = false;
 	m_hitBase.hitRight = false;
-	m_hitBase.rect.top = m_pos.y + m_TexRadius;
-	m_hitBase.rect.bottom = m_pos.y - m_TexRadius;
-	m_hitBase.hitRight = m_pos.x + m_TexRadius;
-	m_hitBase.hitLeft = m_pos.x - m_TexRadius;
+	m_hitBase.rect.top = m_TexRadius;
+	m_hitBase.rect.bottom = -m_TexRadius;
+	m_hitBase.rect.right = m_TexRadius;
+	m_hitBase.rect.left = -m_TexRadius;
 	m_hitBase.radius = m_TexRadius;
 }
 

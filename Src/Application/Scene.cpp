@@ -45,6 +45,7 @@ void Scene::Init()
 	m_boss.Init();
 	m_camera.Init();
 	m_hit.SetMapData(&m_map);
+	m_player.SetHitData(&m_hit);
 }
 
 void Scene::Release()

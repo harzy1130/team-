@@ -1,5 +1,6 @@
 #pragma once
 #include"Constants/Constants.h"
+class C_Hit;
 class C_PlayerBase
 {
 public:
@@ -59,7 +60,7 @@ public:
 	virtual void setCrtRate(float a_CR)final { m_CrtRate = a_CR; }
 	//当たり判定用
 	virtual void setHitBase(S_HitBase a_hitbase) { m_hitBase = a_hitbase; }
-
+	virtual void SetHitData(C_Hit* a_pHit) final { m_pHit = a_pHit; }
 
 protected:
 	//生存
@@ -69,7 +70,7 @@ protected:
 	Math::Vector2 m_pos;
 	Math::Vector2 m_move;
 	float m_speed;
-	float m_scaleX=1;
+	float m_scaleX = 1;
 	bool m_jumpFlg;
 	const float m_Gravity = 1.0f;//重力
 	const float m_JumpPower = 20.0f;
@@ -98,7 +99,7 @@ protected:
 
 	//当たり判定用
 	S_HitBase m_hitBase;
-
+	C_Hit* m_pHit;
 
 	//タイマー変数
 	float m_HPRegeneCD=0;
@@ -118,5 +119,4 @@ protected:
 
 	//行列合成
 	virtual void MatCalc()final;
-
 };
