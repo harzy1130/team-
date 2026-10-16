@@ -2,8 +2,6 @@
 #include"StringUtility.h"
 #include"IntParseResult.h"
 
-//Map::Map():m_height(0),m_width(0){}
-
 void Map::Update()
 {
 	for (int h = 0; h < MapHeight; h++)
@@ -14,13 +12,6 @@ void Map::Update()
 		}
 	}
 
-	//for (auto& raw : m_chip)
-	//{
-	//	for (auto& cal : raw)
-	//	{
-	//		cal.mat = Math::Matrix::CreateTranslation(cal.pos.x, cal.pos.y, 0);
-	//	}
-	//}
 }
 
 void Map::Draw(Math::Vector2 a_pos)
@@ -49,30 +40,6 @@ void Map::Draw(Math::Vector2 a_pos)
 			}
 		}
 	}
-
-	//for (auto& raw : m_chip)
-	//{
-	//	for (auto& cal : raw)
-	//	{
-	//		switch (cal.data)
-	//		{
-	//			//case 0:
-	//			//case 3:
-	//			//	SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(0, 0, TexSize, TexSize), 1.0f);
-	//				//break;
-	//		case MapChip::dirt:
-	//			SHADER.m_spriteShader.SetMatrix(cal.mat);
-	//			SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(TexSize, 0, TexSize, TexSize), 1.0f);
-	//			break;
-	//		case MapChip::glass:
-	//			SHADER.m_spriteShader.SetMatrix(cal.mat);
-	//			SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(TexSize * 2, 0, TexSize, TexSize), 1.0f);
-	//			break;
-	//		default:
-	//			break;
-	//		}
-	//	}
-	//}
 }
 
 void Map::Create()
@@ -86,19 +53,6 @@ void Map::Create()
 			m_mat[h][w]   = Math::Matrix::CreateTranslation(m_pos[h][w].x, m_pos[h][w].y, 0);
 		}
 	}
-
-	//int h = 0, w = 0;
-	//for (auto& raw : m_chip)
-	//{
-	//	w = 0;
-	//	for (auto& cal : raw)
-	//	{
-	//		cal.pos.x = LeftEdge + w * TexSize;
-	//		cal.pos.y = TopEdge - h * TexSize;
-	//		w++;
-	//	}
-	//	h++;
-	//}
 }
 
 void Map::Load()
@@ -161,56 +115,13 @@ void Map::Load()
 			w = 0;
 		}
 	}
+}
 
-	//std::string value = "";
-	//std::vector<std::string> list;
-	//FILE* mapfp;
-	//m_chip.clear();
-	//std::string filename = "MapData/Stage" + std::to_string(stageNum) + ".csv";
+Math::Vector2 Map::GetPosition(int h, int w)
+{
+	Math::Vector2 pos;
+	pos.x = LeftEdge + w * TexSize;
+	pos.y = TopEdge - h * TexSize;
 
-	//if ((mapfp = fopen(filename.c_str(), "r")) != nullptr)
-	//{
-	//	char ch;
-	//	while ((ch = fgetc(mapfp)) != EOF)
-	//	{
-	//		if (ch == ',')
-	//		{
-	//			list.push_back(value);
-	//			value.clear();
-	//		}
-	//		else if (ch == '\n')
-	//		{
-	//			list.push_back(value);
-	//			list.push_back(NEXT_ROW);
-	//			value.clear();
-	//		}
-	//		else
-	//		{
-	//			value += ch;
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	return;
-	//}
-	//fclose(mapfp);
-
-	//int h = 0;
-	//int w = 0;
-	//for (int i = 0; i < list.size(); i++)
-	//{
-	//	IntParseResult result = StringUtility::TryIntParse(list[i]);
-
-	//	if (result.IsSuccess)
-	//	{
-	//		m_chip[h][w].data = result.Number;
-	//		w++;
-	//	}
-	//	else
-	//	{
-	//		h++;
-	//		w = 0;
-	//	}
-	//}
+	return pos;
 }
