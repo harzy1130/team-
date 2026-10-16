@@ -328,4 +328,9 @@
       <Filter>Src\System\Shader\StandardShader</Filter>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Src\GUI"><UniqueIdentifier>{a2855877-aec3-4f05-aaeb-6e90ca6542ae}</UniqueIdentifier></Filter>
+    <ClInclude Include="Src\GUI\CharacterGUI.h"><Filter>Src\GUI</Filter></ClInclude>
+    <ClCompile Include="Src\GUI\CharacterGUI.cpp"><Filter>Src\GUI</Filter></ClCompile>
+  </ItemGroup>
 </Project>

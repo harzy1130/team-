@@ -6,6 +6,7 @@ void C_PlayerBase::Init()
 	//移動
 	m_bAlive = true;
 	m_pos = { 0,0 };
+    m_move = { 0,0 };
 	m_speed = 10;
 	m_jumpFlg = false;
 	//基本ステータス
@@ -43,6 +44,7 @@ void C_PlayerBase::Update()
 	m_pos.y += m_move.y;
 	if (m_pos.y <= -300) {
 		m_pos.y = -300;
+        m_move.y = 0.0f;
 		m_jumpFlg = false;
 	}
 	MatCalc();

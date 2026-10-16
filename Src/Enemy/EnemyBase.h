@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "hit/HitBase.h"
 
 // Horizontal patrol enemy; shared collision data comes from HitBase.
@@ -31,6 +31,7 @@ public:
     int GetAtk() const { return m_atk; }
     float GetMoveSpeed() const { return m_moveSpeed; }
     bool GetAlive() const { return m_bAlive; }
+
 
 private:
     KdTexture m_texture;
