@@ -71,4 +71,4 @@ struct S_HitBase
 
 //ƒJƒƒ‰ˆÚ“®’è”==============================
 
-static const float CAMERA_SPEED = 0.3f;
+static const float CAMERA_SPEED = 0.1f;
