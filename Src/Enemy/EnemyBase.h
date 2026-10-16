@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "hit/HitBase.h"
 
 // Horizontal patrol enemy; shared collision data comes from HitBase.
@@ -16,6 +16,11 @@ public:
     void CalcMat();
     void Draw();
     void Release();
+
+    // Returns false when dead, invulnerable, or damage is not positive.
+    bool TakeDamage(int damage, float attackFromX);
+    bool IsInvincible() const { return m_invincibleFrames > 0; }
+    bool IsHurt() const { return m_hurtFrames > 0; }
 
     void SetPatrolRange(float leftX, float rightX);
     void SetHp(int hp);
@@ -38,4 +43,7 @@ private:
     int m_atk = 10;
     float m_moveSpeed = 2.0f;
     int m_direction = 1; // 1: right, -1: left
+    int m_invincibleFrames = 0;
+    int m_hurtFrames = 0;
+    float m_knockbackX = 0.0f;
 };
