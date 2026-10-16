@@ -23,6 +23,7 @@ public:
 
 	void SetTexture(KdTexture* a_pTex) { m_pTex = a_pTex; }
 
+	Math::Vector2 GetPosition(int h, int w);
 	int GetStageNum() { return stageNum; }
 private:
 
@@ -30,11 +31,6 @@ private:
 	int		      m_data[MapHeight][MapWidth];
 	Math::Vector2 m_pos[MapHeight][MapWidth];
 	Math::Matrix  m_mat[MapHeight][MapWidth];
-
-
-	//std::vector<std::vector<ChipData>>m_chip;
-	//int m_height;
-	//int m_width;
 
 	const int stageNum = 1;
 };
