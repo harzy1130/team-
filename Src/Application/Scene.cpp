@@ -5,10 +5,10 @@ void Scene::Draw2D()
 {
 	SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(0, 0, 0));
 	SHADER.m_spriteShader.DrawTex(&m_backTex, Math::Rectangle(0, 0, 1280, 720), 1.0f);
-	m_map.Draw();
+	m_map.Draw(m_camera.GetPos());
 	m_enemy.Draw();
 	m_boss.Draw();
-	m_player.Draw();
+	m_player.Draw(m_camera.GetPos());
 }
 
 void Scene::Update()
