@@ -1,5 +1,5 @@
 #include"Camera.h"
-#include"Constans/Constants.h"
+#include"Constants/Constants.h"
 
 void C_Camera::Update()
 {

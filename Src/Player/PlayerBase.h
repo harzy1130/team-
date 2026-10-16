@@ -1,5 +1,5 @@
 #pragma once
-#include"Constans/Constants.h"
+#include"Constants/Constants.h"
 class C_PlayerBase
 {
 public:

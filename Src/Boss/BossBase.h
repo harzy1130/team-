@@ -1,5 +1,5 @@
 #pragma once
-#include"BossConstants.h"
+#include"Constants/Constants.h"
 
 class BossBase {
 public:

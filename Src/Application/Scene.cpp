@@ -35,6 +35,7 @@ void Scene::Init()
 	{
 		OutputDebugStringA("Enemy texture load failed: Texture/Chara.png\n");
 	}
+
 	m_enemy.SetHp(100);
 	m_enemy.SetAtk(10);
 	m_enemy.SetMoveSpeed(2.0f);
@@ -43,6 +44,7 @@ void Scene::Init()
 	m_player.Init();
 	m_boss.Init();
 	m_camera.Init();
+	m_hit.SetMapData(&m_map);
 }
 
 void Scene::Release()
