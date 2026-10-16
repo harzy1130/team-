@@ -23,12 +23,13 @@ void Map::Update()
 	//}
 }
 
-void Map::Draw()
+void Map::Draw(Math::Vector2 a_pos)
 {
 	for (int h = 0; h < MapHeight; h++)
 	{
 		for (int w = 0; w < MapWidth; w++)
 		{
+			m_mat[h][w] = Math::Matrix::CreateTranslation(m_pos[h][w].x - a_pos.x, m_pos[h][w].y - a_pos.y,0);
 			SHADER.m_spriteShader.SetMatrix(m_mat[h][w]);//画像の行列をセット
 
 			switch (m_data[h][w])

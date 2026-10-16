@@ -3,7 +3,8 @@
 
 void C_Camera::Update()
 {
-	m_pos += (m_target - m_pos) * CAMERA_SPEED;
+	m_pos.x += int(((m_target - m_pos) * CAMERA_SPEED).x);
+	m_pos.y += int(((m_target - m_pos) * CAMERA_SPEED).y);
 }
 
 void C_Camera::Init()

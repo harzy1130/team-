@@ -7,7 +7,7 @@ public:
 
 	virtual void Init();
 	virtual void Update();
-	virtual void Draw();
+	virtual void Draw(Math::Vector2 a_pos);
 
 	//ÉQÉbÉ^Å[
 	//ê∂ë∂

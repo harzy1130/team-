@@ -17,7 +17,7 @@ public:
 
 	void Init();
 	void Update();
-	void Draw();
+	void Draw(Math::Vector2 a_pos);
 	void Create();
 	void Load();
 

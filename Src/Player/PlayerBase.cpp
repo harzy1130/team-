@@ -38,9 +38,12 @@ void C_PlayerBase::Update()
 	MatCalc();
 }
 
-void C_PlayerBase::Draw()
+void C_PlayerBase::Draw(Math::Vector2 a_pos)
 {
 	if (!m_bAlive)return;
+	//ÉJÉÅÉâç¿ïWèCê≥
+	m_mat = Math::Matrix::CreateTranslation(m_pos.x - a_pos.x, m_pos.y - a_pos.y, 0);
+
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(
 		m_pTex, Math::Rectangle(0, 0, 64, 64), 1.0f);
