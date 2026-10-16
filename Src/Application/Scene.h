@@ -1,4 +1,5 @@
 #pragma once
+#include "GUI/CharacterGUI.h"
 #include"Boss/Boss.h"
 #include"Enemy/Enemy1.h"
 #include"Player/PlayerBase.h"
@@ -20,6 +21,7 @@ private:
 	Map m_map;
 	C_Camera m_camera;
 	C_Hit m_hit;
+    CharacterGUI m_gui;
 
 public:
 
