@@ -1,16 +1,18 @@
 #pragma once
 #include"Constants/Constants.h"
+#include"Camera/Camera.h"
 #include<utility>
 
-class Map
+class C_Camera;
+class C_Map
 {
 public:
-	Map() {};
-	~Map() {};
+	C_Map() {};
+	~C_Map() {};
 	
-	void Init();
+	void Init(C_Camera* a_pCamera);
 	void Update();
-	void Draw(Math::Vector2 a_pos);
+	void Draw();
 	void Create();
 	void Load();
 
@@ -26,6 +28,10 @@ private:
 
 	KdTexture*    m_pTex;
 	S_ChipData    m_chip[MAP_HEIGHT][MAP_WIDTH];
+
+	//参照する別クラスのポインタ
+	C_Camera* m_pCamera;
+
 
 	const int stageNum = 1;
 };

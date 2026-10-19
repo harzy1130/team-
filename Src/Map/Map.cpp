@@ -2,27 +2,33 @@
 #include"StringUtility.h"
 #include"IntParseResult.h"
 
-void Map::Update()
+void C_Map::Init(C_Camera* a_pCamera)
+{
+	m_pCamera = a_pCamera;
+	Load();
+	Create();
+}
+
+void C_Map::Update()
 {
 	for (int h = 0; h < MAP_HEIGHT; h++)
 	{
 		for (int w = 0; w < MAP_WIDTH; w++)
 		{
-			m_chip[h][w].mat = Math::Matrix::CreateTranslation(m_chip[h][w].pos.x, m_chip[h][w].pos.y, 0);
+			m_chip[h][w].mat = Math::Matrix::CreateTranslation(
+				m_chip[h][w].pos.x - m_pCamera->GetPos().x, m_chip[h][w].pos.y - m_pCamera->GetPos().y, 0);
 		}
 	}
 
 }
 
-void Map::Draw(Math::Vector2 a_pos)
+void C_Map::Draw()
 {
 	for (int h = 0; h < MAP_HEIGHT; h++)
 	{
 		for (int w = 0; w < MAP_WIDTH; w++)
 		{
-			m_chip[h][w].mat= Math::Matrix::CreateTranslation(m_chip[h][w].pos.x - a_pos.x, m_chip[h][w].pos.y - a_pos.y,0);
 			SHADER.m_spriteShader.SetMatrix(m_chip[h][w].mat);//画像の行列をセット
-
 			switch (m_chip[h][w].data)
 			{
 			//case 0:
@@ -42,7 +48,7 @@ void Map::Draw(Math::Vector2 a_pos)
 	}
 }
 
-void Map::Create()
+void C_Map::Create()
 {
 	for (int h = 0; h < MAP_HEIGHT; h++)
 	{
@@ -55,7 +61,7 @@ void Map::Create()
 	}
 }
 
-void Map::Load()
+void C_Map::Load()
 {
 	for (int h = 0; h < MAP_HEIGHT; h++)
 	{
@@ -119,19 +125,19 @@ void Map::Load()
 	}
 }
 
-bool Map::GetCollisionFlg(int h, int w)
+bool C_Map::GetCollisionFlg(int h, int w)
 {
 	if (h >= MAP_HEIGHT || w >= MAP_WIDTH)return true;
 	return m_chip[h][w].collisionFlg;
 }
 
-Math::Vector2 Map::GetPosition(int h, int w)
+Math::Vector2 C_Map::GetPosition(int h, int w)
 {
 	if (h >= MAP_HEIGHT || w >= MAP_WIDTH)return Math::Vector2{ 0,0 };
 	return m_chip[h][w].pos;
 }
 
-std::pair<int, int> Map::GetIndex(Math::Vector2 a_pos)
+std::pair<int, int> C_Map::GetIndex(Math::Vector2 a_pos)
 {
 	std::pair<int, int> index;
 	index.first  = (a_pos.x - LEFT_EDGE) / PTEX_SIZE;
