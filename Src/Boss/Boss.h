@@ -1,16 +1,16 @@
 #pragma once
 #include"BossBase.h"
 
-class Boss : public BossBase {
+
+class C_Boss : public C_BossBase {
 public:
-	Boss() {};
-	~Boss() {};
+	C_Boss() {};
+	~C_Boss() {};
 
 	void Draw();
 	void Update();
 	void Move();
-	void Init();
 
 private:
-	
+
 };
