@@ -53,7 +53,7 @@ void C_PlayerBase::Update()
         m_move.y = 0.0f;
 		m_jumpFlg = false;
 	}
-	MatCalc();
+	CalcMat();
 }
 
 void C_PlayerBase::Draw()
@@ -153,7 +153,7 @@ void C_PlayerBase::HitBaseSet()
 }
 
 //s—ñ‡¬
-void C_PlayerBase::MatCalc()
+void C_PlayerBase::CalcMat()
 {
 	m_transMat= Math::Matrix::CreateTranslation(
 		m_pos.x - m_pCamera->GetPos().x, m_pos.y - m_pCamera->GetPos().y, 0);
