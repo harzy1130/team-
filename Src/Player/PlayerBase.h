@@ -1,16 +1,19 @@
 #pragma once
 #include"Constants/Constants.h"
 #include"Skill/SkillBase.h"
+#include"Camera/Camera.h"
+
 class C_Hit;
+class C_Camera;
 class C_PlayerBase
 {
 public:
 	C_PlayerBase() {};
 	~C_PlayerBase() {};
 
-	virtual void Init();
+	virtual void Init(C_Hit* a_pHit, C_Camera* a_pCamera);
 	virtual void Update();
-	virtual void Draw(Math::Vector2 a_pos);
+	virtual void Draw();
 
 	//ゲッター
 	//生存
@@ -66,7 +69,8 @@ public:
 	virtual void setCrtRate(float a_CR)final { m_CrtRate = a_CR; }
 	//当たり判定用
 	virtual void setHitBase(S_HitBase a_hitbase) { m_hitBase = a_hitbase; }
-	virtual void SetHitData(C_Hit* a_pHit) final { m_pHit = a_pHit; }
+	virtual void SetHitClass(C_Hit* a_pHit) final { m_pHit = a_pHit; }
+	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
 
 protected:
 	//生存
@@ -107,7 +111,10 @@ protected:
 
 	//当たり判定用
 	S_HitBase m_hitBase;
+	
+	//参照するクラスのポインタ
 	C_Hit* m_pHit;
+	C_Camera* m_pCamera;
 
 	//タイマー変数
 	float m_HPRegeneCD=0;
@@ -126,7 +133,7 @@ protected:
 	virtual void HitBaseSet();
 
 	//行列合成
-	virtual void MatCalc()final;
+	virtual void CalcMat()final;
 
 	//スキル用
 	C_Skill m_skill;
