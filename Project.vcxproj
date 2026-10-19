@@ -174,6 +174,7 @@
     <ClInclude Include="Src\Map\MapConstants.h" />
     <ClInclude Include="Src\Map\StringUtility.h" />
     <ClInclude Include="Src\Player\PlayerBase.h" />
+    <ClInclude Include="Src\Skill\SkillBase.h" />
     <ClInclude Include="Src\System\Audio\KdAudio.h" />
     <ClInclude Include="src\System\Direct3D\KdDirect3D.h" />
     <ClInclude Include="Src\System\Direct3D\KdDirect3DHelper.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="Src\hit\HitBase.cpp" />
     <ClCompile Include="Src\Map\Map.cpp" />
     <ClCompile Include="Src\Player\PlayerBase.cpp" />
+    <ClCompile Include="Src\Skill\SkillBase.cpp" />
     <ClCompile Include="Src\System\Audio\KdAudio.cpp" />
     <ClCompile Include="src\System\Direct3D\KdDirect3D.cpp" />
     <ClCompile Include="Src\System\Direct3D\KdDirect3DHelper.cpp" />
