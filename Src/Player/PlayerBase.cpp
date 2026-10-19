@@ -1,7 +1,7 @@
 #include "PlayerBase.h"
 #include "hit/hit.h"
 
-void C_PlayerBase::Init()
+void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
 {
 	//ˆÚ“®
 	m_bAlive = true;
@@ -27,6 +27,8 @@ void C_PlayerBase::Init()
 	m_TexSize = 64;
 	m_TexRadius = 32;
 	m_skill.Init();
+	SetHitClass(a_pHit);
+	SetCameraClass(a_pCamera);
 }
 
 void C_PlayerBase::Update()
@@ -54,11 +56,10 @@ void C_PlayerBase::Update()
 	MatCalc();
 }
 
-void C_PlayerBase::Draw(Math::Vector2 a_pos)
+void C_PlayerBase::Draw()
 {
 	if (!m_bAlive)return;
 	//ƒJƒƒ‰À•WC³
-	m_mat = Math::Matrix::CreateTranslation(m_pos.x - a_pos.x, m_pos.y - a_pos.y, 0);
 
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(
@@ -155,7 +156,7 @@ void C_PlayerBase::HitBaseSet()
 void C_PlayerBase::MatCalc()
 {
 	m_transMat= Math::Matrix::CreateTranslation(
-		m_pos.x , m_pos.y, 0);
+		m_pos.x - m_pCamera->GetPos().x, m_pos.y - m_pCamera->GetPos().y, 0);
 	m_scaleMat= Math::Matrix::CreateScale(m_scaleX, 1, 1);
 	m_mat = m_scaleMat * m_transMat;
 }

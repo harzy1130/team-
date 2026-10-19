@@ -16,9 +16,9 @@ private:
 	KdTexture m_backTex;
 
 	C_PlayerBase m_player;
-	Boss m_boss;
+	C_Boss m_boss;
 	Enemy1 m_enemy;
-	Map m_map;
+	C_Map m_map;
 	C_Camera m_camera;
 	C_Hit m_hit;
     CharacterGUI m_gui;

@@ -18,7 +18,7 @@ bool EnemyBase::Init(float x, float y, float leftX, float rightX,
     m_direction = 1;
     SetPatrolRange(leftX, rightX);
     SetMoveSpeed(speed);
-
+   
     if (texturePath == nullptr || !m_texture.Load(texturePath))
     {
         return false;
@@ -76,6 +76,16 @@ void EnemyBase::SetMoveSpeed(float speed)
     m_moveSpeed = std::max(0.0f, speed);
 }
 
+void EnemyBase::SetHitClass(C_Hit* a_pHit)
+{
+    m_pHit = a_pHit;
+}
+
+void EnemyBase::SetCameraClass(C_Camera* a_pCamera)
+{
+    m_pCamera = a_pCamera;
+}
+
 // 無敵時間と被ダメージ状態を更新し、ノックバックまたは左右の巡回移動を行う。
 void EnemyBase::Update()
 {
@@ -126,6 +136,7 @@ void EnemyBase::Draw()
     if (m_invincibleFrames > 0 && (m_invincibleFrames / 4) % 2 == 0) return;
 
     //// Update後にSetPosが呼ばれた場合に備えて、描画行列を再計算する。
+    // カメラスクロールのためいったんコメントアウトしました（吉田）
     CalcMat();
     const auto& info = m_texture.GetInfo();
     SHADER.m_spriteShader.SetMatrix(m_mat);
