@@ -1,5 +1,6 @@
 #pragma once
 #include"Constants/Constants.h"
+#include"Skill/SkillBase.h"
 class C_Hit;
 class C_PlayerBase
 {
@@ -19,7 +20,9 @@ public:
 	//移動
 	virtual Math::Vector2 getPos()final { return m_pos; }
 	virtual Math::Vector2 getMove()final { return m_move; }
+	virtual Math::Vector2 getSkillMove()final { return m_skillMove; }
 	virtual bool getJumpFlg()final { return m_jumpFlg; }
+	virtual float getScaleX()final { return m_scaleX; }
 	//基本ステータス
 	virtual float getHP()final { return m_HP; }
 	virtual float getMAXHP()final { return m_MAXHP; }
@@ -31,6 +34,7 @@ public:
 	virtual float getMS()final { return m_MSUP; }
 	virtual float getCrtDmg()final { return m_CrtDmgP; }
 	virtual float getCrtRate()final { return m_CrtRate; }
+	virtual float getSkillHaste()final { return m_SkillHaste; }
 	//当たり判定用
 	virtual S_HitBase getHitBase()final { return m_hitBase; }
 
@@ -44,6 +48,8 @@ public:
 	virtual void setPosY(float a_posY)final { m_pos.y = a_posY; }
 	virtual void setMoveX(float a_moveX)final { m_move.x = a_moveX; }
 	virtual void setMoveY(float a_moveY)final { m_move.y = a_moveY; }
+	virtual void setSkillMoveX(float a_moveX) { m_skillMove.x = a_moveX; }
+	virtual void setSkillMoveY(float a_moveY) { m_skillMove.y = a_moveY; }
 	virtual void setJumpFlg(bool a_flg)final { m_jumpFlg = a_flg; }
 
 	//基本ステータス
@@ -69,6 +75,7 @@ protected:
 	//移動用
 	Math::Vector2 m_pos;
 	Math::Vector2 m_move;
+	Math::Vector2 m_skillMove;
 	float m_speed;
 	float m_scaleX = 1;
 	bool m_jumpFlg;
@@ -96,6 +103,7 @@ protected:
 	float m_HPRegene;	//ライフリジェネ
 	float m_CrtDmgP;	//クリティカルダメージ
 	float m_CrtRate;	//クリティカル率
+	float m_SkillHaste;	//スキルヘイスト
 
 	//当たり判定用
 	S_HitBase m_hitBase;
@@ -119,4 +127,7 @@ protected:
 
 	//行列合成
 	virtual void MatCalc()final;
+
+	//スキル用
+	C_Skill m_skill;
 };

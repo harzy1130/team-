@@ -7,6 +7,7 @@ void C_PlayerBase::Init()
 	m_bAlive = true;
 	m_pos = { 0,0 };
     m_move = { 0,0 };
+	m_skillMove = { 0,0 };
 	m_speed = 10;
 	m_jumpFlg = false;
 	//基本ステータス
@@ -21,9 +22,11 @@ void C_PlayerBase::Init()
 	m_HPRegene = 0;
 	m_CrtDmgP = 150;
 	m_CrtRate = 0;
+	m_SkillHaste=50;
 	//画像
 	m_TexSize = 64;
 	m_TexRadius = 32;
+	m_skill.Init();
 }
 
 void C_PlayerBase::Update()
@@ -31,7 +34,9 @@ void C_PlayerBase::Update()
 	m_move.x = 0.0f;
 	m_move.y -= m_Gravity;
 
+	m_skill.Update();
 	PlayerInput();
+	
 
 	//当たり判定
 	HitBaseSet();
@@ -39,8 +44,8 @@ void C_PlayerBase::Update()
 	HitBaseResult();
 
 	//座標確定
-	m_pos.x += m_move.x;
-	m_pos.y += m_move.y;
+	m_pos.x += m_move.x+m_skillMove.x;
+	m_pos.y += m_move.y+m_skillMove.y;
 	if (m_pos.y <= -300) {
 		m_pos.y = -300;
         m_move.y = 0.0f;
@@ -118,6 +123,9 @@ void C_PlayerBase::PlayerInput()
 			m_jumpFlg = true;
 			m_move.y = m_JumpPower;
 		}
+	}
+	if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+		m_skill.SkillActivation(this);
 	}
 }
 
