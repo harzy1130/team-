@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "EnemyBase.h"
 
 // Enemy1 owns this enemy type's initial settings.
@@ -7,7 +7,7 @@ class Enemy1 : public EnemyBase
 {
 public:
     
-    bool Init();
+    bool Init(C_Hit* a_pHit, C_Camera* a_pCamera);
     
     void Update();
 private:

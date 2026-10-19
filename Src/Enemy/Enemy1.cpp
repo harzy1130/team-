@@ -1,31 +1,33 @@
-ï»¿#include "Pch.h"
+#include "Pch.h"
 #include "Enemy1.h"
-#include "Map/MapConstants.h"
+#include "Constants/Constants.h"
 
-// Enemy1 ã®åˆæœŸã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¨å·¡å›ç¯„å›²ã‚’è¨­å®šã—ã€Stage1 å·¦å´ã®å¹³åœ°ã«è¶³å…ƒã‚’åˆã‚ã›ã‚‹ã€‚
-bool Enemy1::Init()
+// Enemy1 ‚Ì‰ŠúƒXƒe[ƒ^ƒX‚Æ„‰ñ”ÍˆÍ‚ğİ’è‚µAStage1 ¶‘¤‚Ì•½’n‚É‘«Œ³‚ğ‡‚í‚¹‚éB
+bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
 {
     // Stage1's left flat floor occupies row MapHeight - 2.
-    // Map::Create uses tile CENTERS: LeftEdge + col*TexSize, TopEdge - row*TexSize.
-    const float startX = LeftEdge + 2.5f * TexSize;
-    const float leftX = LeftEdge + TexSize + TexSize / 4.0f;
-    const float rightX = LeftEdge + 6.0f * TexSize - TexSize / 2.0f;
+    // Map::Create uses tile CENTERS: LEFT_EDGE + col*PTEX_SIZE, TopEdge - row*PTEX_SIZE.
+    const float startX = LEFT_EDGE + 2.5f * PTEX_SIZE;
+    const float leftX = LEFT_EDGE + PTEX_SIZE + PTEX_SIZE / 4.0f;
+    const float rightX = LEFT_EDGE + 6.0f * PTEX_SIZE - PTEX_SIZE / 2.0f;
     if (!EnemyBase::Init(startX, 0.0f, leftX, rightX))
     {
         OutputDebugStringA("Enemy1 texture load failed: Texture/Chara.png\n");
         return false;
     }
-    const float floorTop = TopEdge - (MapHeight - 2) * TexSize + TexSize / 2.0f;
+    const float floorTop = TOP_EDGE - (MAP_HEIGHT - 2) * PTEX_SIZE + PTEX_SIZE / 2.0f;
     SetPos(startX, floorTop - static_cast<float>(GetRect().bottom));
     SetHp(100);
     SetAtk(10);
     SetMoveSpeed(2.0f);
+    SetHitClass(a_pHit);
+    SetCameraClass(a_pCamera);
     m_testHitWasDown = false;
     CalcMat();
     return true;
 }
 
-// ã‚²ãƒ¼ãƒ ç”»é¢ãŒé¸æŠã•ã‚Œã¦ã„ã‚‹é–“ã€H ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸç¬é–“ã«è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ†ã‚¹ãƒˆã—ã€æ•µã®å…±é€šæ›´æ–°ã‚’å‘¼ã³å‡ºã™ã€‚
+// ƒQ[ƒ€‰æ–Ê‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚éŠÔAH ƒL[‚ğ‰Ÿ‚µ‚½uŠÔ‚É”íƒ_ƒ[ƒW‚ğƒeƒXƒg‚µA“G‚Ì‹¤’ÊXV‚ğŒÄ‚Ño‚·B
 void Enemy1::Update()
 {
     // Temporary enemy-only test. Real attacks should call TakeDamage on a hit.
@@ -35,5 +37,6 @@ void Enemy1::Update()
     if (hitDown && !m_testHitWasDown)
         TakeDamage(25, GetPos().x - 100.0f);
     m_testHitWasDown = hitDown;
+    m_pCamera->GetPos();
     EnemyBase::Update();
 }
