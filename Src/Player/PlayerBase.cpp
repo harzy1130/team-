@@ -42,7 +42,7 @@ void C_PlayerBase::Update()
 	
 	m_move += m_skillMove;
 	//“–‚½‚è”»’è
-	m_pHit->HitCheck(this);
+	m_pHit->MapHitCheck(this);
 	m_bJump = !m_bHitRect.bottom;
 
 	//À•WŠm’è
