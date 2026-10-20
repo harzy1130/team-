@@ -1,52 +1,61 @@
-ï»¿#pragma once
+#pragma once
+#include"Camera/Camera.h"
 
+class C_Hit;
+class C_Camera;
 // World coordinates use +Y upwards. m_rect is relative to m_pos.
 class HitBase
 {
 public:
-    // æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åŸºåº•ã‚¯ãƒ©ã‚¹çµŒç”±ã§ã‚‚å®‰å…¨ã«ç ´æ£„ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ã€‚
+    // ”h¶ƒNƒ‰ƒX‚ÌƒIƒuƒWƒFƒNƒg‚ğŠî’êƒNƒ‰ƒXŒo—R‚Å‚àˆÀ‘S‚É”jŠü‚Å‚«‚é‚æ‚¤‚É‚·‚éB
     virtual ~HitBase() = default;
 
-    // ç¾åœ¨ã®ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’è¨­å®šã™ã‚‹ã€‚
+    // Œ»İ‚Ìƒ[ƒ‹ƒhÀ•W‚ğİ’è‚·‚éB
     void SetPos(float x, float y) { m_pos = Math::Vector2(x, y); }
-    // æ¬¡ã«é©ç”¨ã™ã‚‹ Xãƒ»Y æ–¹å‘ã®ç§»å‹•é‡ã‚’è¨­å®šã™ã‚‹ã€‚
+    // Ÿ‚É“K—p‚·‚é XEY •ûŒü‚ÌˆÚ“®—Ê‚ğİ’è‚·‚éB
     void SetMove(float x, float y) { m_move = Math::Vector2(x, y); }
-    // ä¸­å¿ƒã‹ã‚‰ã®åŠå¹…ãƒ»åŠé«˜ã•ã‚’æŒ‡å®šã—ã¦ã€ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ã®å½“ãŸã‚Šåˆ¤å®šçŸ©å½¢ã‚’è¨­å®šã™ã‚‹ã€‚
+    // ’†S‚©‚ç‚Ì”¼•E”¼‚‚³‚ğw’è‚µ‚ÄAƒ[ƒJƒ‹À•W‚Ì“–‚½‚è”»’è‹éŒ`‚ğİ’è‚·‚éB
     void SetRect(long halfWidth, long halfHeight);
-    // ç¾åœ¨ã®ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’è¿”ã™ã€‚
+    // Œ»İ‚Ìƒ[ƒ‹ƒhÀ•W‚ğ•Ô‚·B
     Math::Vector2 GetPos() const { return m_pos; }
-    // ã¾ã é©ç”¨ã—ã¦ã„ãªã„ç§»å‹•é‡ã‚’è¿”ã™ã€‚
+    // ‚Ü‚¾“K—p‚µ‚Ä‚¢‚È‚¢ˆÚ“®—Ê‚ğ•Ô‚·B
     Math::Vector2 GetMove() const { return m_move; }
-    // ç¾åœ¨ä½ç½®ã«ç§»å‹•é‡ã‚’åŠ ãˆãŸã€ç§»å‹•å¾Œã®äºˆæ¸¬åº§æ¨™ã‚’è¿”ã™ã€‚
+    // Œ»İˆÊ’u‚ÉˆÚ“®—Ê‚ğ‰Á‚¦‚½AˆÚ“®Œã‚Ì—\‘ªÀ•W‚ğ•Ô‚·B
     Math::Vector2 GetFuturePos() const { return m_pos + m_move; }
-    // ç‰©ä½“ã®ä¸­å¿ƒã‚’åŸºæº–ã¨ã—ãŸãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ã®å½“ãŸã‚Šåˆ¤å®šçŸ©å½¢ã‚’è¿”ã™ã€‚
+    // •¨‘Ì‚Ì’†S‚ğŠî€‚Æ‚µ‚½ƒ[ƒJƒ‹À•W‚Ì“–‚½‚è”»’è‹éŒ`‚ğ•Ô‚·B
     RECT GetRect() const { return m_rect; }
-    // ç¾åœ¨ä½ç½®ã§ã®å½“ãŸã‚Šåˆ¤å®šçŸ©å½¢ã‚’è¿”ã™ã€‚RECT ã®åº§æ¨™ã¯æ•´æ•°ã«å¤‰æ›ã•ã‚Œã‚‹ã€‚
+    // Œ»İˆÊ’u‚Å‚Ì“–‚½‚è”»’è‹éŒ`‚ğ•Ô‚·BRECT ‚ÌÀ•W‚Í®”‚É•ÏŠ·‚³‚ê‚éB
     RECT GetNowRect() const;
-    // ç§»å‹•å¾Œã®äºˆæ¸¬ä½ç½®ã§ã®å½“ãŸã‚Šåˆ¤å®šçŸ©å½¢ã‚’è¿”ã™ã€‚RECT ã®åº§æ¨™ã¯æ•´æ•°ã«å¤‰æ›ã•ã‚Œã‚‹ã€‚
+    // ˆÚ“®Œã‚Ì—\‘ªˆÊ’u‚Å‚Ì“–‚½‚è”»’è‹éŒ`‚ğ•Ô‚·BRECT ‚ÌÀ•W‚Í®”‚É•ÏŠ·‚³‚ê‚éB
     RECT GetFutureRect() const;
 
-    // ç¾åœ¨ã®å½“ãŸã‚Šåˆ¤å®šã®ä¸Šç«¯ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã§è¿”ã™ï¼ˆY è»¸ã¯ä¸Šå‘ããŒæ­£ï¼‰ã€‚
+    // Œ»İ‚Ì“–‚½‚è”»’è‚Ìã’[‚ğƒ[ƒ‹ƒhÀ•W‚Å•Ô‚·iY ²‚ÍãŒü‚«‚ª³jB
     float GetHitTop() const { return m_pos.y + m_rect.top; }
-    // ç¾åœ¨ã®å½“ãŸã‚Šåˆ¤å®šã®ä¸‹ç«¯ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã§è¿”ã™ã€‚
+    // Œ»İ‚Ì“–‚½‚è”»’è‚Ì‰º’[‚ğƒ[ƒ‹ƒhÀ•W‚Å•Ô‚·B
     float GetHitBottom() const { return m_pos.y + m_rect.bottom; }
-    // ç¾åœ¨ã®å½“ãŸã‚Šåˆ¤å®šã®å·¦ç«¯ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã§è¿”ã™ã€‚
+    // Œ»İ‚Ì“–‚½‚è”»’è‚Ì¶’[‚ğƒ[ƒ‹ƒhÀ•W‚Å•Ô‚·B
     float GetHitLeft() const { return m_pos.x + m_rect.left; }
-    // ç¾åœ¨ã®å½“ãŸã‚Šåˆ¤å®šã®å³ç«¯ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã§è¿”ã™ã€‚
+    // Œ»İ‚Ì“–‚½‚è”»’è‚Ì‰E’[‚ğƒ[ƒ‹ƒhÀ•W‚Å•Ô‚·B
     float GetHitRight() const { return m_pos.x + m_rect.right; }
 
     // Only positive-area overlap counts as a hit; touching edges do not.
-    // ç¾åœ¨ä½ç½®ã§ç›¸æ‰‹ã¨çŸ©å½¢ãŒé‡ãªã‚‹ã‹ã‚’èª¿ã¹ã‚‹ã€‚è¾ºãŒæ¥ã™ã‚‹ã ã‘ã®å ´åˆã¯ false ã‚’è¿”ã™ã€‚
+    // Œ»İˆÊ’u‚Å‘Šè‚Æ‹éŒ`‚ªd‚È‚é‚©‚ğ’²‚×‚éB•Ó‚ªÚ‚·‚é‚¾‚¯‚Ìê‡‚Í false ‚ğ•Ô‚·B
     bool IsHit(const HitBase& other) const;
     // Predict overlap after both objects apply their pending moves.
-    // åŒæ–¹ãŒç§»å‹•é‡ã‚’é©ç”¨ã—ãŸå¾Œã«ã€çŸ©å½¢ãŒé‡ãªã‚‹ã‹ã©ã†ã‹ã‚’äºˆæ¸¬ã™ã‚‹ã€‚
+    // ‘o•û‚ªˆÚ“®—Ê‚ğ“K—p‚µ‚½Œã‚ÉA‹éŒ`‚ªd‚È‚é‚©‚Ç‚¤‚©‚ğ—\‘ª‚·‚éB
     bool IsFutureHit(const HitBase& other) const;
     // Apply once after any collision correction, then clear the pending move.
-    // ç§»å‹•é‡ã‚’ç¾åœ¨ä½ç½®ã«ä¸€åº¦ã ã‘é©ç”¨ã—ã€é©ç”¨æ¸ˆã¿ã®ç§»å‹•é‡ã‚’ 0 ã«æˆ»ã™ã€‚
+    // ˆÚ“®—Ê‚ğŒ»İˆÊ’u‚Éˆê“x‚¾‚¯“K—p‚µA“K—pÏ‚İ‚ÌˆÚ“®—Ê‚ğ 0 ‚É–ß‚·B
     void ApplyMove();
 
+    void SetHitClass(C_Hit* a_pHit) { m_pHit = a_pHit; };
+    void SetCameraClass(C_Camera* a_pCamera) { m_pCamera = a_pCamera; };
 protected:
     RECT m_rect{};
-    Math::Vector2 m_pos{0.0f, 0.0f};
-    Math::Vector2 m_move{0.0f, 0.0f};
+    Math::Vector2 m_pos{ 0.0f, 0.0f };
+    Math::Vector2 m_draw{ 0.0f, 0.0f };
+    Math::Vector2 m_move{ 0.0f, 0.0f };
+
+    C_Camera* m_pCamera = nullptr;
+    C_Hit* m_pHit = nullptr;
 };

@@ -195,14 +195,14 @@
     <ClInclude Include="Src\Camera\Camera.h">
       <Filter>Src\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Src\hit\HIt.h">
-      <Filter>Src\Hit</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Map\MapConstants.h">
       <Filter>Src\Map</Filter>
     </ClInclude>
     <ClInclude Include="Src\Skill\SkillBase.h">
       <Filter>Src\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Hit\Hit.h">
+      <Filter>Src\Hit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -293,11 +293,11 @@
     <ClCompile Include="Src\Camera\Camera.cpp">
       <Filter>Src\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Src\hit\HIt.cpp">
-      <Filter>Src\Hit</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Skill\SkillBase.cpp">
       <Filter>Src\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Hit\Hit.cpp">
+      <Filter>Src\Hit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

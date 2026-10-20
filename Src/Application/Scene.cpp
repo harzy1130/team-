@@ -30,6 +30,7 @@ void Scene::Init()
 	m_map.SetTexture(&m_chipTex);
 	m_boss.SetTexture(&m_bossTex);
 	m_player.setTex(&m_playerTex);
+	m_camera.Init();
 
 	if (!m_enemy.Init(&m_hit, &m_camera))
 	{
@@ -42,7 +43,6 @@ void Scene::Init()
 	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera);
 	m_boss.Init(&m_hit, &m_camera);
-	m_camera.Init();
 	m_hit.SetMapData(&m_map);
 	
 }

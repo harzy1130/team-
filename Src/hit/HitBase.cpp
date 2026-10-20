@@ -1,9 +1,10 @@
-ï»¿#include "Pch.h"
+#include "Pch.h"
 #include "HitBase.h"
+#include"hit.h"
 
 namespace
 {
-    // ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ã®çŸ©å½¢ã‚’æŒ‡å®šä½ç½®ã®ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã¸å¤‰æ›ã—ã€æ•´æ•°ã® RECT ã¨ã—ã¦è¿”ã™ã€‚
+    // ƒ[ƒJƒ‹À•W‚Ì‹éŒ`‚ğw’èˆÊ’u‚Ìƒ[ƒ‹ƒhÀ•W‚Ö•ÏŠ·‚µA®”‚Ì RECT ‚Æ‚µ‚Ä•Ô‚·B
     RECT WorldRect(const RECT& rect, const Math::Vector2& pos)
     {
         return RECT{static_cast<LONG>(pos.x + rect.left),
@@ -12,7 +13,7 @@ namespace
             static_cast<LONG>(pos.y + rect.bottom)};
     }
 
-    // å°æ•°ã®ä½ç½®ã‚’ä¿ã£ãŸã¾ã¾äºŒã¤ã®çŸ©å½¢ã®é‡ãªã‚Šã‚’åˆ¤å®šã™ã‚‹ã€‚è¾ºã®æ¥è§¦ã ã‘ã§ã¯è¡çªã¨ã—ãªã„ã€‚
+    // ¬”‚ÌˆÊ’u‚ğ•Û‚Á‚½‚Ü‚Ü“ñ‚Â‚Ì‹éŒ`‚Ìd‚È‚è‚ğ”»’è‚·‚éB•Ó‚ÌÚG‚¾‚¯‚Å‚ÍÕ“Ë‚Æ‚µ‚È‚¢B
     bool Overlaps(const RECT& a, const Math::Vector2& ap,
         const RECT& b, const Math::Vector2& bp)
     {
@@ -25,7 +26,7 @@ namespace
     }
 }
 
-// ä¸­å¿ƒã‹ã‚‰ã®åŠå¹…ãƒ»åŠé«˜ã•ã‚’æŒ‡å®šã—ã¦ã€ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ã®å½“ãŸã‚Šåˆ¤å®šçŸ©å½¢ã‚’è¨­å®šã™ã‚‹ã€‚
+// ’†S‚©‚ç‚Ì”¼•E”¼‚‚³‚ğw’è‚µ‚ÄAƒ[ƒJƒ‹À•W‚Ì“–‚½‚è”»’è‹éŒ`‚ğİ’è‚·‚éB
 void HitBase::SetRect(long halfWidth, long halfHeight)
 {
     halfWidth = std::max(0L, halfWidth);
@@ -33,31 +34,31 @@ void HitBase::SetRect(long halfWidth, long halfHeight)
     m_rect = RECT{-halfWidth, halfHeight, halfWidth, -halfHeight};
 }
 
-// ç¾åœ¨ä½ç½®ã§ã®å½“ãŸã‚Šåˆ¤å®šçŸ©å½¢ã‚’è¿”ã™ã€‚RECT ã®åº§æ¨™ã¯æ•´æ•°ã«å¤‰æ›ã•ã‚Œã‚‹ã€‚
+// Œ»İˆÊ’u‚Å‚Ì“–‚½‚è”»’è‹éŒ`‚ğ•Ô‚·BRECT ‚ÌÀ•W‚Í®”‚É•ÏŠ·‚³‚ê‚éB
 RECT HitBase::GetNowRect() const
 {
     return WorldRect(m_rect, m_pos);
 }
 
-// ç§»å‹•å¾Œã®äºˆæ¸¬ä½ç½®ã§ã®å½“ãŸã‚Šåˆ¤å®šçŸ©å½¢ã‚’è¿”ã™ã€‚RECT ã®åº§æ¨™ã¯æ•´æ•°ã«å¤‰æ›ã•ã‚Œã‚‹ã€‚
+// ˆÚ“®Œã‚Ì—\‘ªˆÊ’u‚Å‚Ì“–‚½‚è”»’è‹éŒ`‚ğ•Ô‚·BRECT ‚ÌÀ•W‚Í®”‚É•ÏŠ·‚³‚ê‚éB
 RECT HitBase::GetFutureRect() const
 {
     return WorldRect(m_rect, GetFuturePos());
 }
 
-// ç¾åœ¨ä½ç½®ã§ç›¸æ‰‹ã¨çŸ©å½¢ãŒé‡ãªã‚‹ã‹ã‚’èª¿ã¹ã‚‹ã€‚è¾ºãŒæ¥ã™ã‚‹ã ã‘ã®å ´åˆã¯ false ã‚’è¿”ã™ã€‚
+// Œ»İˆÊ’u‚Å‘Šè‚Æ‹éŒ`‚ªd‚È‚é‚©‚ğ’²‚×‚éB•Ó‚ªÚ‚·‚é‚¾‚¯‚Ìê‡‚Í false ‚ğ•Ô‚·B
 bool HitBase::IsHit(const HitBase& other) const
 {
     return Overlaps(m_rect, m_pos, other.m_rect, other.m_pos);
 }
 
-// åŒæ–¹ãŒç§»å‹•é‡ã‚’é©ç”¨ã—ãŸå¾Œã«ã€çŸ©å½¢ãŒé‡ãªã‚‹ã‹ã©ã†ã‹ã‚’äºˆæ¸¬ã™ã‚‹ã€‚
+// ‘o•û‚ªˆÚ“®—Ê‚ğ“K—p‚µ‚½Œã‚ÉA‹éŒ`‚ªd‚È‚é‚©‚Ç‚¤‚©‚ğ—\‘ª‚·‚éB
 bool HitBase::IsFutureHit(const HitBase& other) const
 {
     return Overlaps(m_rect, GetFuturePos(), other.m_rect, other.GetFuturePos());
 }
 
-// ç§»å‹•é‡ã‚’ç¾åœ¨ä½ç½®ã«ä¸€åº¦ã ã‘é©ç”¨ã—ã€é©ç”¨æ¸ˆã¿ã®ç§»å‹•é‡ã‚’ 0 ã«æˆ»ã™ã€‚
+// ˆÚ“®—Ê‚ğŒ»İˆÊ’u‚Éˆê“x‚¾‚¯“K—p‚µA“K—pÏ‚İ‚ÌˆÚ“®—Ê‚ğ 0 ‚É–ß‚·B
 void HitBase::ApplyMove()
 {
     m_pos += m_move;
