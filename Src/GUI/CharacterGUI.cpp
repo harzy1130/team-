@@ -6,9 +6,17 @@
 // 各 getter から最新の値を取得し、プレイヤーと敵の情報を並べて表示する。
 void CharacterGUI::Draw(C_PlayerBase& player, const EnemyBase& enemy)
 {
+    // 起動時は非表示。ゲーム画面で F1 を押した瞬間に表示を切り替える。
+    const bool keyDown = (GetAsyncKeyState(VK_F1) & 0x8000) != 0;
+    const bool focused = GetActiveWindow() != nullptr
+        && GetForegroundWindow() == GetActiveWindow();
+    if (focused && keyDown && !m_toggleWasDown) m_visible = !m_visible;
+    m_toggleWasDown = keyDown;
+    if (!m_visible) return;
+
     ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
     ImGui::SetNextWindowSize(ImVec2(520, 420), ImGuiSetCond_Once);
-    if (ImGui::Begin(u8"キャラクター情報"))
+    if (ImGui::Begin(u8"キャラクター情報", &m_visible))
     {
         ImGui::Columns(2, "CharacterStats", true);
 

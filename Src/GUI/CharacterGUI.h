@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 
 class C_PlayerBase;
 class EnemyBase;
@@ -6,6 +6,9 @@ class EnemyBase;
 class CharacterGUI
 {
 public:
-    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨æ•µã®ç¾åœ¨ã®æƒ…å ±ã‚’ã€èª­ã¿å–ã‚Šå°‚ç”¨ã® GUI ã«è¡¨ç¤ºã™ã‚‹ã€‚
+    // ƒvƒŒƒCƒ„[‚Æ“G‚ÌŒ»İ‚Ìî•ñ‚ğA“Ç‚İæ‚èê—p‚Ì GUI ‚É•\¦‚·‚éB
     void Draw(C_PlayerBase& player, const EnemyBase& enemy);
+private:
+    bool m_visible = false;
+    bool m_toggleWasDown = false;
 };
