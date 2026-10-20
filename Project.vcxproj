@@ -167,6 +167,7 @@
     <ClInclude Include="Src\Constans\Constants.h" />
     <ClInclude Include="Src\Enemy\Enemy1.h" />
     <ClInclude Include="Src\Enemy\EnemyBase.h" />
+    <ClInclude Include="Src\Game\GameStateManager\GameStateManager.h" />
     <ClInclude Include="Src\Hit\Hit.h" />
     <ClInclude Include="Src\hit\HitBase.h" />
     <ClInclude Include="Src\Map\IntParseResult.h" />

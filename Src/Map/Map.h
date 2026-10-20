@@ -32,6 +32,6 @@ private:
 	//参照する別クラスのポインタ
 	C_Camera* m_pCamera;
 
-
-	const int stageNum = 1;
+	//仮のステージ選択
+	const int stageNum = StageNum::stage1;
 };

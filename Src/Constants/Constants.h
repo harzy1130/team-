@@ -9,7 +9,7 @@ const float LEFT_EDGE     = -SCREEN_WIDTH  / 2;
 
 //マップ定数====================================
 static const int  MAP_HEIGHT  = 12;
-static const int  MAP_WIDTH   = 32;
+static const int  MAP_WIDTH   = 64;
 const int		  CHIP_SIZE   = 64;
 const int		  CHIP_RADIUS = CHIP_SIZE / 2;
 const std::string NEXT_ROW    = "NEXT_ROW";
@@ -24,8 +24,15 @@ struct S_ChipData
 
 const enum MapChip
 {
-	dirt = 1,
+	dirt  = 1,
 	glass = 2,
+};
+
+const enum StageNum
+{
+	stageSelect = 0,
+	stage1 = 1,
+	stage2 = 2,
 };
 
 //プレイヤー定数================================
@@ -72,3 +79,12 @@ struct S_HitBase
 //カメラ移動定数==============================
 
 static const float CAMERA_SPEED = 0.1f;
+
+//ゲームステート定数==========================
+const enum S_GameState
+{
+	title  = 0,
+	select = 1,
+	game   = 2,
+	result = 3
+};
