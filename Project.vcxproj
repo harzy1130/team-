@@ -164,7 +164,7 @@
     <ClInclude Include="Src\Boss\Boss.h" />
     <ClInclude Include="Src\Boss\BossBase.h" />
     <ClInclude Include="Src\Camera\Camera.h" />
-    <ClInclude Include="Src\Constans\Constants.h" />
+    <ClInclude Include="Src\Constants\Constants.h" />
     <ClInclude Include="Src\Enemy\Enemy1.h" />
     <ClInclude Include="Src\Enemy\EnemyBase.h" />
     <ClInclude Include="Src\Game\GameStateManager\GameStateManager.h" />

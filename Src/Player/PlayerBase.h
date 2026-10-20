@@ -2,10 +2,11 @@
 #include"Constants/Constants.h"
 #include"Skill/SkillBase.h"
 #include"Camera/Camera.h"
+#include"Hit/HitBase.h"
 
 class C_Hit;
 class C_Camera;
-class C_PlayerBase
+class C_PlayerBase : public HitBase
 {
 public:
 	C_PlayerBase() {};
@@ -17,58 +18,55 @@ public:
 
 	//ゲッター
 	//生存
-	virtual bool getAFlg()final { return m_bAlive; }
+	virtual bool GetAFlg()final { return m_bAlive; }
 	//画像サイズ
-	virtual float getTexSize()final { return m_TexSize; }
+	virtual float GetTexSize()final { return m_TexSize; }
 	//移動
-	virtual Math::Vector2 getPos()final { return m_pos; }
-	virtual Math::Vector2 getMove()final { return m_move; }
-	virtual Math::Vector2 getSkillMove()final { return m_skillMove; }
-	virtual bool getJumpFlg()final { return m_jumpFlg; }
-	virtual float getScaleX()final { return m_scaleX; }
+	//virtual Math::Vector2 GetPos()final { return m_pos; }
+	//virtual Math::Vector2 GetMove()final { return m_move; }
+	virtual Math::Vector2 GetSkillMove()final { return m_skillMove; }
+	virtual bool GetJumpFlg()final { return m_bJump; }
+	virtual float GetScaleX()final { return m_scaleX; }
 	//基本ステータス
-	virtual float getHP()final { return m_HP; }
-	virtual float getMAXHP()final { return m_MAXHP; }
-	virtual float getDEF()final { return m_DEF; }
-	virtual float getATK()final { return m_ATK; }
-	virtual float getAS()final { return m_AS; }
+	virtual float GetHP()final { return m_HP; }
+	virtual float GetMAXHP()final { return m_MAXHP; }
+	virtual float GetDEF()final { return m_DEF; }
+	virtual float GetATK()final { return m_ATK; }
+	virtual float GetAS()final { return m_AS; }
 	//特殊ステータス
-	virtual float getLifStl()final { return m_LifStl; }
-	virtual float getMS()final { return m_MSUP; }
-	virtual float getCrtDmg()final { return m_CrtDmgP; }
-	virtual float getCrtRate()final { return m_CrtRate; }
-	virtual float getSkillHaste()final { return m_SkillHaste; }
-	//当たり判定用
-	virtual S_HitBase getHitBase()final { return m_hitBase; }
+	virtual float GetLifStl()final { return m_LifStl; }
+	virtual float GetMS()final { return m_MSUP; }
+	virtual float GetCrtDmg()final { return m_CrtDmgP; }
+	virtual float GetCrtRate()final { return m_CrtRate; }
+	virtual float GetSkillHaste()final { return m_SkillHaste; }
 
 	//セッター
 	//生存
-	virtual void setAFlg(bool a_flg)final { m_bAlive = a_flg; }
+	virtual void SetAFlg(bool a_flg)final { m_bAlive = a_flg; }
 	//画像
-	virtual void setTex(KdTexture* a_tex)final { m_pTex = a_tex; }
+	virtual void SetTex(KdTexture* a_tex)final { m_pTex = a_tex; }
 	//移動
-	virtual void setPosX(float a_posX)final { m_pos.x = a_posX; }
-	virtual void setPosY(float a_posY)final { m_pos.y = a_posY; }
-	virtual void setMoveX(float a_moveX)final { m_move.x = a_moveX; }
-	virtual void setMoveY(float a_moveY)final { m_move.y = a_moveY; }
-	virtual void setSkillMoveX(float a_moveX) { m_skillMove.x = a_moveX; }
-	virtual void setSkillMoveY(float a_moveY) { m_skillMove.y = a_moveY; }
-	virtual void setJumpFlg(bool a_flg)final { m_jumpFlg = a_flg; }
+	virtual void SetPosX(float a_posX)final { m_pos.x = a_posX; }
+	virtual void SetPosY(float a_posY)final { m_pos.y = a_posY; }
+	virtual void SetMoveX(float a_moveX)final { m_move.x = a_moveX; }
+	virtual void SetMoveY(float a_moveY)final { m_move.y = a_moveY; }
+	virtual void SetSkillMoveX(float a_moveX) { m_skillMove.x = a_moveX; }
+	virtual void SetSkillMoveY(float a_moveY) { m_skillMove.y = a_moveY; }
+	virtual void SetJumpFlg(bool a_flg)final { m_bJump = a_flg; }
 
 	//基本ステータス
-	virtual void setHP(float a_HP)final { m_HP = a_HP; }
-	virtual void setMAXHP(float a_MAXHP)final { m_MAXHP = a_MAXHP; }
-	virtual void setDEF(float a_DEF)final { m_DEF = a_DEF; }
-	virtual void setATK(float a_ATK)final { m_ATK = a_ATK; }
-	virtual void setAS(float a_AS)final { m_AS = a_AS; }
+	virtual void SetHP(float a_HP)final { m_HP = a_HP; }
+	virtual void SetMAXHP(float a_MAXHP)final { m_MAXHP = a_MAXHP; }
+	virtual void SetDEF(float a_DEF)final { m_DEF = a_DEF; }
+	virtual void SetATK(float a_ATK)final { m_ATK = a_ATK; }
+	virtual void SetAS(float a_AS)final { m_AS = a_AS; }
 	//特殊ステータス
-	virtual void setLifStl(float a_LS)final { m_LifStl = a_LS; }
-	virtual void setMS(float a_MS)final { m_MSUP = a_MS; }
-	virtual void setHPRegene(float a_HPR)final { m_HPRegene = a_HPR; }
-	virtual void setCrtDmg(float a_CD)final { m_CrtDmgP = a_CD; }
-	virtual void setCrtRate(float a_CR)final { m_CrtRate = a_CR; }
-	//当たり判定用
-	virtual void setHitBase(S_HitBase a_hitbase) { m_hitBase = a_hitbase; }
+	virtual void SetLifStl(float a_LS)final { m_LifStl = a_LS; }
+	virtual void SetMS(float a_MS)final { m_MSUP = a_MS; }
+	virtual void SetHPRegene(float a_HPR)final { m_HPRegene = a_HPR; }
+	virtual void SetCrtDmg(float a_CD)final { m_CrtDmgP = a_CD; }
+	virtual void SetCrtRate(float a_CR)final { m_CrtRate = a_CR; }
+	//参照する外部クラス
 	virtual void SetHitClass(C_Hit* a_pHit) final { m_pHit = a_pHit; }
 	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
 
@@ -77,12 +75,12 @@ protected:
 	bool m_bAlive;
 
 	//移動用
-	Math::Vector2 m_pos;
-	Math::Vector2 m_move;
+	//Math::Vector2 m_pos;
+	//Math::Vector2 m_move;
 	Math::Vector2 m_skillMove;
 	float m_speed;
 	float m_scaleX = 1;
-	bool m_jumpFlg;
+	bool m_bJump;
 	const float m_Gravity = 1.0f;//重力
 	const float m_JumpPower = 20.0f;
 
@@ -108,9 +106,6 @@ protected:
 	float m_CrtDmgP;	//クリティカルダメージ
 	float m_CrtRate;	//クリティカル率
 	float m_SkillHaste;	//スキルヘイスト
-
-	//当たり判定用
-	S_HitBase m_hitBase;
 	
 	//参照するクラスのポインタ
 	C_Hit* m_pHit;
@@ -127,10 +122,6 @@ protected:
 
 	//操作
 	virtual void PlayerInput();
-
-	//hitBaseから値移し
-	virtual void HitBaseResult();
-	virtual void HitBaseSet();
 
 	//行列合成
 	virtual void CalcMat()final;

@@ -1,5 +1,6 @@
 #pragma once
 #include"Camera/Camera.h"
+#include"Constants/Constants.h"
 
 class C_Hit;
 class C_Camera;
@@ -16,6 +17,18 @@ public:
     void SetMove(float x, float y) { m_move = Math::Vector2(x, y); }
     // 中心からの半幅・半高さを指定して、ローカル座標の当たり判定矩形を設定する。
     void SetRect(long halfWidth, long halfHeight);
+    // 中心からの半径で円判定用の円を設定
+    void SetRadius(float a_radius) { m_radius = a_radius; }
+    // どこが当たっているかをリセット
+    void ResetHitRect();
+    // 左が壁に当たっている
+    void SetHitLeft(float a_x);
+    // 上が天井に当たっている
+    void SetHitTop(float a_y);
+    // 右が壁に当たっている
+    void SetHitRight(float a_x);
+    // 下が床に触れている
+    void SetHitBottom(float a_y);
     // 現在のワールド座標を返す。
     Math::Vector2 GetPos() const { return m_pos; }
     // まだ適用していない移動量を返す。
@@ -52,10 +65,11 @@ public:
     void SetCameraClass(C_Camera* a_pCamera) { m_pCamera = a_pCamera; };
 protected:
     RECT m_rect{};
+    S_HitRect m_bHitRect;
     Math::Vector2 m_pos{ 0.0f, 0.0f };
     Math::Vector2 m_draw{ 0.0f, 0.0f };
     Math::Vector2 m_move{ 0.0f, 0.0f };
-
+    float m_radius = 0;
     C_Camera* m_pCamera = nullptr;
     C_Hit* m_pHit = nullptr;
 };

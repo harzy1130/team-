@@ -18,7 +18,7 @@ void Scene::Update()
 	m_enemy.Update();
 	m_boss.Update();
 	m_player.Update();
-	m_camera.SetTurget(m_player.getPos());
+	m_camera.SetTurget(m_player.GetPos());
 }
 
 void Scene::Init()
@@ -29,7 +29,7 @@ void Scene::Init()
 	m_playerTex.Load("Texture/Chara.png");
 	m_map.SetTexture(&m_chipTex);
 	m_boss.SetTexture(&m_bossTex);
-	m_player.setTex(&m_playerTex);
+	m_player.SetTex(&m_playerTex);
 	m_camera.Init();
 
 	if (!m_enemy.Init(&m_hit, &m_camera))
@@ -43,7 +43,7 @@ void Scene::Init()
 	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera);
 	m_boss.Init(&m_hit, &m_camera);
-	m_hit.SetMapData(&m_map);
+	m_hit.SetMapClass(&m_map);
 	
 }
 
