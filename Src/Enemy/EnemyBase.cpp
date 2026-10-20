@@ -127,7 +127,7 @@ bool EnemyBase::MoveWithCollision(float horizontalMove)
     const float maxFallSpeed = static_cast<float>(CHIP_RADIUS) * 0.5f;
     m_velocityY = std::max(m_velocityY - GRAVITY, -maxFallSpeed);
     SetMove(horizontalMove, m_velocityY);
-    if (m_pHit != nullptr) m_pHit->HitCheck(this);
+    if (m_pHit != nullptr) m_pHit->MapHitCheck(this);
 
     // ApplyMove が移動量を消す前に、落地・天井衝突で補正された速度を保存する。
     const auto correctedMove = GetMove();

@@ -96,4 +96,5 @@
 //===============================================
 #include "System/KdSystem.h"
 
-
+//valueに入った値をmaxとminをもとに丸める。max>minである必要がある。
+float Clamp(float a_value, float a_max, float a_min);
