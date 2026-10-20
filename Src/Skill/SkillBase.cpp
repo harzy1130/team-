@@ -16,7 +16,7 @@ void C_Skill::Update()
 		if (m_count <= 0) {
 			m_bSkillMotion = false;
 			m_count = 10;
-			m_PB->setSkillMoveX(0);
+			m_PB->SetSkillMoveX(0);
 		}
 	}
 }
@@ -33,7 +33,7 @@ void C_Skill::SkillActivation(C_PlayerBase*a_pPlayer)
 	m_bSkillMotion = true;
 	m_CurrentState = S_State::Casting;
 	m_PB = a_pPlayer;
-	m_PB->setSkillMoveX(40*m_PB->getScaleX());
+	m_PB->SetSkillMoveX(40*m_PB->GetScaleX());
 	m_skillCD = SkillHasteCalc(m_skillCDMax,m_PB);
 	return;
 }
@@ -41,7 +41,7 @@ void C_Skill::SkillActivation(C_PlayerBase*a_pPlayer)
 
 float C_Skill::SkillHasteCalc(float a_CDMax, C_PlayerBase *a_pPlayer)
 {
-	return a_CDMax * (100.0f / (100.0f + a_pPlayer->getSkillHaste()));
+	return a_CDMax * (100.0f / (100.0f + a_pPlayer->GetSkillHaste()));
 }
 	
 

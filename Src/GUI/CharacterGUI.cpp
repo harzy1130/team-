@@ -1,12 +1,12 @@
-ï»¿#include "Pch.h"
+#include "Pch.h"
 #include "CharacterGUI.h"
 #include "Player/PlayerBase.h"
 #include "Enemy/EnemyBase.h"
 
-// å„ getter ã‹ã‚‰æœ€æ–°ã®å€¤ã‚’å–å¾—ã—ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨æ•µã®æƒ…å ±ã‚’ä¸¦ã¹ã¦è¡¨ç¤ºã™ã‚‹ã€‚
+// Še Getter ‚©‚çÅV‚Ì’l‚ğæ“¾‚µAƒvƒŒƒCƒ„[‚Æ“G‚Ìî•ñ‚ğ•À‚×‚Ä•\¦‚·‚éB
 void CharacterGUI::Draw(C_PlayerBase& player, const EnemyBase& enemy)
 {
-    // èµ·å‹•æ™‚ã¯éè¡¨ç¤ºã€‚ã‚²ãƒ¼ãƒ ç”»é¢ã§ F1 ã‚’æŠ¼ã—ãŸç¬é–“ã«è¡¨ç¤ºã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚
+    // ‹N“®‚Í”ñ•\¦BƒQ[ƒ€‰æ–Ê‚Å F1 ‚ğ‰Ÿ‚µ‚½uŠÔ‚É•\¦‚ğØ‚è‘Ö‚¦‚éB
     const bool keyDown = (GetAsyncKeyState(VK_F1) & 0x8000) != 0;
     const bool focused = GetActiveWindow() != nullptr
         && GetForegroundWindow() == GetActiveWindow();
@@ -16,50 +16,50 @@ void CharacterGUI::Draw(C_PlayerBase& player, const EnemyBase& enemy)
 
     ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
     ImGui::SetNextWindowSize(ImVec2(520, 420), ImGuiSetCond_Once);
-    if (ImGui::Begin(u8"ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼æƒ…å ±", &m_visible))
+    if (ImGui::Begin(u8"ƒLƒƒƒ‰ƒNƒ^[î•ñ", &m_visible))
     {
         ImGui::Columns(2, "CharacterStats", true);
 
-        ImGui::TextUnformatted(u8"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼");
+        ImGui::TextUnformatted(u8"ƒvƒŒƒCƒ„[");
         ImGui::Separator();
-        ImGui::Text(u8"HP: %.0f / %.0f", player.getHP(), player.getMAXHP());
-        ImGui::Text(u8"æ”»æ’ƒåŠ› (ATK): %.0f", player.getATK());
-        ImGui::Text(u8"é˜²å¾¡åŠ› (DEF): %.0f", player.getDEF());
-        ImGui::Text(u8"æ”»æ’ƒé€Ÿåº¦ (AS): %.0f", player.getAS());
-        // MS ã¯åŸºæœ¬é€Ÿåº¦ã§ã¯ãªãã€æ—¢å­˜ã® getter ãŒè¿”ã™è£œæ­£å€¤ã€‚
-        ImGui::Text(u8"ç§»å‹•é€Ÿåº¦è£œæ­£ (MS): %.1f %%", player.getMS());
-        ImGui::Text(u8"ãƒ©ã‚¤ãƒ•ã‚¹ãƒ†ã‚£ãƒ¼ãƒ«: %.1f", player.getLifStl());
-        ImGui::Text(u8"ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡: %.1f %%", player.getCrtRate());
-        ImGui::Text(u8"ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«å€ç‡: %.1f %%", player.getCrtDmg());
+        ImGui::Text(u8"HP: %.0f / %.0f", player.GetHP(), player.GetMAXHP());
+        ImGui::Text(u8"UŒ‚—Í (ATK): %.0f", player.GetATK());
+        ImGui::Text(u8"–hŒä—Í (DEF): %.0f", player.GetDEF());
+        ImGui::Text(u8"UŒ‚‘¬“x (AS): %.0f", player.GetAS());
+        // MS ‚ÍŠî–{‘¬“x‚Å‚Í‚È‚­AŠù‘¶‚Ì Getter ‚ª•Ô‚·•â³’lB
+        ImGui::Text(u8"ˆÚ“®‘¬“x•â³ (MS): %.1f %%", player.GetMS());
+        ImGui::Text(u8"ƒ‰ƒCƒtƒXƒeƒB[ƒ‹: %.1f", player.GetLifStl());
+        ImGui::Text(u8"ƒNƒŠƒeƒBƒJƒ‹—¦: %.1f %%", player.GetCrtRate());
+        ImGui::Text(u8"ƒNƒŠƒeƒBƒJƒ‹”{—¦: %.1f %%", player.GetCrtDmg());
         ImGui::Spacing();
-        const auto playerPos = player.getPos();
-        const auto playerMove = player.getMove();
-        ImGui::Text(u8"åº§æ¨™ X: %.1f", playerPos.x);
-        ImGui::Text(u8"åº§æ¨™ Y: %.1f", playerPos.y);
-        ImGui::Text(u8"ç§»å‹•é‡ X: %.1f", playerMove.x);
-        ImGui::Text(u8"ç§»å‹•é‡ Y: %.1f", playerMove.y);
-        ImGui::Text(u8"çŠ¶æ…‹: %s", player.getAFlg() ? u8"ç”Ÿå­˜" : u8"ç„¡åŠ¹");
-        ImGui::Text(u8"ã‚¸ãƒ£ãƒ³ãƒ—ä¸­: %s", player.getJumpFlg() ? u8"ã¯ã„" : u8"ã„ã„ãˆ");
+        const auto playerPos = player.GetPos();
+        const auto playerMove = player.GetMove();
+        ImGui::Text(u8"À•W X: %.1f", playerPos.x);
+        ImGui::Text(u8"À•W Y: %.1f", playerPos.y);
+        ImGui::Text(u8"ˆÚ“®—Ê X: %.1f", playerMove.x);
+        ImGui::Text(u8"ˆÚ“®—Ê Y: %.1f", playerMove.y);
+        ImGui::Text(u8"ó‘Ô: %s", player.GetAFlg() ? u8"¶‘¶" : u8"–³Œø");
+        ImGui::Text(u8"ƒWƒƒƒ“ƒv’†: %s", player.GetJumpFlg() ? u8"‚Í‚¢" : u8"‚¢‚¢‚¦");
 
         ImGui::NextColumn();
-        ImGui::TextUnformatted(u8"æ•µ (Enemy1)");
+        ImGui::TextUnformatted(u8"“G (Enemy1)");
         ImGui::Separator();
         ImGui::Text("HP: %d", enemy.GetHp());
-        ImGui::Text(u8"æ”»æ’ƒåŠ› (ATK): %d", enemy.GetAtk());
-        ImGui::Text(u8"å·¡å›é€Ÿåº¦: %.1f px/frame", enemy.GetMoveSpeed());
+        ImGui::Text(u8"UŒ‚—Í (ATK): %d", enemy.GetAtk());
+        ImGui::Text(u8"„‰ñ‘¬“x: %.1f px/frame", enemy.GetMoveSpeed());
         ImGui::Spacing();
         const auto enemyPos = enemy.GetPos();
-        ImGui::Text(u8"åº§æ¨™ X: %.1f", enemyPos.x);
-        ImGui::Text(u8"åº§æ¨™ Y: %.1f", enemyPos.y);
-        ImGui::Text(u8"è¶³å…ƒ Y: %.1f", enemy.GetHitBottom());
-        ImGui::Text(u8"çŠ¶æ…‹: %s", enemy.GetAlive() ? u8"ç”Ÿå­˜" : u8"æ­»äº¡");
-        ImGui::Text(u8"è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸ä¸­: %s", enemy.IsHurt() ? u8"ã¯ã„" : u8"ã„ã„ãˆ");
-        ImGui::Text(u8"ç„¡æ•µæ™‚é–“ä¸­: %s", enemy.IsInvincible() ? u8"ã¯ã„" : u8"ã„ã„ãˆ");
+        ImGui::Text(u8"À•W X: %.1f", enemyPos.x);
+        ImGui::Text(u8"À•W Y: %.1f", enemyPos.y);
+        ImGui::Text(u8"‘«Œ³ Y: %.1f", enemy.GetHitBottom());
+        ImGui::Text(u8"ó‘Ô: %s", enemy.GetAlive() ? u8"¶‘¶" : u8"€–S");
+        ImGui::Text(u8"”íƒ_ƒ[ƒW’†: %s", enemy.IsHurt() ? u8"‚Í‚¢" : u8"‚¢‚¢‚¦");
+        ImGui::Text(u8"–³“GŠÔ’†: %s", enemy.IsInvincible() ? u8"‚Í‚¢" : u8"‚¢‚¢‚¦");
         ImGui::Spacing();
-        ImGui::TextUnformatted(u8"H: æ•µã«25ãƒ€ãƒ¡ãƒ¼ã‚¸ï¼ˆãƒ†ã‚¹ãƒˆï¼‰");
+        ImGui::TextUnformatted(u8"H: “G‚É25ƒ_ƒ[ƒWiƒeƒXƒgj");
 
         ImGui::Columns(1);
     }
-    // Begin ãŒ false ã®å ´åˆã‚‚ã€å¯¾å¿œã™ã‚‹ End ã¯å¿…ãšå‘¼ã³å‡ºã™ã€‚
+    // Begin ‚ª false ‚Ìê‡‚àA‘Î‰‚·‚é End ‚Í•K‚¸ŒÄ‚Ño‚·B
     ImGui::End();
 }

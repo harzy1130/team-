@@ -39,6 +39,7 @@ const enum StageNum
 const float      GRAVITY    = 1.0f;
 const float      JUMP_POWER = 20.0f;
 static const int PTEX_SIZE  = 64;
+static const int PTEX_RADIUS= PTEX_SIZE / 2;
 
 //ボス定数======================================
 struct S_Boss
@@ -86,12 +87,3 @@ struct S_HitRect
 //カメラ移動定数==============================
 
 static const float CAMERA_SPEED = 0.1f;
-
-//ゲームステート定数==========================
-const enum S_GameState
-{
-	Title  = 0,
-	Select = 1,
-	Game   = 2,
-	Result = 3
-};

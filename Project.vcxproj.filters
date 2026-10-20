@@ -186,9 +186,6 @@
     <ClInclude Include="Src\Map\StringUtility.h">
       <Filter>Src\Map</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Constans\Constants.h">
-      <Filter>Src\Constants</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Enemy\Enemy1.h">
       <Filter>Src\Enemy</Filter>
     </ClInclude>
@@ -212,6 +209,9 @@
     </ClInclude>
     <ClInclude Include="Src\Game\GameStateManager\GameStateManager.h">
       <Filter>Src\Game\GameStateManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Constants\Constants.h">
+      <Filter>Src\Constants</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

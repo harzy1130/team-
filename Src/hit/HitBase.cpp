@@ -34,6 +34,39 @@ void HitBase::SetRect(long halfWidth, long halfHeight)
     m_rect = RECT{-halfWidth, halfHeight, halfWidth, -halfHeight};
 }
 
+void HitBase::ResetHitRect()
+{
+    m_bHitRect = { false,false,false,false };
+}
+
+void HitBase::SetHitLeft(float a_x)
+{
+    m_pos.x = a_x - m_rect.left;
+    m_move.x = 0;
+    m_bHitRect.left = true;
+}
+
+void HitBase::SetHitTop(float a_y)
+{
+    m_pos.y = a_y - m_rect.top;
+    m_move.y = 0;
+    m_bHitRect.top = true;
+}
+
+void HitBase::SetHitRight(float a_x)
+{
+    m_pos.x = a_x - m_rect.right;
+    m_move.x = 0;
+    m_bHitRect.right = true;
+}
+
+void HitBase::SetHitBottom(float a_y)
+{
+    m_pos.y = a_y - m_rect.bottom;
+    m_move.y = 0;
+    m_bHitRect.bottom = true;
+}
+
 // 現在位置での当たり判定矩形を返す。RECT の座標は整数に変換される。
 RECT HitBase::GetNowRect() const
 {
