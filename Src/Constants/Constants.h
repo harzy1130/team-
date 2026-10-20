@@ -76,6 +76,13 @@ struct S_HitBase
 	float radius;
 };
 
+struct S_HitRect
+{
+	bool left;
+	bool top;
+	bool right;
+	bool bottom;
+};
 //カメラ移動定数==============================
 
 static const float CAMERA_SPEED = 0.1f;
@@ -83,8 +90,8 @@ static const float CAMERA_SPEED = 0.1f;
 //ゲームステート定数==========================
 const enum S_GameState
 {
-	title  = 0,
-	select = 1,
-	game   = 2,
-	result = 3
+	Title  = 0,
+	Select = 1,
+	Game   = 2,
+	Result = 3
 };
