@@ -10,7 +10,7 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
     const float startX = LEFT_EDGE + 2.5f * PTEX_SIZE;
     const float leftX = LEFT_EDGE + PTEX_SIZE + PTEX_SIZE / 4.0f;
     const float rightX = LEFT_EDGE + 6.0f * PTEX_SIZE - PTEX_SIZE / 2.0f;
-    if (!EnemyBase::Init(startX, 0.0f, leftX, rightX))
+    if (!EnemyBase::Init(a_pHit, a_pCamera, startX, 0.0f, leftX, rightX))
     {
         OutputDebugStringA("Enemy1 texture load failed: Texture/Chara.png\n");
         return false;
@@ -20,8 +20,7 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
     SetHp(100);
     SetAtk(10);
     SetMoveSpeed(2.0f);
-    SetHitClass(a_pHit);
-    SetCameraClass(a_pCamera);
+
     m_testHitWasDown = false;
     CalcMat();
     return true;

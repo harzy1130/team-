@@ -1,10 +1,7 @@
 #pragma once
 #include "hit/HitBase.h"
-#include"Camera/Camera.h"
-#include"Hit/Hit.h"
 
-class C_Hit;
-class C_Camera;
+
 // Horizontal patrol enemy; shared collision data comes from HitBase.
 class EnemyBase  : public HitBase
 {
@@ -14,7 +11,7 @@ public:
 
     // speed: pixels per Update (the existing game uses a fixed-frame loop).
     // Returns false if the texture could not be loaded.
-    bool Init(float x = 0.0f, float y = 0.0f,
+    bool Init(C_Hit* a_pHit = nullptr, C_Camera* a_pCamera = nullptr, float x = 0.0f, float y = 0.0f,
         float leftX = -200.0f, float rightX = 200.0f,
         float speed = 2.0f, const char* texturePath = "Texture/Chara.png");
     void Update();
@@ -31,8 +28,6 @@ public:
     void SetHp(int hp);
     void SetAtk(int atk);
     void SetMoveSpeed(float speed);
-    void SetHitClass(C_Hit* a_pHit);
-    void SetCameraClass(C_Camera* a_pCamera);
 
     int GetHp() const { return m_hp; }
     int GetAtk() const { return m_atk; }
@@ -54,8 +49,4 @@ private:
     int m_invincibleFrames = 0;
     int m_hurtFrames = 0;
     float m_knockbackX = 0.0f;
-
-protected:
-    C_Camera* m_pCamera;
-    C_Hit* m_pHit;
 };

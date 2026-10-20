@@ -10,7 +10,7 @@ EnemyBase::EnemyBase()
 }
 
 // 初期位置・巡回範囲・速度を設定し、画像と当たり判定を初期化する。画像の読み込み失敗時は false を返す。
-bool EnemyBase::Init(float x, float y, float leftX, float rightX,
+bool EnemyBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, float x, float y, float leftX, float rightX,
     float speed, const char* texturePath)
 {
     Release();
@@ -18,7 +18,9 @@ bool EnemyBase::Init(float x, float y, float leftX, float rightX,
     m_direction = 1;
     SetPatrolRange(leftX, rightX);
     SetMoveSpeed(speed);
-   
+    SetHitClass(a_pHit);
+    SetCameraClass(a_pCamera);
+
     if (texturePath == nullptr || !m_texture.Load(texturePath))
     {
         return false;
@@ -76,16 +78,6 @@ void EnemyBase::SetMoveSpeed(float speed)
     m_moveSpeed = std::max(0.0f, speed);
 }
 
-void EnemyBase::SetHitClass(C_Hit* a_pHit)
-{
-    m_pHit = a_pHit;
-}
-
-void EnemyBase::SetCameraClass(C_Camera* a_pCamera)
-{
-    m_pCamera = a_pCamera;
-}
-
 // 無敵時間と被ダメージ状態を更新し、ノックバックまたは左右の巡回移動を行う。
 void EnemyBase::Update()
 {
@@ -123,10 +115,11 @@ void EnemyBase::Update()
 // 移動方向に応じた左右反転と、現在位置への平行移動を描画行列に反映する。
 void EnemyBase::CalcMat()
 {
+    m_draw = m_pos - m_pCamera->GetPos();
     // Turn 180 degrees around Y when moving left (horizontal sprite flip).
     const float angle = (m_direction < 0) ? DirectX::XM_PI : 0.0f;
     m_mat = Math::Matrix::CreateRotationY(angle)
-        * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0.0f);
+        * Math::Matrix::CreateTranslation(m_draw.x, m_draw.y, 0.0f);
 }
 
 // 生存中の敵を描画する。無敵時間中は表示を切り替えて点滅させる。
