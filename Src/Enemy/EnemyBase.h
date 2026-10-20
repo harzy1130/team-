@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "hit/HitBase.h"
 
 
@@ -36,6 +36,8 @@ public:
 
 
 private:
+    // 重力と地形衝突を処理して移動を一度だけ適用し、横方向の衝突結果を返す。
+    bool MoveWithCollision(float horizontalMove);
     KdTexture m_texture;
 
     Math::Matrix m_mat;
@@ -49,4 +51,5 @@ private:
     int m_invincibleFrames = 0;
     int m_hurtFrames = 0;
     float m_knockbackX = 0.0f;
+    float m_velocityY = 0.0f;
 };

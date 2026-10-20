@@ -1,5 +1,7 @@
 #include "Pch.h"
 #include "EnemyBase.h"
+#include "hit/hit.h"
+#include "Constants/Constants.h"
 
 // 敵の座標・描画行列・生存状態を初期化する。
 EnemyBase::EnemyBase()
@@ -48,6 +50,7 @@ void EnemyBase::SetHp(int hp)
     if (m_hp == 0)
     {
         m_bAlive = false;
+        m_velocityY = 0.0f;
         SetMove(0.0f, 0.0f);
     }
 }
@@ -82,34 +85,56 @@ void EnemyBase::SetMoveSpeed(float speed)
 void EnemyBase::Update()
 {
     if (!m_bAlive) return;
-
     if (m_invincibleFrames > 0) --m_invincibleFrames;
-    if (m_hurtFrames > 0)
+
+    const bool hurt = m_hurtFrames > 0;
+    float moveX = 0.0f;
+    if (hurt)
     {
         --m_hurtFrames;
         const float nextX = std::max(m_leftX,
             std::min(m_pos.x + m_knockbackX, m_rightX));
-        SetMove(nextX - m_pos.x, 0.0f);
-        ApplyMove();
-        m_knockbackX *= 0.8f;
-        return;
+        moveX = nextX - m_pos.x;
     }
-
-    SetMove(m_moveSpeed * static_cast<float>(m_direction), 0.0f);
-    const float nextX = GetFuturePos().x;
-
-    if (nextX >= m_rightX)
+    else
     {
-        SetMove(m_rightX - m_pos.x, 0.0f);
-        m_direction = -1;
-    }
-    else if (nextX <= m_leftX)
-    {
-        SetMove(m_leftX - m_pos.x, 0.0f);
-        m_direction = 1;
+        moveX = m_moveSpeed * static_cast<float>(m_direction);
+        const float nextX = m_pos.x + moveX;
+        if (nextX >= m_rightX)
+        {
+            moveX = m_rightX - m_pos.x;
+            m_direction = -1;
+        }
+        else if (nextX <= m_leftX)
+        {
+            moveX = m_leftX - m_pos.x;
+            m_direction = 1;
+        }
     }
 
+    // 巡回中もノックバック中も、同じ重力・衝突処理を通す。
+    const bool wall = MoveWithCollision(moveX);
+    if (hurt)
+        m_knockbackX = wall ? 0.0f : m_knockbackX * 0.8f;
+    else if (wall)
+        m_direction = moveX > 0.0f ? -1 : 1;
+}
+
+// 下向き速度を蓄積し、既存の HitCheck で補正してから座標を確定する。
+bool EnemyBase::MoveWithCollision(float horizontalMove)
+{
+    // 落下速度を制限し、1 フレームでマップチップを飛び越えにくくする。
+    const float maxFallSpeed = static_cast<float>(CHIP_RADIUS) * 0.5f;
+    m_velocityY = std::max(m_velocityY - GRAVITY, -maxFallSpeed);
+    SetMove(horizontalMove, m_velocityY);
+    if (m_pHit != nullptr) m_pHit->HitCheck(this);
+
+    // ApplyMove が移動量を消す前に、落地・天井衝突で補正された速度を保存する。
+    const auto correctedMove = GetMove();
+    m_velocityY = correctedMove.y;
+    const bool wall = horizontalMove != 0.0f && correctedMove.x == 0.0f;
     ApplyMove();
+    return wall;
 }
 
 // 移動方向に応じた左右反転と、現在位置への平行移動を描画行列に反映する。
@@ -145,6 +170,7 @@ void EnemyBase::Release()
     m_invincibleFrames = 0;
     m_hurtFrames = 0;
     m_knockbackX = 0.0f;
+    m_velocityY = 0.0f;
     SetMove(0.0f, 0.0f);
     m_texture.Release();
 }

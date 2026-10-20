@@ -1,8 +1,8 @@
-#include "Pch.h"
+ï»¿#include "Pch.h"
 #include "Enemy1.h"
 #include "Constants/Constants.h"
 
-// Enemy1 ‚Ì‰ŠúƒXƒe[ƒ^ƒX‚Æ„‰ñ”ÍˆÍ‚ğİ’è‚µAStage1 ¶‘¤‚Ì•½’n‚É‘«Œ³‚ğ‡‚í‚¹‚éB
+// Enemy1 ã®åˆæœŸã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¨å·¡å›ç¯„å›²ã‚’è¨­å®šã—ã€Stage1 å·¦å´ã®å¹³åœ°ã«è¶³å…ƒã‚’åˆã‚ã›ã‚‹ã€‚
 bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
 {
     // Stage1's left flat floor occupies row MapHeight - 2.
@@ -16,7 +16,8 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
         return false;
     }
     const float floorTop = TOP_EDGE - (MAP_HEIGHT - 2) * PTEX_SIZE + PTEX_SIZE / 2.0f;
-    SetPos(startX, floorTop - static_cast<float>(GetRect().bottom));
+    // åœ°é¢ã‚ˆã‚Š 1 ãƒãƒƒãƒ—ãƒãƒƒãƒ—åˆ†é«˜ã„ä½ç½®ã«å‡ºç¾ã•ã›ã€è½ä¸‹ã¨ç€åœ°ã‚’ç¢ºèªã™ã‚‹ã€‚
+    SetPos(startX, floorTop - static_cast<float>(GetRect().bottom) + CHIP_SIZE);
     SetHp(100);
     SetAtk(10);
     SetMoveSpeed(2.0f);
@@ -26,7 +27,7 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
     return true;
 }
 
-// ƒQ[ƒ€‰æ–Ê‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚éŠÔAH ƒL[‚ğ‰Ÿ‚µ‚½uŠÔ‚É”íƒ_ƒ[ƒW‚ğƒeƒXƒg‚µA“G‚Ì‹¤’ÊXV‚ğŒÄ‚Ño‚·B
+// ã‚²ãƒ¼ãƒ ç”»é¢ãŒé¸æŠã•ã‚Œã¦ã„ã‚‹é–“ã€H ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸç¬é–“ã«è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ†ã‚¹ãƒˆã—ã€æ•µã®å…±é€šæ›´æ–°ã‚’å‘¼ã³å‡ºã™ã€‚
 void Enemy1::Update()
 {
     // Temporary enemy-only test. Real attacks should call TakeDamage on a hit.
