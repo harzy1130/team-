@@ -67,6 +67,12 @@
     <Filter Include="Src\Skill">
       <UniqueIdentifier>{97335821-ab0a-4df2-bfe1-fa7f443aab7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Game">
+      <UniqueIdentifier>{8deb851d-cac0-4412-bd92-45338809dd29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Game\GameStateManager">
+      <UniqueIdentifier>{04def199-bd8a-402a-b99b-06f561545526}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -203,6 +209,9 @@
     </ClInclude>
     <ClInclude Include="Src\Hit\Hit.h">
       <Filter>Src\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GameStateManager\GameStateManager.h">
+      <Filter>Src\Game\GameStateManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

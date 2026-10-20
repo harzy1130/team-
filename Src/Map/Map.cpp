@@ -113,7 +113,7 @@ void C_Map::Load()
 		if (result.IsSuccess)
 		{
 			m_chip[h][w].data = result.Number;
-			if (m_chip[h][w].data == 0)m_chip[h][w].collisionFlg = false;
+			if (m_chip[h][w].data == 0 || m_chip[h][w].data == 1)m_chip[h][w].collisionFlg = false;
 			else m_chip[h][w].collisionFlg = true;
 			w++;
 		}
