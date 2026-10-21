@@ -1,11 +1,8 @@
 #pragma once
 #include"Constants/Constants.h"
 #include"Skill/SkillBase.h"
-#include"Camera/Camera.h"
 #include"Hit/HitBase.h"
 
-class C_Hit;
-class C_Camera;
 class C_PlayerBase : public HitBase
 {
 public:
@@ -21,9 +18,6 @@ public:
 	virtual bool GetAFlg()final { return m_bAlive; }
 	//画像サイズ
 	virtual float GetTexSize()final { return m_TexSize; }
-	//移動
-	//virtual Math::Vector2 GetPos()final { return m_pos; }
-	//virtual Math::Vector2 GetMove()final { return m_move; }
 	virtual Math::Vector2 GetSkillMove()final { return m_skillMove; }
 	virtual bool GetJumpFlg()final { return m_bJump; }
 	virtual float GetScaleX()final { return m_scaleX; }
@@ -67,8 +61,8 @@ public:
 	virtual void SetCrtDmg(float a_CD)final { m_CrtDmgP = a_CD; }
 	virtual void SetCrtRate(float a_CR)final { m_CrtRate = a_CR; }
 	//参照する外部クラス
-	virtual void SetHitClass(C_Hit* a_pHit) final { m_pHit = a_pHit; }
-	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
+	//virtual void SetHitClass(C_Hit* a_pHit) final { m_pHit = a_pHit; }
+	//virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
 
 protected:
 	//生存
@@ -108,8 +102,8 @@ protected:
 	float m_SkillHaste;	//スキルヘイスト
 	
 	//参照するクラスのポインタ
-	C_Hit* m_pHit;
-	C_Camera* m_pCamera;
+	//C_Hit* m_pHit;
+	//C_Camera* m_pCamera;
 
 	//タイマー変数
 	float m_HPRegeneCD=0;
