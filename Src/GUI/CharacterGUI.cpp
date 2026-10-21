@@ -54,18 +54,23 @@ void CharacterGUI::Draw(C_PlayerBase& player, const EnemyBase& enemy, C_GameStat
 
         ImGui::Columns(1);
 
-        ImGui::NextColumn();
+        ImGui::Columns(2, "", true);
         ImGui::Separator();
-        ImGui::TextUnformatted(u8"GameState");
-        ImGui::Text("GameState: %d", game.GetGameState());
-        ImGui::Text("StageNum: %d", map.GetStageNum());
-        if (ImGui::Button(u8"テストステージに移動"))
-        {
-            map.SetStageNum(StageNum::Test);
-            map.Load();
-            map.Create();
-            game.SetGameState(GameState::Game);
-        }
+        ImGui::TextUnformatted(u8"ゲームの状態");
+        if (game.GetGameState() == GameState::Title)ImGui::Text(u8"タイトル");
+        if (game.GetGameState() == GameState::Select)ImGui::Text(u8"セレクト");
+        if (game.GetGameState() == GameState::Game)ImGui::Text(u8"ゲーム");
+
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Text(u8"T: タイトル\nR: セレクトステージ\n1: テストステージ ");
+
+        ImGui::NextColumn();
+        ImGui::TextUnformatted(u8"現在のステージ");
+        if (map.GetStageNum() == StageNum::stage1)ImGui::Text(u8"ステージ１");
+        if (map.GetStageNum() == StageNum::stage2)ImGui::Text(u8"ステージ２");
+        if (map.GetStageNum() == StageNum::stageSelect)ImGui::Text(u8"セレクトステージ");
+        if (map.GetStageNum() == StageNum::Test)ImGui::Text(u8"テストステージ");
     }
     // Begin が false の場合も、対応する End は必ず呼び出す。
     ImGui::End();

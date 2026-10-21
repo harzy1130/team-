@@ -1,22 +1,23 @@
 #include"GameStateManager.h"
 
-C_GameStateManager::C_GameStateManager() : m_gameState(GameState::Title), 
-										   m_pMap(nullptr),
-										   m_pPlayer(nullptr){}
+C_GameStateManager::C_GameStateManager() : m_gameState(GameState::Title),
+m_pMap(nullptr),
+m_pPlayer(nullptr) {
+}
 
 void C_GameStateManager::Draw()
 {
 	switch (m_gameState)
 	{
 	case GameState::Title:
-		SHADER.m_spriteShader.DrawString(-200, 0, "タイトル(仮)\nEnterでセレクトステージに遷移", Math::Vector4(1, 0, 1, 1));
+		SHADER.m_spriteShader.DrawString(-200, 0, "タイトル(仮)\nEnterでセレクトステージ遷移\n1 でテストステージ遷移", Math::Vector4(0, 1, 1, 1));
 		break;
-	//case GameState::Select:
-	//	break;
-	//case GameState::Game:
-	//	break;
-	//case GameState::Result:
-	//	break;
+		//case GameState::Select:
+		//	break;
+		//case GameState::Game:
+		//	break;
+		//case GameState::Result:
+		//	break;
 	default:
 		break;
 	}
@@ -34,8 +35,7 @@ void C_GameStateManager::Update()
 		m_pMap->Load();
 		m_pMap->Create();
 	}
-
-	//Enterキーでステージ選択画面に遷移
+	//ステージ選択画面
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		if (m_gameState == GameState::Title)
@@ -43,8 +43,7 @@ void C_GameStateManager::Update()
 			m_gameState = GameState::Select;
 		}
 	}
-
-	// Rキーでリザルト画面に遷移
+	// リザルト画面
 	// そのままセレクトステージへ
 	if (GetAsyncKeyState('R') & 0x8000)
 	{
@@ -53,13 +52,25 @@ void C_GameStateManager::Update()
 			m_gameState = GameState::Result;
 		}
 	}
+	//	テストステージ
+	if (GetAsyncKeyState('1') & 0x8000)
+	{
+		if (m_gameState != GameState::Game || m_pMap->GetStageNum() != StageNum::Test)
+		{
+			m_pMap->SetStageNum(StageNum::Test);
+			m_pMap->Load();
+			m_pMap->Create();
+			m_pPlayer->SetPos(150, -200);
+			SetGameState(GameState::Game);
+		}
+	}
 	//============================================================
 
 
 	switch (m_gameState)
 	{
 	case GameState::Title:
-		m_pPlayer->SetPos(0,-200);
+		m_pPlayer->SetPos(0, -200);
 		break;
 	case GameState::Select:
 		StageTransition();
@@ -70,7 +81,7 @@ void C_GameStateManager::Update()
 		m_pMap->SetStageNum(StageNum::stageSelect);
 		m_pMap->Load();
 		m_pMap->Create();
-		
+
 		m_pPlayer->SetPos(0, -200);
 
 		m_gameState = GameState::Select;
@@ -81,7 +92,7 @@ void C_GameStateManager::Update()
 
 void C_GameStateManager::StageTransition()
 {
-	float nearStageDistance = pow(60.0f,2);
+	float nearStageDistance = pow(60.0f, 2);
 	StageNum nearStage{};
 	bool foundStage = false;
 
@@ -89,7 +100,7 @@ void C_GameStateManager::StageTransition()
 	{
 		for (int w = 0;w < m_pMap->GetIdxMaxMin().first;w++)
 		{
-			switch (m_pMap->GetData(h,w))
+			switch (m_pMap->GetData(h, w))
 			{
 			case MapChip::s1:
 				SearchNearStage(h, w, StageNum::stage1, nearStageDistance, nearStage, foundStage);
@@ -118,7 +129,7 @@ void C_GameStateManager::StageTransition()
 void C_GameStateManager::SearchNearStage(int h, int w, StageNum stage, float& nearestStageDistance, StageNum& nearestStage, bool& foundStage)
 {
 	float x, y, ToStageDistance = 0;
-	
+
 	x = m_pPlayer->GetPos().x - m_pMap->GetPosition(h, w).x;
 	y = m_pPlayer->GetPos().y - m_pMap->GetPosition(h, w).y;
 	ToStageDistance = pow(x, 2) + pow(y, 2);
