@@ -1,9 +1,10 @@
 ﻿#include "Pch.h"
 #include "Enemy1.h"
+#include "Map/Map.h"
 #include "Constants/Constants.h"
 
 // Enemy1 の初期ステータスと巡回範囲を設定し、Stage1 左側の平地に足元を合わせる。
-bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
+bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map)
 {
     // Stage1's left flat floor occupies row MapHeight - 2.
     // Map::Create uses tile CENTERS: LEFT_EDGE + col*PTEX_SIZE, TopEdge - row*PTEX_SIZE.
@@ -21,6 +22,12 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
     SetHp(100);
     SetAtk(10);
     SetMoveSpeed(2.0f);
+    SetVision(320.0f, 60.0f, 560.0f);
+    SetChaseSpeed(6.0f);
+    SetVisionMap(map);
+    m_map = map;
+    m_wasActive = false;
+    m_stage = -1;
 
     m_testHitWasDown = false;
     CalcMat();
@@ -37,6 +44,26 @@ void Enemy1::Update()
     if (hitDown && !m_testHitWasDown)
         TakeDamage(25, GetPos().x - 100.0f);
     m_testHitWasDown = hitDown;
-    m_pCamera->GetPos();
     EnemyBase::Update();
+}
+
+void Enemy1::Update(const HitBase* target, bool active)
+{
+    if (!active)
+    {
+        m_wasActive = false;
+        ResetAwareness();
+        return;
+    }
+
+    // Covers normal entry, reentry, and switching stages directly from the GUI.
+    if (m_map != nullptr && (!m_wasActive || m_stage != m_map->GetStageNum()))
+    {
+        if (!PlaceOnMap(m_map))
+            OutputDebugStringA("Enemy spawn failed: no ground below spawn column.\n");
+        m_stage = m_map->GetStageNum();
+    }
+    m_wasActive = true;
+    SetTarget(target);
+    Update();
 }
