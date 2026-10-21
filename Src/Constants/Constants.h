@@ -26,13 +26,16 @@ const enum MapChip
 {
 	dirt  = 1,
 	glass = 2,
+	s1    = 10,
+	s2    = 11,
 };
 
 const enum StageNum
 {
 	stageSelect = 0,
-	stage1 = 1,
-	stage2 = 2,
+	stage1      = 1,
+	stage2      = 2,
+	Test        = 10,
 };
 
 //ƒvƒŒƒCƒ„[’è”================================

@@ -167,7 +167,7 @@
     <ClInclude Include="Src\Constants\Constants.h" />
     <ClInclude Include="Src\Enemy\Enemy1.h" />
     <ClInclude Include="Src\Enemy\EnemyBase.h" />
-    <ClInclude Include="Src\Game\GameStateManager\GameStateManager.h" />
+    <ClInclude Include="Src\GameStateManager\GameStateManager.h" />
     <ClInclude Include="Src\Hit\Hit.h" />
     <ClInclude Include="Src\hit\HitBase.h" />
     <ClInclude Include="Src\Map\IntParseResult.h" />
@@ -206,6 +206,7 @@
     <ClCompile Include="Src\Camera\Camera.cpp" />
     <ClCompile Include="Src\Enemy\Enemy1.cpp" />
     <ClCompile Include="Src\Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Src\GameStateManager\GameStateManager.cpp" />
     <ClCompile Include="Src\Hit\Hit.cpp" />
     <ClCompile Include="Src\hit\HitBase.cpp" />
     <ClCompile Include="Src\Map\Map.cpp" />

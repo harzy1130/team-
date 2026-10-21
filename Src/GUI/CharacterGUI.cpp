@@ -2,21 +2,15 @@
 #include "CharacterGUI.h"
 #include "Player/PlayerBase.h"
 #include "Enemy/EnemyBase.h"
+#include "GameStateManager/GameStateManager.h"
+#include "Map/Map.h"
 
-// 各 Getter から最新の値を取得し、プレイヤーと敵の情報を並べて表示する。
-void CharacterGUI::Draw(C_PlayerBase& player, const EnemyBase& enemy)
+// 各 getter から最新の値を取得し、プレイヤーと敵の情報を並べて表示する。
+void CharacterGUI::Draw(C_PlayerBase& player, const EnemyBase& enemy, C_GameStateManager& game, C_Map& map)
 {
-    // 起動時は非表示。ゲーム画面で F1 を押した瞬間に表示を切り替える。
-    const bool keyDown = (GetAsyncKeyState(VK_F1) & 0x8000) != 0;
-    const bool focused = GetActiveWindow() != nullptr
-        && GetForegroundWindow() == GetActiveWindow();
-    if (focused && keyDown && !m_toggleWasDown) m_visible = !m_visible;
-    m_toggleWasDown = keyDown;
-    if (!m_visible) return;
-
     ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
-    ImGui::SetNextWindowSize(ImVec2(520, 420), ImGuiSetCond_Once);
-    if (ImGui::Begin(u8"キャラクター情報", &m_visible))
+    ImGui::SetNextWindowSize(ImVec2(550, 420), ImGuiSetCond_Once);
+    if (ImGui::Begin(u8"キャラクター情報"))
     {
         ImGui::Columns(2, "CharacterStats", true);
 
@@ -59,6 +53,19 @@ void CharacterGUI::Draw(C_PlayerBase& player, const EnemyBase& enemy)
         ImGui::TextUnformatted(u8"H: 敵に25ダメージ（テスト）");
 
         ImGui::Columns(1);
+
+        ImGui::NextColumn();
+        ImGui::Separator();
+        ImGui::TextUnformatted(u8"GameState");
+        ImGui::Text("GameState: %d", game.GetGameState());
+        ImGui::Text("StageNum: %d", map.GetStageNum());
+        if (ImGui::Button(u8"テストステージに移動"))
+        {
+            map.SetStageNum(StageNum::Test);
+            map.Load();
+            map.Create();
+            game.SetGameState(GameState::Game);
+        }
     }
     // Begin が false の場合も、対応する End は必ず呼び出す。
     ImGui::End();
