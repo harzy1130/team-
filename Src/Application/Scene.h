@@ -20,8 +20,6 @@ private:
 	C_PlayerBase m_player;
 	C_Boss m_boss;
 	Enemy1 m_enemy;
-	bool m_enemyWasInGame = false;
-	int m_enemyStage = -1;
 	C_Map m_map;
 	C_Camera m_camera;
 	C_Hit m_hit;

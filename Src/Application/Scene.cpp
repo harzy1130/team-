@@ -21,38 +21,21 @@ void Scene::Draw2D()
 
 void Scene::Update()
 {
-	if (m_game.GetGameState() != GameState::Game) m_enemyWasInGame = false;
-	if (m_game.GetGameState() == GameState::Select || m_game.GetGameState() == GameState::Game)
+	const bool inGame = m_game.GetGameState() == GameState::Game;
+	if (m_game.GetGameState() == GameState::Select || inGame)
 	{
 		m_camera.Update();
 		m_map.Update();
 		m_player.Update();
 		m_camera.SetTurget(m_player.GetPos());
-		if (m_game.GetGameState() == GameState::Game)
-		{
-            // Detect both normal stage entry and the GUI's direct stage switch.
-            if (!m_enemyWasInGame || m_enemyStage != m_map.GetStageNum())
-            {
-                if (!m_enemy.PlaceOnMap(&m_map))
-                    OutputDebugStringA("Enemy spawn failed: no ground below spawn column.\n");
-                m_enemyStage = m_map.GetStageNum();
-                m_enemyWasInGame = true;
-            }
-            m_enemy.SetTarget(m_player.GetAFlg() ? &m_player : nullptr);
-			m_enemy.Update();
-			m_boss.Update();
-		}
 	}
-	// Clear pursuit when changing stages, titles, or results.
-	const auto previousState = m_game.GetGameState();
+	m_enemy.Update(m_player.GetAFlg() ? &m_player : nullptr, inGame);
+	if (inGame) m_boss.Update();
 	m_game.Update();
-	if (previousState != m_game.GetGameState()) m_enemy.ResetAwareness();
 }
 
 void Scene::Init()
 {
-	m_enemyWasInGame = false;
-	m_enemyStage = -1;
 	m_backTex.Load("Texture/back1.png");
 	m_chipTex.Load("Texture/MapChip.png");
 	m_bossTex.Load("Texture/boss.png");
@@ -65,17 +48,11 @@ void Scene::Init()
 	m_game.SetMapData(&m_map);
 	m_game.SetPlayerData(&m_player);
 
-	if (!m_enemy.Init(&m_hit, &m_camera))
+	if (!m_enemy.Init(&m_hit, &m_camera, &m_map))
 	{
 		OutputDebugStringA("Enemy texture load failed: Texture/Chara.png\n");
 	}
 
-	m_enemy.SetVisionMap(&m_map);
-	m_enemy.SetVision(320.0f, 60.0f, 560.0f);
-	m_enemy.SetChaseSpeed(4.0f);
-	m_enemy.SetHp(100);
-	m_enemy.SetAtk(10);
-	m_enemy.SetMoveSpeed(2.0f);
 	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera);
 	m_boss.Init(&m_hit, &m_camera);
