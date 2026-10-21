@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Library">
@@ -356,5 +356,14 @@
     <ClCompile Include="Src\GUI\CharacterGUI.cpp">
       <Filter>Src\GUI</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Skill\EnemySkill.h"><Filter>Src\Skill</Filter></ClInclude>
+    <ClCompile Include="Src\Skill\EnemySkill.cpp"><Filter>Src\Skill</Filter></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Enemy\EnemyManager.h"><Filter>Src\Enemy</Filter></ClInclude>
+    <ClCompile Include="Src\Enemy\EnemyManager.cpp"><Filter>Src\Enemy</Filter></ClCompile>
+    <None Include="Src\Enemy\EnemySpawns.csv"><Filter>Src\Enemy</Filter></None>
   </ItemGroup>
 </Project>
