@@ -22,6 +22,7 @@ bool EnemyBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, float x, float y, float
     m_direction = 1;
     SetPatrolRange(leftX, rightX);
     m_spawnX = m_pos.x;
+    m_spawnSearchY = y;
     SetMoveSpeed(speed);
     SetHitClass(a_pHit);
     SetCameraClass(a_pCamera);
@@ -33,6 +34,7 @@ bool EnemyBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, float x, float y, float
 
     const auto& info = m_texture.GetInfo();
     SetRect(static_cast<long>(info.Width / 2), static_cast<long>(info.Height / 2));
+    ResetHitRect();
     m_bAlive = true;
     CalcMat();
     return true;
@@ -106,10 +108,14 @@ void EnemyBase::Update()
         --m_hurtFrames;
         moveX = m_knockbackX;
     }
+    else if (GetActionMove(moveX))
+    {
+        // 固有行動は X 方向の移動量だけを指定し、座標への適用は MoveWithCollision で一度だけ行う。
+    }
     else if (m_chasing)
     {
         const float dx = m_target->GetPos().x - m_pos.x;
-        // Stop at the target's X instead of overshooting and turning every frame.
+        // ターゲットの X 座標で止め、通り過ぎて毎フレーム向きが反転するのを防ぐ。
         if (std::abs(dx) > 1.0f)
         {
             m_direction = dx > 0.0f ? 1 : -1;
@@ -118,7 +124,7 @@ void EnemyBase::Update()
     }
     else if (m_pos.x < m_leftX || m_pos.x > m_rightX)
     {
-        // Walk back after losing the target; never teleport into the patrol area.
+        // ターゲットを見失った後は、巡回範囲まで歩いて戻る。
         const float goal = m_pos.x < m_leftX ? m_leftX : m_rightX;
         m_direction = goal > m_pos.x ? 1 : -1;
         moveX = static_cast<float>(m_direction) * std::min(m_moveSpeed, std::abs(goal - m_pos.x));
@@ -150,6 +156,7 @@ bool EnemyBase::MoveWithCollision(float horizontalMove)
     const float maxFallSpeed = static_cast<float>(CHIP_RADIUS) * 0.5f;
     m_velocityY = std::max(m_velocityY - GRAVITY, -maxFallSpeed);
     SetMove(horizontalMove, m_velocityY);
+    ResetHitRect();
     if (m_pHit != nullptr) m_pHit->MapHitCheck(this);
 
     // ApplyMove が移動量を消す前に、落地・天井衝突で補正された速度を保存する。
@@ -164,7 +171,7 @@ bool EnemyBase::MoveWithCollision(float horizontalMove)
 void EnemyBase::CalcMat()
 {
     m_draw = m_pCamera ? m_pos - m_pCamera->GetPos() : m_pos;
-    // Turn 180 degrees around Y when moving left (horizontal sprite flip).
+    // 左向きの場合は Y 軸を中心に 180 度回転し、画像を左右反転する。
     const float angle = (m_direction < 0) ? DirectX::XM_PI : 0.0f;
     m_mat = Math::Matrix::CreateRotationY(angle)
         * Math::Matrix::CreateTranslation(m_draw.x, m_draw.y, 0.0f);
@@ -200,7 +207,7 @@ void EnemyBase::Release()
     m_texture.Release();
 }
 
-// Keep acquisition and release distances separate to prevent rapid state toggling.
+// 発見距離と追跡解除距離を分け、状態が短時間で切り替わり続けるのを防ぐ。
 void EnemyBase::SetVision(float range, float fullAngleDegrees, float loseDistance)
 {
     m_visionRange = std::max(1.0f, range);
@@ -208,8 +215,8 @@ void EnemyBase::SetVision(float range, float fullAngleDegrees, float loseDistanc
     m_loseDistance = std::max(m_visionRange + 1.0f, loseDistance);
 }
 
-// Tile centers are LEFT_EDGE + col*CHIP_SIZE, TOP_EDGE - row*CHIP_SIZE.
-// Bounds are checked here because GetCollisionFlg does not guard negative indices.
+// チップの中心座標は X: LEFT_EDGE + 列 * CHIP_SIZE、Y: TOP_EDGE - 行 * CHIP_SIZE。
+// GetCollisionFlg は負の添字を確認しないため、ここで範囲をチェックする。
 float EnemyBase::TraceVision(float directionX, float directionY, float distance) const
 {
     if (m_visionMap == nullptr) return distance;
@@ -240,7 +247,7 @@ bool EnemyBase::CanSeeTarget() const
     return TraceVision(delta.x / distance, delta.y / distance, distance) >= distance;
 }
 
-// Render the same wall-clipped sector used for detection, behind both characters.
+// 検知と同じ壁で遮られる扇形の視野を、両キャラクターより奥に描画する。
 void EnemyBase::DrawVision()
 {
     if (!m_bAlive) return;
@@ -282,7 +289,7 @@ void EnemyBase::DrawVision()
 bool EnemyBase::PlaceOnMap(C_Map* map)
 {
     if (map == nullptr) return false;
-    // Query the entire foot width, not just the center tile. Tiles are centered.
+    // チップの中心座標を基準に、中心の 1 マスだけでなく足元の幅全体を調べる。
     const int firstCol = static_cast<int>(std::floor(
         (m_spawnX + m_rect.left - LEFT_EDGE + CHIP_RADIUS + 0.01f) / CHIP_SIZE));
     const int lastCol = static_cast<int>(std::floor(
@@ -290,13 +297,15 @@ bool EnemyBase::PlaceOnMap(C_Map* map)
     if (firstCol < 0 || lastCol >= MAP_WIDTH) return false;
     for (int row = 0; row < MAP_HEIGHT; ++row)
     {
+        const float floorTop = TOP_EDGE - row * CHIP_SIZE + CHIP_RADIUS;
+        // 指定した高さより上の足場を選ばず、多段地形の配置にも対応する。
+        if (floorTop > m_spawnSearchY + m_rect.bottom) continue;
         bool ground = false;
         for (int col = firstCol; col <= lastCol; ++col)
             if (map->GetCollisionFlg(row, col)) ground = true;
         if (!ground) continue;
 
-        const float floorTop = TOP_EDGE - row * CHIP_SIZE + CHIP_RADIUS;
-        // Retain the short initial fall, but start ABOVE the actual solid surface.
+        // 開始時の短い落下は残し、実際の地面より上から出現させる。
         SetPos(m_spawnX, floorTop - static_cast<float>(m_rect.bottom) + CHIP_SIZE);
         ResetAwareness();
         m_direction = 1;
