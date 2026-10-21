@@ -1,5 +1,7 @@
 #include "Pch.h"
 #include "EnemyBase.h"
+#include "Map/Map.h"
+#include <cmath>
 #include "hit/hit.h"
 #include "Constants/Constants.h"
 
@@ -19,6 +21,7 @@ bool EnemyBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, float x, float y, float
     SetPos(x, y);
     m_direction = 1;
     SetPatrolRange(leftX, rightX);
+    m_spawnX = m_pos.x;
     SetMoveSpeed(speed);
     SetHitClass(a_pHit);
     SetCameraClass(a_pCamera);
@@ -87,14 +90,38 @@ void EnemyBase::Update()
     if (!m_bAlive) return;
     if (m_invincibleFrames > 0) --m_invincibleFrames;
 
+    if (m_target == nullptr) m_chasing = false;
+    else if (m_chasing)
+    {
+        const auto delta = m_target->GetPos() - m_pos;
+        if (delta.x * delta.x + delta.y * delta.y > m_loseDistance * m_loseDistance)
+            m_chasing = false;
+    }
+    else if (CanSeeTarget()) m_chasing = true;
+
     const bool hurt = m_hurtFrames > 0;
     float moveX = 0.0f;
     if (hurt)
     {
         --m_hurtFrames;
-        const float nextX = std::max(m_leftX,
-            std::min(m_pos.x + m_knockbackX, m_rightX));
-        moveX = nextX - m_pos.x;
+        moveX = m_knockbackX;
+    }
+    else if (m_chasing)
+    {
+        const float dx = m_target->GetPos().x - m_pos.x;
+        // Stop at the target's X instead of overshooting and turning every frame.
+        if (std::abs(dx) > 1.0f)
+        {
+            m_direction = dx > 0.0f ? 1 : -1;
+            moveX = static_cast<float>(m_direction) * std::min(m_chaseSpeed, std::abs(dx));
+        }
+    }
+    else if (m_pos.x < m_leftX || m_pos.x > m_rightX)
+    {
+        // Walk back after losing the target; never teleport into the patrol area.
+        const float goal = m_pos.x < m_leftX ? m_leftX : m_rightX;
+        m_direction = goal > m_pos.x ? 1 : -1;
+        moveX = static_cast<float>(m_direction) * std::min(m_moveSpeed, std::abs(goal - m_pos.x));
     }
     else
     {
@@ -112,15 +139,11 @@ void EnemyBase::Update()
         }
     }
 
-    // 巡回中もノックバック中も、同じ重力・衝突処理を通す。
     const bool wall = MoveWithCollision(moveX);
-    if (hurt)
-        m_knockbackX = wall ? 0.0f : m_knockbackX * 0.8f;
-    else if (wall)
-        m_direction = moveX > 0.0f ? -1 : 1;
+    if (hurt) m_knockbackX = wall ? 0.0f : m_knockbackX * 0.8f;
+    else if (wall && !m_chasing) m_direction = moveX > 0.0f ? -1 : 1;
 }
 
-// 下向き速度を蓄積し、既存の HitCheck で補正してから座標を確定する。
 bool EnemyBase::MoveWithCollision(float horizontalMove)
 {
     // 落下速度を制限し、1 フレームでマップチップを飛び越えにくくする。
@@ -140,7 +163,7 @@ bool EnemyBase::MoveWithCollision(float horizontalMove)
 // 移動方向に応じた左右反転と、現在位置への平行移動を描画行列に反映する。
 void EnemyBase::CalcMat()
 {
-    m_draw = m_pos - m_pCamera->GetPos();
+    m_draw = m_pCamera ? m_pos - m_pCamera->GetPos() : m_pos;
     // Turn 180 degrees around Y when moving left (horizontal sprite flip).
     const float angle = (m_direction < 0) ? DirectX::XM_PI : 0.0f;
     m_mat = Math::Matrix::CreateRotationY(angle)
@@ -166,6 +189,8 @@ void EnemyBase::Draw()
 
 void EnemyBase::Release()
 {
+    ResetAwareness();
+    m_visionMap = nullptr;
     m_bAlive = false;
     m_invincibleFrames = 0;
     m_hurtFrames = 0;
@@ -173,4 +198,116 @@ void EnemyBase::Release()
     m_velocityY = 0.0f;
     SetMove(0.0f, 0.0f);
     m_texture.Release();
+}
+
+// Keep acquisition and release distances separate to prevent rapid state toggling.
+void EnemyBase::SetVision(float range, float fullAngleDegrees, float loseDistance)
+{
+    m_visionRange = std::max(1.0f, range);
+    m_visionHalfAngle = std::max(1.0f, std::min(fullAngleDegrees, 170.0f)) * DirectX::XM_PI / 360.0f;
+    m_loseDistance = std::max(m_visionRange + 1.0f, loseDistance);
+}
+
+// Tile centers are LEFT_EDGE + col*CHIP_SIZE, TOP_EDGE - row*CHIP_SIZE.
+// Bounds are checked here because GetCollisionFlg does not guard negative indices.
+float EnemyBase::TraceVision(float directionX, float directionY, float distance) const
+{
+    if (m_visionMap == nullptr) return distance;
+    const int steps = std::max(1, static_cast<int>(std::ceil(distance / 4.0f)));
+    float previous = 0.0f;
+    for (int i = 0; i <= steps; ++i)
+    {
+        const float t = distance * static_cast<float>(i) / steps;
+        const float x = m_pos.x + directionX * t;
+        const float y = m_pos.y + directionY * t;
+        const int col = static_cast<int>(std::floor((x - LEFT_EDGE + CHIP_RADIUS) / CHIP_SIZE));
+        const int row = static_cast<int>(std::floor((TOP_EDGE - y + CHIP_RADIUS) / CHIP_SIZE));
+        if (col < 0 || col >= MAP_WIDTH || row < 0 || row >= MAP_HEIGHT
+            || m_visionMap->GetCollisionFlg(row, col)) return previous;
+        previous = t;
+    }
+    return distance;
+}
+
+bool EnemyBase::CanSeeTarget() const
+{
+    if (m_target == nullptr) return false;
+    const auto delta = m_target->GetPos() - m_pos;
+    const float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y);
+    if (distance > m_visionRange) return false;
+    if (distance < 0.001f) return true;
+    if (delta.x * m_direction < distance * std::cos(m_visionHalfAngle)) return false;
+    return TraceVision(delta.x / distance, delta.y / distance, distance) >= distance;
+}
+
+// Render the same wall-clipped sector used for detection, behind both characters.
+void EnemyBase::DrawVision()
+{
+    if (!m_bAlive) return;
+    const auto draw = m_pCamera ? m_pos - m_pCamera->GetPos() : m_pos;
+    SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(draw.x, draw.y, 0.0f));
+    constexpr int segments = 24;
+    constexpr int bands = 3;
+    Math::Vector2 rays[segments + 1];
+    for (int i = 0; i <= segments; ++i)
+    {
+        const float angle = -m_visionHalfAngle + 2.0f * m_visionHalfAngle * i / segments;
+        const float dx = std::cos(angle) * m_direction;
+        const float dy = std::sin(angle);
+        const float length = TraceVision(dx, dy, m_visionRange);
+        rays[i] = Math::Vector2(dx * length, dy * length);
+    }
+    for (int band = 0; band < bands; ++band)
+    {
+        const float inner = static_cast<float>(band) / bands;
+        const float outer = static_cast<float>(band + 1) / bands;
+        const float alpha = 0.20f - band * 0.05f;
+        const Math::Color color = m_chasing ? Math::Color(1.0f, 0.25f, 0.12f, alpha)
+            : Math::Color(1.0f, 0.9f, 0.3f, alpha);
+        for (int i = 0; i < segments; ++i)
+        {
+            const auto a = rays[i] * inner;
+            const auto b = rays[i] * outer;
+            const auto c = rays[i + 1] * outer;
+            const auto d = rays[i + 1] * inner;
+            SHADER.m_spriteShader.DrawTriangle(static_cast<int>(a.x), static_cast<int>(a.y),
+                static_cast<int>(b.x), static_cast<int>(b.y), static_cast<int>(c.x), static_cast<int>(c.y), &color);
+            if (band > 0)
+                SHADER.m_spriteShader.DrawTriangle(static_cast<int>(a.x), static_cast<int>(a.y),
+                    static_cast<int>(c.x), static_cast<int>(c.y), static_cast<int>(d.x), static_cast<int>(d.y), &color);
+        }
+    }
+    SHADER.m_spriteShader.SetMatrix(Math::Matrix::Identity);
+}
+bool EnemyBase::PlaceOnMap(C_Map* map)
+{
+    if (map == nullptr) return false;
+    // Query the entire foot width, not just the center tile. Tiles are centered.
+    const int firstCol = static_cast<int>(std::floor(
+        (m_spawnX + m_rect.left - LEFT_EDGE + CHIP_RADIUS + 0.01f) / CHIP_SIZE));
+    const int lastCol = static_cast<int>(std::floor(
+        (m_spawnX + m_rect.right - LEFT_EDGE + CHIP_RADIUS - 0.01f) / CHIP_SIZE));
+    if (firstCol < 0 || lastCol >= MAP_WIDTH) return false;
+    for (int row = 0; row < MAP_HEIGHT; ++row)
+    {
+        bool ground = false;
+        for (int col = firstCol; col <= lastCol; ++col)
+            if (map->GetCollisionFlg(row, col)) ground = true;
+        if (!ground) continue;
+
+        const float floorTop = TOP_EDGE - row * CHIP_SIZE + CHIP_RADIUS;
+        // Retain the short initial fall, but start ABOVE the actual solid surface.
+        SetPos(m_spawnX, floorTop - static_cast<float>(m_rect.bottom) + CHIP_SIZE);
+        ResetAwareness();
+        m_direction = 1;
+        m_velocityY = 0.0f;
+        m_knockbackX = 0.0f;
+        m_hurtFrames = 0;
+        m_invincibleFrames = 0;
+        SetMove(0.0f, 0.0f);
+        ResetHitRect();
+        CalcMat();
+        return true;
+    }
+    return false;
 }

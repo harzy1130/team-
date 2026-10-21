@@ -7,9 +7,9 @@ void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 	std::pair<int,int> chip;
 	int start_w, end_w, start_h, end_h;
 	chip = m_pMap->GetIndex(a_pHitBase->GetPos());
-	start_w = Clamp(chip.first - 1, m_pMap->GetIdxMaxMin().first, 0);
+	start_w = Clamp(chip.first, m_pMap->GetIdxMaxMin().first, 0);
 	end_w = Clamp(chip.first + 2, m_pMap->GetIdxMaxMin().first, 0);
-	start_h = Clamp(chip.second - 1, m_pMap->GetIdxMaxMin().second, 0);
+	start_h = Clamp(chip.second, m_pMap->GetIdxMaxMin().second, 0);
 	end_h = Clamp(chip.second + 2, m_pMap->GetIdxMaxMin().second, 0);
 
 	a_pHitBase->ResetHitRect();
