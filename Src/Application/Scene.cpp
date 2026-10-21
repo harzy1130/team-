@@ -5,20 +5,34 @@ void Scene::Draw2D()
 {
 	SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(0, 0, 0));
 	SHADER.m_spriteShader.DrawTex(&m_backTex, Math::Rectangle(0, 0, 1280, 720), 1.0f);
-	m_map.Draw();
-	m_enemy.Draw();
-	m_boss.Draw();
-	m_player.Draw();
+	m_game.Draw();
+	if (m_game.GetGameState() == GameState::Select || m_game.GetGameState() == GameState::Game)
+	{
+		m_map.Draw();
+		m_player.Draw();
+		if (m_game.GetGameState() == GameState::Game)
+		{
+			m_enemy.Draw();
+			m_boss.Draw();
+		}
+	}
 }
 
 void Scene::Update()
 {
-	m_camera.Update();
-	m_map.Update();
-	m_enemy.Update();
-	m_boss.Update();
-	m_player.Update();
-	m_camera.SetTurget(m_player.GetPos());
+	if (m_game.GetGameState() == GameState::Select || m_game.GetGameState() == GameState::Game)
+	{
+		m_camera.Update();
+		m_map.Update();
+		m_player.Update();
+		m_camera.SetTurget(m_player.GetPos());
+		if (m_game.GetGameState() == GameState::Game)
+		{
+			m_enemy.Update();
+			m_boss.Update();
+		}
+	}
+	m_game.Update();
 }
 
 void Scene::Init()
@@ -31,6 +45,9 @@ void Scene::Init()
 	m_boss.SetTexture(&m_bossTex);
 	m_player.SetTex(&m_playerTex);
 	m_camera.Init();
+
+	m_game.SetMapData(&m_map);
+	m_game.SetPlayerData(&m_player);
 
 	if (!m_enemy.Init(&m_hit, &m_camera))
 	{
@@ -58,5 +75,5 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-    m_gui.Draw(m_player, m_enemy);
+	m_gui.Draw(m_player, m_enemy, m_game, m_map);
 }

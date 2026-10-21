@@ -1,4 +1,5 @@
 #pragma once
+#include"GameStateManager/GameStateManager.h"
 #include "GUI/CharacterGUI.h"
 #include"Boss/Boss.h"
 #include"Enemy/Enemy1.h"
@@ -15,6 +16,7 @@ private:
 	KdTexture m_chipTex;
 	KdTexture m_backTex;
 
+	C_GameStateManager m_game;
 	C_PlayerBase m_player;
 	C_Boss m_boss;
 	Enemy1 m_enemy;

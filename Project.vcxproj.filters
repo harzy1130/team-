@@ -67,11 +67,8 @@
     <Filter Include="Src\Skill">
       <UniqueIdentifier>{97335821-ab0a-4df2-bfe1-fa7f443aab7b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Game">
-      <UniqueIdentifier>{8deb851d-cac0-4412-bd92-45338809dd29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Game\GameStateManager">
-      <UniqueIdentifier>{04def199-bd8a-402a-b99b-06f561545526}</UniqueIdentifier>
+    <Filter Include="Src\GameStateManager">
+      <UniqueIdentifier>{6b19da8b-fb1b-4f3c-9d91-51910d8a835d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -207,11 +204,11 @@
     <ClInclude Include="Src\Hit\Hit.h">
       <Filter>Src\Hit</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Game\GameStateManager\GameStateManager.h">
-      <Filter>Src\Game\GameStateManager</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Constants\Constants.h">
       <Filter>Src\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameStateManager\GameStateManager.h">
+      <Filter>Src\GameStateManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +304,9 @@
     </ClCompile>
     <ClCompile Include="Src\Hit\Hit.cpp">
       <Filter>Src\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameStateManager\GameStateManager.cpp">
+      <Filter>Src\GameStateManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
