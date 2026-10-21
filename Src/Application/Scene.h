@@ -2,7 +2,7 @@
 #include"GameStateManager/GameStateManager.h"
 #include "GUI/CharacterGUI.h"
 #include"Boss/Boss.h"
-#include"Enemy/Enemy1.h"
+#include"Enemy/EnemyManager.h"
 #include"Player/PlayerBase.h"
 #include"Map/Map.h"
 #include"Camera/Camera.h"
@@ -19,7 +19,7 @@ private:
 	C_GameStateManager m_game;
 	C_PlayerBase m_player;
 	C_Boss m_boss;
-	Enemy1 m_enemy;
+	EnemyManager m_enemies;
 	C_Map m_map;
 	C_Camera m_camera;
 	C_Hit m_hit;
