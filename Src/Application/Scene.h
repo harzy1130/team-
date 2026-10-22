@@ -12,6 +12,7 @@ class Scene
 {
 private:
 	KdTexture m_playerTex;
+	KdTexture m_playerAtkTex;
 	KdTexture m_bossTex;
 	KdTexture m_chipTex;
 	KdTexture m_backTex;
