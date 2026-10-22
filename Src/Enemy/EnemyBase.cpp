@@ -205,6 +205,8 @@ void EnemyBase::Release()
     m_velocityY = 0.0f;
     SetMove(0.0f, 0.0f);
     m_texture.Release();
+    m_pCamera = nullptr;
+    m_pHit = nullptr;
 }
 
 // ”­Œ©‹——£‚Æ’ÇÕ‰ğœ‹——£‚ğ•ª‚¯Aó‘Ô‚ª’ZŠÔ‚ÅØ‚è‘Ö‚í‚è‘±‚¯‚é‚Ì‚ğ–h‚®B

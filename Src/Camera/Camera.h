@@ -1,6 +1,5 @@
 #pragma once
 
-
 class C_Camera {
 public:
 	C_Camera() = default;
@@ -18,4 +17,6 @@ public:
 private:
 	Math::Vector2 m_pos;
 	Math::Vector2 m_target;
+	//first‚ªÅ‘åAsecond‚ªÅ­
+	std::pair<Math::Vector2, Math::Vector2> m_range;
 };
