@@ -1,10 +1,10 @@
-ï»¿#pragma once
+#pragma once
 #include "Enemy1.h"
 #include <memory>
 #include <string>
 #include <vector>
 
-// ã‚¹ãƒ†ãƒ¼ã‚¸ã”ã¨ã®é…ç½®ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ•µã‚’ç”Ÿæˆã—ã€æ›´æ–°ãƒ»æç”»ãƒ»è§£æ”¾ã‚’ã¾ã¨ã‚ã¦è¡Œã†ã€‚
+// ƒXƒe[ƒW‚²‚Æ‚Ì”z’uƒf[ƒ^‚©‚ç“G‚ğ¶¬‚µAXVE•`‰æE‰ğ•ú‚ğ‚Ü‚Æ‚ß‚Äs‚¤B
 class EnemyManager
 {
 public:
@@ -15,7 +15,7 @@ public:
     void Draw();
     void Release();
 
-    std::size_t GetCount() const { return m_enemies.size(); }
+    std::size_t GetCount() const { return m_pAllEnemies.size(); }
     std::size_t GetAliveCount() const;
     Enemy1* GetEnemy(std::size_t index);
     const Enemy1* GetEnemy(std::size_t index) const;
@@ -24,8 +24,8 @@ public:
 private:
     bool LoadStage(int stage);
     void ClearEnemies();
-    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’æŒã¤æ•µæœ¬ä½“ã¯ã‚³ãƒ”ãƒ¼ã›ãšã€æ‰€æœ‰ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã§ä¿æŒã™ã‚‹ã€‚
-    std::vector<std::unique_ptr<Enemy1>> m_enemies;
+    // ƒeƒNƒXƒ`ƒƒ‚ğ‚Â“G–{‘Ì‚ÍƒRƒs[‚¹‚¸AŠ—Lƒ|ƒCƒ“ƒ^[‚Å•Û‚·‚éB
+    std::vector<std::unique_ptr<Enemy1>> m_enemies1;
     C_Hit* m_hit = nullptr;
     C_Camera* m_camera = nullptr;
     C_Map* m_map = nullptr;
@@ -33,4 +33,7 @@ private:
     int m_stage = -1;
     bool m_wasActive = false;
     std::size_t m_debugEnemy = 0;
+
+    // m_enemies ‚ªŠ—L‚µA‚±‚±‚Å‚Í EnemyBase ‚Æ‚µ‚ÄQÆ‚·‚é”ñŠ—Lƒ|ƒCƒ“ƒ^[ˆê——B
+    std::vector<EnemyBase*> m_pAllEnemies;
 };

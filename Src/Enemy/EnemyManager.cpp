@@ -31,19 +31,27 @@ void EnemyManager::Update(C_PlayerBase* player, bool active)
         m_stage = m_map->GetStageNum();
         m_wasActive = true;
     }
-    for (std::size_t i = 0; i < m_enemies.size(); ++i)
+    for (std::size_t i = 0; i < m_enemies1.size(); ++i)
     {
-        m_enemies[i]->SetDamageTestEnabled(i == m_debugEnemy);
-        m_enemies[i]->Update(player, true);
+        m_enemies1[i]->SetDamageTestEnabled(i == m_debugEnemy);
+        m_enemies1[i]->Update(player, true);
     }
-	m_enemies.erase(std::remove_if(m_enemies.begin(), m_enemies.end(),
+    //æ‚ÉŠÇ—”z—ñ‚Ì—v‘f‚ğíœ
+    m_pAllEnemies.erase(std::remove_if(m_pAllEnemies.begin(), m_pAllEnemies.end(),
+        [](const EnemyBase* pEB) {
+            if (pEB->GetAlive())return false;
+            return true;
+        }),
+        m_pAllEnemies.end());
+
+	m_enemies1.erase(std::remove_if(m_enemies1.begin(), m_enemies1.end(),
         [](const std::unique_ptr<Enemy1>& enemy) {
             if (enemy->GetAlive())return false;
 			enemy->Release();
 			return true;
         }),
-		m_enemies.end());
-    if (m_debugEnemy >= m_enemies.size())
+		m_enemies1.end());
+    if (m_debugEnemy >= m_enemies1.size())
     {
         m_debugEnemy = 0;
     }
@@ -87,47 +95,50 @@ bool EnemyManager::LoadStage(int stage)
             OutputDebugStringA("Enemy spawn failed: texture or ground unavailable.\n");
             continue;
         }
-        m_enemies.push_back(std::move(enemy));
+        EnemyBase* enemyBase = enemy.get();
+        m_enemies1.push_back(std::move(enemy));
+        m_pAllEnemies.push_back(enemyBase);
     }
     return true;
 }
 
 void EnemyManager::DrawVision()
 {
-    for (const auto& enemy : m_enemies) enemy->DrawVision();
+    for (const auto& enemy : m_enemies1) enemy->DrawVision();
 }
 
 void EnemyManager::Draw()
 {
-    for (const auto& enemy : m_enemies) enemy->Draw();
+    for (const auto& allenemy : m_pAllEnemies)allenemy->Draw();
 }
 
 std::size_t EnemyManager::GetAliveCount() const
 {
     std::size_t count = 0;
-    for (const auto& enemy : m_enemies) if (enemy->GetAlive()) ++count;
+    for (const auto& enemy : m_enemies1) if (enemy->GetAlive()) ++count;
     return count;
 }
 
 Enemy1* EnemyManager::GetEnemy(std::size_t index)
 {
-    return index < m_enemies.size() ? m_enemies[index].get() : nullptr;
+    return index < m_enemies1.size() ? m_enemies1[index].get() : nullptr;
 }
 
 const Enemy1* EnemyManager::GetEnemy(std::size_t index) const
 {
-    return index < m_enemies.size() ? m_enemies[index].get() : nullptr;
+    return index < m_enemies1.size() ? m_enemies1[index].get() : nullptr;
 }
 
 void EnemyManager::SetDebugEnemy(std::size_t index)
 {
-    m_debugEnemy = index < m_enemies.size() ? index : 0;
+    m_debugEnemy = index < m_enemies1.size() ? index : 0;
 }
 
 void EnemyManager::ClearEnemies()
 {
-    for (const auto& enemy : m_enemies) enemy->Release();
-    m_enemies.clear();
+    for (const auto& enemy : m_enemies1) enemy->Release();
+    m_enemies1.clear();
+    m_pAllEnemies.clear();
     m_debugEnemy = 0;
 }
 
