@@ -1,4 +1,4 @@
-﻿#include "Pch.h"
+#include "Pch.h"
 #include "EnemyManager.h"
 #include "Map/Map.h"
 #include <algorithm>
@@ -35,6 +35,17 @@ void EnemyManager::Update(C_PlayerBase* player, bool active)
     {
         m_enemies[i]->SetDamageTestEnabled(i == m_debugEnemy);
         m_enemies[i]->Update(player, true);
+    }
+	m_enemies.erase(std::remove_if(m_enemies.begin(), m_enemies.end(),
+        [](const std::unique_ptr<Enemy1>& enemy) {
+            if (enemy->GetAlive())return false;
+			enemy->Release();
+			return true;
+        }),
+		m_enemies.end());
+    if (m_debugEnemy >= m_enemies.size())
+    {
+        m_debugEnemy = 0;
     }
 }
 
