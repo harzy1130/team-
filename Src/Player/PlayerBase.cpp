@@ -1,5 +1,6 @@
 #include "PlayerBase.h"
 #include "hit/hit.h"
+#include <cmath>
 
 void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
 {
@@ -7,6 +8,7 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
 	m_bAlive = true;
 	m_pos = { 0,0 };
     m_move = { 0,0 };
+    m_damageInvincibleFrames = 0;
 	m_skillMove = { 0,0 };
 	m_speed = 10;
 	m_bJump = false;
@@ -34,6 +36,8 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
 
 void C_PlayerBase::Update()
 {
+    if (!m_bAlive) { m_move = { 0, 0 }; return; }
+    if (m_damageInvincibleFrames > 0) --m_damageInvincibleFrames;
 	m_move.x = 0.0f;
 	m_move.y -= m_Gravity;
 
@@ -59,6 +63,7 @@ void C_PlayerBase::Update()
 void C_PlayerBase::Draw()
 {
 	if (!m_bAlive)return;
+    if (m_damageInvincibleFrames > 0 && (m_damageInvincibleFrames / 4) % 2 == 0) return;
 	//ƒJƒƒ‰À•WC³
 
 	SHADER.m_spriteShader.SetMatrix(m_mat);
@@ -137,4 +142,19 @@ void C_PlayerBase::CalcMat()
 		m_pos.x - m_pCamera->GetPos().x, m_pos.y - m_pCamera->GetPos().y, 0);
 	m_scaleMat= Math::Matrix::CreateScale(m_scaleX, 1, 1);
 	m_mat = m_scaleMat * m_transMat;
+}
+
+bool C_PlayerBase::TakeDamage(float rawDamage)
+{
+    if (!m_bAlive || m_HP <= 0.0f || m_damageInvincibleFrames > 0 || !std::isfinite(rawDamage) || !(rawDamage > 0.0f) || !std::isfinite(m_DEF)) return false;
+    const float damage = DefCalc(rawDamage, std::max(0.0f, m_DEF), 0.0f);
+    m_HP = std::max(0.0f, m_HP - damage);
+    m_damageInvincibleFrames = 30;
+    if (m_HP == 0.0f)
+    {
+        m_bAlive = false;
+        m_move = { 0.0f, 0.0f };
+        m_skillMove = { 0.0f, 0.0f };
+    }
+    return true;
 }

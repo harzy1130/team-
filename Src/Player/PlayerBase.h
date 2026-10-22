@@ -16,6 +16,10 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
+    // 被ダメージの共通処理。防御力・無敵時間・HP 減少・死亡を処理する。
+    bool TakeDamage(float rawDamage);
+    bool IsDamageInvincible() const { return m_damageInvincibleFrames > 0; }
+
 	//ゲッター
 	//生存
 	virtual bool GetAFlg()final { return m_bAlive; }
@@ -71,6 +75,7 @@ public:
 	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
 
 protected:
+    int m_damageInvincibleFrames = 0;
 	//生存
 	bool m_bAlive;
 
