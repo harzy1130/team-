@@ -49,6 +49,8 @@ public:
 	virtual void SetAFlg(bool a_flg)final { m_bAlive = a_flg; }
 	//画像
 	virtual void SetTex(KdTexture* a_tex)final { m_pTex = a_tex; }
+	virtual void SetAtkTex(KdTexture* a_tex)final { m_pAtkTex = a_tex; }
+
 	//移動
 	virtual void SetPosX(float a_posX)final { m_pos.x = a_posX; }
 	virtual void SetPosY(float a_posY)final { m_pos.y = a_posY; }
@@ -98,6 +100,7 @@ protected:
 	int m_TexRadius;
 
 	//基礎ステータス
+	int m_Level;
 	float m_HP;		//現在体力
 	float m_MAXHP;	//最大体力
 	float m_DEF;	//防御力
@@ -111,6 +114,19 @@ protected:
 	float m_CrtDmgP;	//クリティカルダメージ
 	float m_CrtRate;	//クリティカル率
 	float m_SkillHaste;	//スキルヘイスト
+	float m_IncreasedASP;//増加攻撃速度
+
+	//通常攻撃
+	KdTexture* m_pAtkTex;
+	Math::Matrix m_AtkMat;
+	Math::Matrix m_AtkTransMat;
+	Math::Matrix m_AtkScaleMat;
+	Math::Vector2 m_AtkPos;
+	float m_AtkCount;
+	float m_maxAtkCount;
+	float m_atkAnimCount;
+	bool m_bAtk;
+
 	
 	//参照するクラスのポインタ
 	C_Hit* m_pHit;
@@ -118,18 +134,26 @@ protected:
 
 	//タイマー変数
 	float m_HPRegeneCD=0;
+	float m_AttackDelay;
 
 	//計算関数
 	virtual float DefCalc(float a_DMG, float a_DEF,float a_penet)final;
 	virtual void HPRegeneCalc()final;
 	virtual float CrtDmgCalc(float a_DMG, float a_CrtDmg, float a_CrtRate)final;
 	virtual float MoveSpeedCalc(float a_speed, float a_MS)final;
+	virtual float AtkSpeedCalc()final;
 
 	//操作
 	virtual void PlayerInput();
 
 	//行列合成
 	virtual void CalcMat()final;
+
+	//攻撃
+	virtual void PlayerAtk();
+	virtual void InitAtk();
+	virtual void UpdateAtk();
+	virtual void DrawAtk();
 
 	//スキル用
 	C_Skill m_skill;

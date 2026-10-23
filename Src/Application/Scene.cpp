@@ -1,4 +1,4 @@
-﻿#include "main.h"
+#include "main.h"
 #include "Scene.h"
 
 void Scene::Draw2D()
@@ -40,9 +40,11 @@ void Scene::Init()
 	m_chipTex.Load("Texture/MapChip.png");
 	m_bossTex.Load("Texture/boss.png");
 	m_playerTex.Load("Texture/Chara.png");
+	m_playerAtkTex.Load("Texture/atk1.png");
 	m_map.SetTexture(&m_chipTex);
 	m_boss.SetTexture(&m_bossTex);
 	m_player.SetTex(&m_playerTex);
+	m_player.SetAtkTex(&m_playerAtkTex);
 	m_camera.Init();
 
 	m_game.SetMapData(&m_map);
@@ -64,6 +66,7 @@ void Scene::Release()
 	m_chipTex.Release();
 	m_bossTex.Release();
 	m_playerTex.Release();
+	m_playerAtkTex.Release();
 	m_enemies.Release();
 }
 
