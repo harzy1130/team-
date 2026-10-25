@@ -9,14 +9,15 @@ void Scene::Draw2D()
 	if (m_game.GetGameState() == GameState::Select || m_game.GetGameState() == GameState::Game)
 	{
 		m_map.Draw();
-		if (m_game.GetGameState() == GameState::Game) m_enemies.DrawVision();
 		m_player.Draw();
 		if (m_game.GetGameState() == GameState::Game)
 		{
 			m_enemies.Draw();
+			m_enemies.DrawVision();
 			m_boss.Draw();
 		}
 	}
+	m_game.SceneChangeDraw();
 }
 
 void Scene::Update()
@@ -41,10 +42,12 @@ void Scene::Init()
 	m_bossTex.Load("Texture/boss.png");
 	m_playerTex.Load("Texture/Chara.png");
 	m_playerAtkTex.Load("Texture/atk1.png");
+	m_blackTex.Load("Texture/black.png");
 	m_map.SetTexture(&m_chipTex);
 	m_boss.SetTexture(&m_bossTex);
 	m_player.SetTex(&m_playerTex);
 	m_player.SetAtkTex(&m_playerAtkTex);
+	m_game.SetTexture(&m_blackTex);
 	m_camera.Init();
 
 	m_game.SetMapData(&m_map);
@@ -68,6 +71,7 @@ void Scene::Release()
 	m_playerTex.Release();
 	m_playerAtkTex.Release();
 	m_enemies.Release();
+	m_blackTex.Release();
 }
 
 void Scene::ImGuiUpdate()

@@ -16,6 +16,7 @@ private:
 	KdTexture m_bossTex;
 	KdTexture m_chipTex;
 	KdTexture m_backTex;
+	KdTexture m_blackTex;
 
 	C_GameStateManager m_game;
 	C_PlayerBase m_player;

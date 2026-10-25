@@ -23,6 +23,12 @@ void C_GameStateManager::Draw()
 	}
 }
 
+void C_GameStateManager::SceneChangeDraw()
+{
+	SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(0, 0, 0));
+	SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(0, 0, 1280, 720), m_alpha);
+}
+
 void C_GameStateManager::Update()
 {
 	//============================================================
@@ -47,6 +53,9 @@ void C_GameStateManager::Update()
 	// そのままセレクトステージへ
 	if (GetAsyncKeyState('R') & 0x8000)
 	{
+		m_changeScene = false;
+		m_alpha = 0.0f;
+		m_changeTime = 0;
 		if (m_gameState == GameState::Game)
 		{
 			m_gameState = GameState::Result;
@@ -73,7 +82,7 @@ void C_GameStateManager::Update()
 		m_pPlayer->SetPos(0, -200);
 		break;
 	case GameState::Select:
-		StageTransition();
+		StageTrans();
 		break;
 	case GameState::Game:
 		break;
@@ -85,12 +94,43 @@ void C_GameStateManager::Update()
 		m_pPlayer->SetPos(0, -200);
 
 		m_gameState = GameState::Select;
+		break;
 	default:
 		break;
 	}
+
+	SceneTrans();
 }
 
-void C_GameStateManager::StageTransition()
+void C_GameStateManager::SceneTrans()
+{
+	switch (m_gameState)
+	{
+	case GameState::Select:
+		if (m_changeScene)
+		{
+			if (m_changeTime <= 60)m_changeTime++;
+		}
+		m_alpha = m_changeTime / 60;
+		break;
+	case GameState::Game:
+		if (!m_changeScene)
+		{
+			if (m_changeTime > 0)m_changeTime--;
+		}
+		m_alpha = m_changeTime / 60;
+		break;
+	default:
+		break;
+	}
+
+	if (m_changeTime >= 60)m_changeTime = 60;
+	if (m_changeTime < 0)m_changeTime = 0;
+	if (m_alpha >= 1.0f)m_alpha = 1.0f;
+	if (m_alpha < 0.0f)m_alpha = 0.0f;
+}
+
+void C_GameStateManager::StageTrans()
 {
 	float nearStageDistance = pow(60.0f, 2);
 	StageNum nearStage{};
@@ -116,11 +156,18 @@ void C_GameStateManager::StageTransition()
 
 	if (foundStage && GetAsyncKeyState('F') & 0x8000)
 	{
-		m_pMap->SetStageNum(nearStage);
+		nextStage = nearStage;
+		m_changeScene = true;
+	}
+	if (m_changeTime >= 60 && m_changeScene)
+	{
+		m_pMap->SetStageNum(nextStage);
 		m_pMap->Load();
 		m_pMap->Create();
 
 		m_pPlayer->SetPos(0, -200);
+
+		m_changeScene = false;
 
 		m_gameState = GameState::Game;
 	}
