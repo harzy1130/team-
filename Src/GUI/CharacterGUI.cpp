@@ -61,6 +61,7 @@ void CharacterGUI::Draw(C_PlayerBase& player, EnemyManager& enemies, C_GameState
             ImGui::TextUnformatted(u8"H: 選択中の敵に25ダメージ（テスト）");
         }
         else ImGui::TextUnformatted(u8"このステージには敵が配置されていません。");
+        ImGui::TextUnformatted(u8"1 + E で新たに敵を配置。");
 
         ImGui::Columns(1);
 
