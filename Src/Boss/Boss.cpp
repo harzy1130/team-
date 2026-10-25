@@ -20,7 +20,7 @@ void C_Boss::Move()
 	m_angle += 2;
 	if (m_angle >= 360)m_angle -= 360;
 	float rad = DirectX::XMConvertToRadians(m_angle);
-	m_move.x = cosf(rad) * MOVE_SPEED;
-	m_move.y = sinf(rad) * MOVE_SPEED;
+	m_move.x = cosf(rad) * BOSS_SPEED;
+	m_move.y = sinf(rad) * BOSS_SPEED;
 }
 

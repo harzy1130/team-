@@ -16,8 +16,9 @@ void C_Map::Update()
 	{
 		for (int w = 0; w < MAP_WIDTH; w++)
 		{
+			m_chip[h][w].draw = m_chip[h][w].pos - m_pCamera->GetPos();
 			m_chip[h][w].mat = Math::Matrix::CreateTranslation(
-				m_chip[h][w].pos.x - m_pCamera->GetPos().x, m_chip[h][w].pos.y - m_pCamera->GetPos().y, 0);
+				m_chip[h][w].draw.x, m_chip[h][w].draw.y, 0);
 		}
 	}
 }
@@ -28,6 +29,9 @@ void C_Map::Draw()
 	{
 		for (int w = 0; w < MAP_WIDTH; w++)
 		{
+			if (m_chip[h][w].draw.x > RIGHT_EDGE + CHIP_RADIUS || m_chip[h][w].draw.x < LEFT_EDGE - CHIP_RADIUS)continue;
+			if (m_chip[h][w].draw.y > TOP_EDGE + CHIP_RADIUS || m_chip[h][w].draw.y < BOTTOM_EDGE - CHIP_RADIUS)continue;
+
 			SHADER.m_spriteShader.SetMatrix(m_chip[h][w].mat);//画像の行列をセット
 			switch (m_chip[h][w].data)
 			{

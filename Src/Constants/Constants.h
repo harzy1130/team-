@@ -18,6 +18,7 @@ struct S_ChipData
 {
 	Math::Matrix mat;
 	Math::Vector2 pos;
+	Math::Vector2 draw;
 	int data;
 	bool collisionFlg;
 };
@@ -65,7 +66,7 @@ struct S_Boss
 	Math::Matrix sMat;
 	Math::Matrix rMat;
 };
-static const float MOVE_SPEED = 10.0f;
+static const float BOSS_SPEED = 10.0f;
 
 //HitBaseíËêî=================================
 struct S_HitBase

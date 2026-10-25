@@ -18,6 +18,10 @@ bool EnemyManager::Init(C_Hit* hit, C_Camera* camera, C_Map* map, const char* sp
 
 void EnemyManager::Update(C_PlayerBase* player, bool active)
 {
+    if (GetAsyncKeyState('E') && GetAsyncKeyState('1') & 0x8000) {
+        Math::Vector2 pos = m_camera->GetPos();
+        SpawnEnemy1(pos.x, pos.y);
+    }
     if (!active || m_map == nullptr || m_hit == nullptr || m_camera == nullptr)
     {
         if (m_wasActive) ClearEnemies();
@@ -89,16 +93,41 @@ bool EnemyManager::LoadStage(int stage)
             OutputDebugStringA("Unsupported enemy type or invalid spawn range was skipped.\n");
             continue;
         }
-        auto enemy = std::make_unique<Enemy1>();
-        if (!enemy->Init(m_hit, m_camera, m_map, spawn) || !enemy->PlaceOnMap(m_map))
-        {
-            OutputDebugStringA("Enemy spawn failed: texture or ground unavailable.\n");
-            continue;
-        }
-        EnemyBase* enemyBase = enemy.get();
-        m_enemies1.push_back(std::move(enemy));
-        m_pAllEnemies.push_back(enemyBase);
+        if (!SpawnEnemy1(spawn))continue;
     }
+    return true;
+}
+
+bool EnemyManager::SpawnEnemy1(Enemy1::SpawnSettings a_spawn)
+{
+    auto enemy = std::make_unique<Enemy1>();
+    if (!enemy->Init(m_hit, m_camera, m_map, a_spawn) || !enemy->PlaceOnMap(m_map))
+    {
+        OutputDebugStringA("Enemy spawn failed: texture or ground unavailable.\n");
+        return false;
+    }
+    EnemyBase* enemyBase = enemy.get();
+    m_enemies1.push_back(std::move(enemy));
+    m_pAllEnemies.push_back(enemyBase);
+    return true;
+}
+
+bool EnemyManager::SpawnEnemy1(float a_x, float a_y)
+{
+    Enemy1::SpawnSettings spawn;
+    spawn.x = a_x;
+    spawn.y = a_y;
+    spawn.leftX = a_x + PTEX_SIZE * 2;
+    spawn.rightX = a_x - PTEX_SIZE * 2;
+    auto enemy = std::make_unique<Enemy1>();
+    if (!enemy->Init(m_hit, m_camera, m_map, spawn) || !enemy->PlaceOnMap(m_map))
+    {
+        OutputDebugStringA("Enemy spawn failed: texture or ground unavailable.\n");
+        return false;
+    }
+    EnemyBase* enemyBase = enemy.get();
+    m_enemies1.push_back(std::move(enemy));
+    m_pAllEnemies.push_back(enemyBase);
     return true;
 }
 
@@ -136,9 +165,9 @@ void EnemyManager::SetDebugEnemy(std::size_t index)
 
 void EnemyManager::ClearEnemies()
 {
+    m_pAllEnemies.clear();
     for (const auto& enemy : m_enemies1) enemy->Release();
     m_enemies1.clear();
-    m_pAllEnemies.clear();
     m_debugEnemy = 0;
 }
 
