@@ -7,6 +7,7 @@
 #include"Map/Map.h"
 #include"Camera/Camera.h"
 #include"hit/hit.h"
+#include"Cursor/Cursor.h"
 
 class Scene
 {
@@ -26,6 +27,7 @@ private:
 	C_Camera m_camera;
 	C_Hit m_hit;
     CharacterGUI m_gui;
+	C_Cursor m_cursor;
 
 public:
 
