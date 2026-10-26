@@ -1,8 +1,9 @@
 #include "PlayerBase.h"
 #include "hit/hit.h"
+#include"Cursor/Cursor.h"
 #include <cmath>
 
-void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
+void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 {
 	//ˆÚ“®
 	m_bAlive = true;
@@ -47,6 +48,13 @@ void C_PlayerBase::Update()
 	m_skill.Update();
 	PlayerInput();
 	UpdateAtk();
+	if (m_pCursor->GetMousePos().x > 0) {
+		m_scaleX = 1;
+	}
+	else
+	{
+		m_scaleX = -1;
+	}
 	
 	m_move += m_skillMove;
 	//“–‚½‚è”»’è
@@ -129,12 +137,10 @@ void C_PlayerBase::PlayerInput()
 	if ((GetAsyncKeyState(VK_RIGHT) & 0x8000)||(GetAsyncKeyState('D') & 0x8000))
 	{
 		m_move.x += 8.0f;
-		m_scaleX = 1;
 	}
 	if ((GetAsyncKeyState(VK_LEFT) & 0x8000) || (GetAsyncKeyState('A') & 0x8000))
 	{
 		m_move.x -= 8.0f;
-		m_scaleX = -1;
 	}
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
 		if (m_bJump == false) {
