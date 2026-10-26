@@ -6,13 +6,14 @@
 
 class C_Hit;
 class C_Camera;
+class C_Cursor;
 class C_PlayerBase : public HitBase
 {
 public:
 	C_PlayerBase() {};
 	~C_PlayerBase() {};
 
-	virtual void Init(C_Hit* a_pHit, C_Camera* a_pCamera);
+	virtual void Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor*a_pCursor);
 	virtual void Update();
 	virtual void Draw();
 
@@ -75,6 +76,7 @@ public:
 	//参照する外部クラス
 	virtual void SetHitClass(C_Hit* a_pHit) final { m_pHit = a_pHit; }
 	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
+	virtual void SetCursorClass(C_Cursor* a_pCursor)final { m_pCursor = a_pCursor; }
 
 protected:
     int m_damageInvincibleFrames = 0;
@@ -131,6 +133,7 @@ protected:
 	//参照するクラスのポインタ
 	C_Hit* m_pHit;
 	C_Camera* m_pCamera;
+	C_Cursor* m_pCursor;
 
 	//タイマー変数
 	float m_HPRegeneCD=0;

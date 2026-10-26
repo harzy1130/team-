@@ -55,7 +55,7 @@ void Scene::Init()
 
 
 	m_map.Init(&m_camera);
-	m_player.Init(&m_hit,&m_camera);
+	m_player.Init(&m_hit,&m_camera, &m_cursor);
 	m_boss.Init(&m_hit, &m_camera);
     m_hit.SetMapClass(&m_map);
     if (!m_enemies.Init(&m_hit, &m_camera, &m_map))
