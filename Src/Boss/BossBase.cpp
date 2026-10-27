@@ -1,5 +1,10 @@
 #include "BossBase.h"
 
+void C_BossBase::SetPlayerClass(C_PlayerBase* a_pPlayer)
+{
+	m_pPlayer = a_pPlayer;
+}
+
 void C_BossBase::MatrixUpdate()
 {
 	m_pos += m_move;
@@ -7,8 +12,8 @@ void C_BossBase::MatrixUpdate()
 	m_draw = m_pos - m_pCamera->GetPos();
 
 	float x, y;
-	x = fabs(m_scale.x) / m_scale.x;
-	y = fabs(m_scale.y) / m_scale.y;
+	x = GetPlusMinus(m_scale.x);
+	y = GetPlusMinus(m_scale.y);
 	m_sMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
 	m_rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(m_angle));
 	m_tMat = Math::Matrix::CreateTranslation(m_draw.x + m_gap.x * x, m_draw.y + m_gap.y * y, 0);
@@ -27,7 +32,7 @@ void C_BossBase::MapCollision()
 	MatrixUpdate();
 }
 
-void C_BossBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
+void C_BossBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlayer)
 {
 	m_pos = { 0,0 };
 	m_move = { 0,0 };
@@ -35,12 +40,13 @@ void C_BossBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera)
 	m_bAlive = true;
 	m_angle = 0;
 	m_animationCnt = 0;
-
+	m_size = 1;
+	m_lr = 1;
 	m_sMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
 	m_rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(m_angle));
 	m_tMat = Math::Matrix::CreateTranslation(m_draw.x, m_draw.y, 0);
 	m_mat = m_sMat * m_rMat * m_tMat;
 	SetHitClass(a_pHit);
 	SetCameraClass(a_pCamera);
-
+	SetPlayerClass(a_pPlayer);
 }

@@ -98,3 +98,7 @@
 
 //valueに入った値をmaxとminをもとに丸める。max>minである必要がある。
 float Clamp(float a_value, float a_max, float a_min);
+//valueの＋－を1,-1で返す。0の時は＋と判断し1を返す
+int GetPlusMinus(float a_value);
+//Math::vector2AからBまでの距離を求める
+float GetDist(Math::Vector2 a_posA, Math::Vector2 a_posB);
