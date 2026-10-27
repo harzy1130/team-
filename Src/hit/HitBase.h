@@ -11,12 +11,17 @@ public:
     // 派生クラスのオブジェクトを基底クラス経由でも安全に破棄できるようにする。
     virtual ~HitBase() = default;
 
+    // デバッグ用の矩形表示
+    void DrawDebugRect(Math::Color* color);
+
     // 現在のワールド座標を設定する。
     void SetPos(float x, float y) { m_pos = Math::Vector2(x, y); }
     // 次に適用する X・Y 方向の移動量を設定する。
     void SetMove(float x, float y) { m_move = Math::Vector2(x, y); }
     // 中心からの半幅・半高さを指定して、ローカル座標の当たり判定矩形を設定する。
     void SetRect(long halfWidth, long halfHeight);
+    // 不規則な矩形用。-はつけなくてもよい。
+    void SetRect(long left, long top, long right, long bottom);
     // 中心からの半径で円判定用の円を設定
     void SetRadius(float a_radius) { m_radius = a_radius; }
     // どこが当たっているかをリセット
@@ -68,6 +73,7 @@ protected:
     S_HitRect m_bHitRect;
     Math::Vector2 m_pos{ 0.0f, 0.0f };
     Math::Vector2 m_draw{ 0.0f, 0.0f };
+    Math::Vector2 m_scale{ 1.0f, 1.0f };
     Math::Vector2 m_move{ 0.0f, 0.0f };
     float m_radius = 0;
     C_Camera* m_pCamera = nullptr;

@@ -10,7 +10,9 @@ public:
 	void Draw();
 	void Update();
 	void Move();
-
+	void Walk();
+	void Charge();
+	void Init(C_Hit* a_pHit, C_Camera* a_pCamera);
 private:
 
 };

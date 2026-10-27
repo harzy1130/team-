@@ -66,7 +66,7 @@ struct S_Boss
 	Math::Matrix sMat;
 	Math::Matrix rMat;
 };
-static const float BOSS_SPEED = 10.0f;
+static const float BOSS_SPEED = 5.0f;
 
 //HitBase’è”=================================
 struct S_HitBase

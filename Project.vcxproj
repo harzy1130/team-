@@ -165,6 +165,7 @@
     <ClInclude Include="Src\Boss\BossBase.h" />
     <ClInclude Include="Src\Camera\Camera.h" />
     <ClInclude Include="Src\Constants\Constants.h" />
+    <ClInclude Include="Src\Cursor\Cursor.h" />
     <ClInclude Include="Src\Enemy\Enemy1.h" />
     <ClInclude Include="Src\Enemy\EnemyBase.h" />
     <ClInclude Include="Src\GameStateManager\GameStateManager.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="Src\Boss\Boss.cpp" />
     <ClCompile Include="Src\Boss\BossBase.cpp" />
     <ClCompile Include="Src\Camera\Camera.cpp" />
+    <ClCompile Include="Src\Cursor\Cursor.cpp" />
     <ClCompile Include="Src\Enemy\Enemy1.cpp" />
     <ClCompile Include="Src\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Src\GameStateManager\GameStateManager.cpp" />

@@ -26,12 +26,32 @@ namespace
     }
 }
 
+void HitBase::DrawDebugRect(Math::Color* color)
+{
+    SHADER.m_spriteShader.SetMatrix(Math::Matrix::Identity);
+    SHADER.m_spriteShader.DrawCircle(m_draw.x, m_draw.y, 5, color);
+
+    SHADER.m_spriteShader.DrawLine(m_draw.x + m_rect.left, m_draw.y + m_rect.bottom, m_draw.x + m_rect.right, m_draw.y + m_rect.bottom, color);
+    SHADER.m_spriteShader.DrawLine(m_draw.x + m_rect.left, m_draw.y + m_rect.top, m_draw.x + m_rect.right, m_draw.y + m_rect.top, color);
+    SHADER.m_spriteShader.DrawLine(m_draw.x + m_rect.left, m_draw.y + m_rect.top, m_draw.x + m_rect.left, m_draw.y + m_rect.bottom, color);
+    SHADER.m_spriteShader.DrawLine(m_draw.x + m_rect.right, m_draw.y + m_rect.top, m_draw.x + m_rect.right, m_draw.y + m_rect.bottom, color);
+}
+
 // 中心からの半幅・半高さを指定して、ローカル座標の当たり判定矩形を設定する。
 void HitBase::SetRect(long halfWidth, long halfHeight)
 {
     halfWidth = std::max(0L, halfWidth);
     halfHeight = std::max(0L, halfHeight);
     m_rect = RECT{-halfWidth, halfHeight, halfWidth, -halfHeight};
+}
+// 不規則な矩形用。-はつけなくてもよい。
+void HitBase::SetRect(long left, long top, long right, long bottom)
+{
+    left = abs(left);
+    top = abs(top);
+    right = abs(right);
+    bottom = abs(bottom);
+    m_rect = { -left, top, right, -bottom };
 }
 
 void HitBase::ResetHitRect()

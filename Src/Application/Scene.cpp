@@ -39,7 +39,7 @@ void Scene::Init()
 {
 	m_backTex.Load("Texture/back1.png");
 	m_chipTex.Load("Texture/MapChip.png");
-	m_bossTex.Load("Texture/boss.png");
+	m_bossTex.Load("Texture/Capricorn.png");
 	m_playerTex.Load("Texture/Chara.png");
 	m_playerAtkTex.Load("Texture/atk1.png");
 	m_blackTex.Load("Texture/black.png");

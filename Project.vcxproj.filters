@@ -70,6 +70,9 @@
     <Filter Include="Src\GameStateManager">
       <UniqueIdentifier>{6b19da8b-fb1b-4f3c-9d91-51910d8a835d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Cursor">
+      <UniqueIdentifier>{d7061a82-0fbf-443f-a92c-29f3f51968bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="Src\GameStateManager\GameStateManager.h">
       <Filter>Src\GameStateManager</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Cursor\Cursor.h">
+      <Filter>Src\Cursor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -308,6 +314,9 @@
     <ClCompile Include="Src\GameStateManager\GameStateManager.cpp">
       <Filter>Src\GameStateManager</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Cursor\Cursor.cpp">
+      <Filter>Src\Cursor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="説明.txt" />
@@ -358,12 +367,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Skill\EnemySkill.h"><Filter>Src\Skill</Filter></ClInclude>
-    <ClCompile Include="Src\Skill\EnemySkill.cpp"><Filter>Src\Skill</Filter></ClCompile>
+    <ClInclude Include="Src\Skill\EnemySkill.h">
+      <Filter>Src\Skill</Filter>
+    </ClInclude>
+    <ClCompile Include="Src\Skill\EnemySkill.cpp">
+      <Filter>Src\Skill</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Enemy\EnemyManager.h"><Filter>Src\Enemy</Filter></ClInclude>
-    <ClCompile Include="Src\Enemy\EnemyManager.cpp"><Filter>Src\Enemy</Filter></ClCompile>
-    <None Include="Src\Enemy\EnemySpawns.csv"><Filter>Src\Enemy</Filter></None>
+    <ClInclude Include="Src\Enemy\EnemyManager.h">
+      <Filter>Src\Enemy</Filter>
+    </ClInclude>
+    <ClCompile Include="Src\Enemy\EnemyManager.cpp">
+      <Filter>Src\Enemy</Filter>
+    </ClCompile>
+    <None Include="Src\Enemy\EnemySpawns.csv">
+      <Filter>Src\Enemy</Filter>
+    </None>
   </ItemGroup>
 </Project>
