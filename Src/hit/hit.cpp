@@ -7,19 +7,17 @@ void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 	std::pair<int,int> chip;
 	int start_w, end_w, start_h, end_h;
 	chip = m_pMap->GetIndex(a_pHitBase->GetPos());
-	start_w = Clamp(chip.first - 1, m_pMap->GetIdxMaxMin().first, 0);
-	end_w = Clamp(chip.first + 2, m_pMap->GetIdxMaxMin().first, 0);
-	start_h = Clamp(chip.second - 1, m_pMap->GetIdxMaxMin().second, 0);
-	end_h = Clamp(chip.second + 2, m_pMap->GetIdxMaxMin().second, 0);
+	start_w = Clamp(chip.first - 2, m_pMap->GetIdxMaxMin().first, 0);
+	end_w = Clamp(chip.first + 3, m_pMap->GetIdxMaxMin().first, 0);
+	start_h = Clamp(chip.second - 2, m_pMap->GetIdxMaxMin().second, 0);
+	end_h = Clamp(chip.second + 3, m_pMap->GetIdxMaxMin().second, 0);
 
 	a_pHitBase->ResetHitRect();
 	//引数のキャラベースから現在と未来の矩形を取得
 	RECT now_Rect = a_pHitBase->GetNowRect();
 	RECT fut_Rect = a_pHitBase->GetFutureRect();
-	//for (int h = 0;h <= m_pMap->GetIdxMaxMin().second;h++) 
 	for(int h = start_h;h <= end_h;h++)
 	{
-		//for (int w = 0;w <= m_pMap->GetIdxMaxMin().first;w++) 
 		for(int w = start_w;w <= end_w;w++)
 		{
 			//当たり判定がない場合はスキップ
