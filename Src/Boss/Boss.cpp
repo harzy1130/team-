@@ -29,8 +29,8 @@ void C_Boss::Move()
 	JumpCharge();
 	DashCharge();
 	m_move.x += m_skillMove.x * -m_lr;
-}
 
+}
 void C_Boss::ChangeChargeStance()
 {
 	m_state = State(stance);
@@ -64,11 +64,10 @@ void C_Boss::Walk()
 	m_chargeWait--;
 	if (m_chargeWait < 0)m_chargeWait = 0;
 
-	bool CheckDist = CHIP_SIZE * 7 > GetDist(m_pos, m_pPlayer->GetPos());
+	bool CheckDist = m_chargeRange > GetDist(m_pos, m_pPlayer->GetPos());
 	if (m_chargeWait <= 0 && CheckDist)ChangeChargeStance();
-
-	m_rawMove.x += (BOSS_SPEED / 15) * -m_lr;
-	m_rawMove.x = Clamp(m_rawMove.x, BOSS_SPEED, -BOSS_SPEED);
+	m_rawMove.x += (m_moveSpeed / 15) * -m_lr;
+	m_rawMove.x = Clamp(m_rawMove.x, m_moveSpeed, -m_moveSpeed);
 	m_move += m_rawMove;
 }
 
@@ -117,6 +116,8 @@ void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer)
 	m_gap = { CHIP_RADIUS,CHIP_RADIUS };
 	SetRect(PTEX_SIZE * 2.5,PTEX_SIZE * 1.5);
 	m_hp = 500;
+	m_atk = 20;
+	m_moveSpeed = 5.0f;
 	m_state = State(walk);
 	m_angle = 0;
 	m_chargeWait = 0;
