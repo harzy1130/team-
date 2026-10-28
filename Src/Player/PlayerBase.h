@@ -3,6 +3,7 @@
 #include"Skill/SkillBase.h"
 #include"Camera/Camera.h"
 #include"Hit/HitBase.h"
+#include"Effect/Effect.h"
 
 class C_Hit;
 class C_Camera;
@@ -160,4 +161,7 @@ protected:
 
 	//スキル用
 	C_Skill m_skill;
+
+	//エフェクト用
+	C_Effect m_effect;
 };

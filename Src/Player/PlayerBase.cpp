@@ -29,6 +29,10 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_IncreasedASP = 0;
 	//通常攻撃
 	InitAtk();
+	//スキル
+	m_skill.Init();
+	//エフェクト
+	m_effect.InitPlayer(this);
 	//画像
 	m_TexSize = 64;
 	m_TexRadius = 32;
@@ -46,6 +50,7 @@ void C_PlayerBase::Update()
 	m_move.y -= m_Gravity;
 
 	m_skill.Update();
+	m_effect.UpdatePlayer(this);
 	PlayerInput();
 	UpdateAtk();
 	if (m_pCursor->GetMousePos().x > 0) {
