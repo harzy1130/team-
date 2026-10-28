@@ -41,7 +41,9 @@ protected:
 	float m_animationWait;
 	KdTexture* m_pTex;
 
-	int m_hp;
+	int m_hp = 500;
+	int m_atk = 20;
+	float m_moveSpeed = 5;
 	int m_state;
 	float m_size;
 	int m_lr;

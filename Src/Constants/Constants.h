@@ -46,27 +46,8 @@ static const int PTEX_SIZE  = 64;
 static const int PTEX_RADIUS= PTEX_SIZE / 2;
 
 //ボス定数======================================
-struct S_Boss
-{
-	//状態
-	bool  bAlive;
-	float xScale;
-	float yScale;
-	float angle;
-	KdTexture* pTex;
 
-	//座標
-	Math::Vector2 pos;
-	Math::Vector2 move;
-	Math::Vector2 draw;
 
-	//行列
-	Math::Matrix mat;
-	Math::Matrix tMat;
-	Math::Matrix sMat;
-	Math::Matrix rMat;
-};
-static const float BOSS_SPEED = 5.0f;
 
 //HitBase定数=================================
 struct S_HitBase
