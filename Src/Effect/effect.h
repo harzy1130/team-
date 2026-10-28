@@ -20,12 +20,17 @@ public:
 	bool GetAtkUp(){ return m_bAtkUp; }
 	bool GetDefUp(){ return m_bDefUp; }
 
-	void SetPoison(float a_time) { m_bPoison = true, m_poisonTime = a_time; }
-	void SetCombustion(float a_time) { m_bCombustion = true, m_combustionTime = a_time; }
+	//引数に時間を秒数で入れるとその秒数だけ効果が持続する
+	void SetPoison(float a_time) { m_bPoison = true, m_poisonTime = a_time;m_poisonCount = 0; }
+	void SetCombustion(float a_time) { m_bCombustion = true, m_combustionTime = a_time; m_combustionCount = 0; }
 	void SetSutan(float a_time) { m_bSutan = true, m_sutanTime = a_time; }
 	void SetSuppress(float a_time) { m_bSuppress = true, m_suppressTime = a_time; }
 	void SetAtkUp(float a_time) { m_bAtkUp = true, m_atkUpTime = a_time; }
 	void SetDefUp(float a_time) { m_bDefUp = true, m_defUpTime = a_time; }
+	void SetAtkDown(float a_time) { m_bAtkDown = true, m_atkDownTime = a_time; }
+	void SetDefDown(float a_time) { m_bDefDown = true, m_defDownTime = a_time; }
+	void SetBaseAtk(float a_atk) { m_baseAtk = a_atk; }
+	void SetBaseDef(float a_def) { m_baseDef = a_def; }
 
 private:
 	//元のステータスを保存する変数
@@ -33,9 +38,11 @@ private:
 	float m_baseDef;
 
 	bool m_bPoison;		//毒
-	float m_poisonTime;
+	int m_poisonCount;	//ダメージ用のカウント変数
+	float m_poisonTime;//毒の持続時間
 
 	bool m_bCombustion; //炎上
+	int m_combustionCount;
 	float m_combustionTime;
 
 	bool m_bSutan;		//スタン

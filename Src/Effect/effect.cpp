@@ -46,21 +46,39 @@ void C_Effect::UpdatePlayer(C_PlayerBase* a_pPlayer)
 
 	if (m_bPoison)//“Å
 	{
-		a_pPlayer->SetHP(a_pPlayer->GetHP() - 0.03f);
+		if(m_poisonCount<60)
+		{
+			m_poisonCount++;
+		}
+		else
+		{
+			a_pPlayer->SetHP(a_pPlayer->GetHP() - 1);
+			m_poisonCount = 0;
+		}
 		m_poisonTime -= 1.0f / 60.0f;
 		if (m_poisonTime <= 0)
 		{
 			m_poisonTime = 0;
+			m_poisonCount = 0;
 			m_bPoison = false;
 		}
 	}
 	if (m_bCombustion)//‰Šã
 	{
-		a_pPlayer->SetHP(a_pPlayer->GetHP() - 0.06f);
+		if(m_combustionCount<60)
+		{
+			m_combustionCount++;
+		}
+		else
+		{
+			a_pPlayer->SetHP(a_pPlayer->GetHP() - 3);
+			m_combustionCount = 0;
+		}
 		m_combustionTime -= 1.0f / 60.0f;
 		if (m_combustionTime <= 0)
 		{
 			m_combustionTime = 0;
+			m_combustionCount = 0;
 			m_bCombustion = false;
 		}
 	}
