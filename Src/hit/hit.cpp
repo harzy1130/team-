@@ -4,13 +4,19 @@
 
 void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 {
-	std::pair<int,int> chip;
+	std::pair<int,int> startChip;
+	std::pair<int,int> endChip;
 	int start_w, end_w, start_h, end_h;
-	chip = m_pMap->GetIndex(a_pHitBase->GetPos());
-	start_w = Clamp(chip.first - 2, m_pMap->GetIdxMaxMin().first, 0);
-	end_w = Clamp(chip.first + 3, m_pMap->GetIdxMaxMin().first, 0);
-	start_h = Clamp(chip.second - 2, m_pMap->GetIdxMaxMin().second, 0);
-	end_h = Clamp(chip.second + 3, m_pMap->GetIdxMaxMin().second, 0);
+	Math::Vector2 CorrectionPos = { float(a_pHitBase->GetRect().left + CHIP_RADIUS), float(a_pHitBase->GetRect().top - CHIP_RADIUS) };
+	startChip = m_pMap->GetIndex(a_pHitBase->GetPos() + CorrectionPos);
+	
+	CorrectionPos = { float(a_pHitBase->GetRect().right + CHIP_RADIUS),float(a_pHitBase->GetRect().bottom - CHIP_RADIUS) };
+	endChip = m_pMap->GetIndex(a_pHitBase->GetPos() + CorrectionPos);
+
+	start_w = Clamp(startChip.first - 1, m_pMap->GetIdxMaxMin().first, 0);
+	end_w = Clamp(endChip.first + 2, m_pMap->GetIdxMaxMin().first, 0);
+	start_h = Clamp(startChip.second - 1, m_pMap->GetIdxMaxMin().second, 0);
+	end_h = Clamp(endChip.second + 2, m_pMap->GetIdxMaxMin().second, 0);
 
 	a_pHitBase->ResetHitRect();
 	//引数のキャラベースから現在と未来の矩形を取得
