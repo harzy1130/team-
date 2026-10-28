@@ -3,14 +3,15 @@
 
 void Scene::Draw2D()
 {
-	SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(0, 0, 0));
-	SHADER.m_spriteShader.DrawTex(&m_backTex, Math::Rectangle(0, 0, 1280, 720), 1.0f);
+	const bool inGame = m_game.GetGameState() == GameState::Game;
+	const bool inSelect = m_game.GetGameState() == GameState::Select;
+
 	m_game.Draw();
-	if (m_game.GetGameState() == GameState::Select || m_game.GetGameState() == GameState::Game)
+	if (inSelect || inGame)
 	{
 		m_map.Draw();
 		m_player.Draw();
-		if (m_game.GetGameState() == GameState::Game)
+		if (inGame)
 		{
 			m_enemies.Draw();
 			m_enemies.DrawVision();
@@ -22,8 +23,10 @@ void Scene::Draw2D()
 
 void Scene::Update()
 {
-	const bool inGame = m_game.GetGameState() == GameState::Game;
-	if (m_game.GetGameState() == GameState::Select || inGame)
+	const bool inGame   = m_game.GetGameState() == GameState::Game;
+	const bool inSelect = m_game.GetGameState() == GameState::Select;
+
+	if (inSelect || inGame)
 	{
 		m_camera.Update();
 		m_map.Update();
@@ -37,6 +40,8 @@ void Scene::Update()
 
 void Scene::Init()
 {
+	m_game.Init();
+
 	m_backTex.Load("Texture/back1.png");
 	m_chipTex.Load("Texture/MapChip.png");
 	m_bossTex.Load("Texture/Capricorn.png");
@@ -48,6 +53,7 @@ void Scene::Init()
 	m_player.SetTex(&m_playerTex);
 	m_player.SetAtkTex(&m_playerAtkTex);
 	m_game.SetTexture(&m_blackTex);
+	m_game.SetBackTexture(&m_backTex);
 	m_camera.Init();
 
 	m_game.SetMapData(&m_map);
