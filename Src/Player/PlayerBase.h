@@ -3,6 +3,7 @@
 #include"Skill/SkillBase.h"
 #include"Camera/Camera.h"
 #include"Hit/HitBase.h"
+#include"Effect/effect.h"
 
 class C_Cursor;
 class C_PlayerBase : public HitBase
@@ -156,4 +157,7 @@ protected:
 
 	//スキル用
 	C_Skill m_skill;
+
+	//状態異常用
+	C_Effect m_effect;
 };
