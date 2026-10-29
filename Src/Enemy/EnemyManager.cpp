@@ -148,12 +148,22 @@ std::size_t EnemyManager::GetAliveCount() const
     return count;
 }
 
-Enemy1* EnemyManager::GetEnemy(std::size_t index)
+EnemyBase* EnemyManager::GetEnemy(std::size_t index)
+{
+    return index < m_pAllEnemies.size() ? m_pAllEnemies[index] : nullptr;
+}
+
+const EnemyBase* EnemyManager::GetEnemy(std::size_t index) const
+{
+    return index < m_pAllEnemies.size() ? m_pAllEnemies[index] : nullptr;
+}
+
+Enemy1* EnemyManager::GetEnemy1(std::size_t index)
 {
     return index < m_enemies1.size() ? m_enemies1[index].get() : nullptr;
 }
 
-const Enemy1* EnemyManager::GetEnemy(std::size_t index) const
+const Enemy1* EnemyManager::GetEnemy1(std::size_t index) const
 {
     return index < m_enemies1.size() ? m_enemies1[index].get() : nullptr;
 }

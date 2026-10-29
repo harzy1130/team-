@@ -5,6 +5,7 @@
 
 class C_Hit;
 class C_Camera;
+class EnemyBase;
 // World coordinates use +Y upwards. m_rect is relative to m_pos.
 class HitBase
 {
@@ -35,6 +36,13 @@ public:
     void SetHitRight(float a_x);
     // 下が床に触れている
     void SetHitBottom(float a_y);
+    
+    //
+    void SetHitEnemies(HitBase* a_pHitBase);
+    // 敵のHit記録をリセット
+    void ResetHitEnemies();
+    // 
+    bool GetHitEnemies(HitBase* a_pHitBase);
     // 現在のワールド座標を返す。
     Math::Vector2 GetPos() const { return m_pos; }
     // まだ適用していない移動量を返す。
@@ -47,6 +55,8 @@ public:
     RECT GetNowRect() const;
     // 移動後の予測位置での当たり判定矩形を返す。RECT の座標は整数に変換される。
     RECT GetFutureRect() const;
+    // 物体を中心とした円の半径を返す
+    float GetRadius()const { return m_radius; }
 
     // 現在の当たり判定の上端をワールド座標で返す（Y 軸は上向きが正）。
     float GetHitTop() const { return m_pos.y + m_rect.top; }
@@ -56,7 +66,6 @@ public:
     float GetHitLeft() const { return m_pos.x + m_rect.left; }
     // 現在の当たり判定の右端をワールド座標で返す。
     float GetHitRight() const { return m_pos.x + m_rect.right; }
-
     // Only positive-area overlap counts as a hit; touching edges do not.
     // 現在位置で相手と矩形が重なるかを調べる。辺が接するだけの場合は false を返す。
     bool IsHit(const HitBase& other) const;
@@ -66,9 +75,12 @@ public:
     // Apply once after any collision correction, then clear the pending move.
     // 移動量を現在位置に一度だけ適用し、適用済みの移動量を 0 に戻す。
     void ApplyMove();
+    // 敵と当たった時に行う処理を記述する場所
+    virtual void IfHitEnemy(EnemyBase* a_pEnemy);
 
     void SetHitClass(C_Hit* a_pHit) { m_pHit = a_pHit; };
     void SetCameraClass(C_Camera* a_pCamera) { m_pCamera = a_pCamera; };
+
 protected:
     RECT m_rect{};
     S_HitRect m_bHitRect;
@@ -79,4 +91,7 @@ protected:
     float m_radius = 0;
     C_Camera* m_pCamera = nullptr;
     C_Hit* m_pHit = nullptr;
+
+private:
+    std::vector<HitBase*> m_hitEnemies;
 };

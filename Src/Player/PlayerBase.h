@@ -3,10 +3,7 @@
 #include"Skill/SkillBase.h"
 #include"Camera/Camera.h"
 #include"Hit/HitBase.h"
-#include"Effect/Effect.h"
 
-class C_Hit;
-class C_Camera;
 class C_Cursor;
 class C_PlayerBase : public HitBase
 {
@@ -21,15 +18,13 @@ public:
     // 被ダメージの共通処理。防御力・無敵時間・HP 減少・死亡を処理する。
     bool TakeDamage(float rawDamage);
     bool IsDamageInvincible() const { return m_damageInvincibleFrames > 0; }
+	// 敵と当たった時に行う処理を記述する場所
+	void IfHitEnemy(EnemyBase* a_pEnemy);
 
 	//ゲッター
 	//生存
 	virtual bool GetAFlg()final { return m_bAlive; }
-	//画像サイズ
-	virtual float GetTexSize()final { return m_TexSize; }
 	//移動
-	//virtual Math::Vector2 GetPos()final { return m_pos; }
-	//virtual Math::Vector2 GetMove()final { return m_move; }
 	virtual Math::Vector2 GetSkillMove()final { return m_skillMove; }
 	virtual bool GetJumpFlg()final { return m_bJump; }
 	virtual float GetScaleX()final { return m_scaleX; }
@@ -79,6 +74,7 @@ public:
 	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
 	virtual void SetCursorClass(C_Cursor* a_pCursor)final { m_pCursor = a_pCursor; }
 
+
 protected:
     int m_damageInvincibleFrames = 0;
 	//生存
@@ -91,7 +87,6 @@ protected:
 	float m_speed;
 	float m_scaleX = 1;
 	bool m_bJump;
-	const float m_Gravity = 1.0f;//重力
 	const float m_JumpPower = 20.0f;
 
 	//画像用
@@ -99,8 +94,8 @@ protected:
 	Math::Matrix m_mat;
 	Math::Matrix m_transMat;
 	Math::Matrix m_scaleMat;
-	int m_TexSize;
-	int m_TexRadius;
+
+
 
 	//基礎ステータス
 	int m_Level;
@@ -161,7 +156,4 @@ protected:
 
 	//スキル用
 	C_Skill m_skill;
-
-	//エフェクト用
-	C_Effect m_effect;
 };

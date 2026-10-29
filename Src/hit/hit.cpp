@@ -2,6 +2,12 @@
 #include"Map/Map.h"
 #include"Pch.h"
 
+void C_Hit::Init(C_Map* a_pMap, EnemyManager* a_pEnemyManager)
+{
+	SetMapClass(a_pMap);
+	SetEnemyManager(a_pEnemyManager);
+}
+
 void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 {
 	std::pair<int,int> startChip;
@@ -10,7 +16,7 @@ void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 	Math::Vector2 CorrectionPos = { float(a_pHitBase->GetRect().left + CHIP_RADIUS), float(a_pHitBase->GetRect().top - CHIP_RADIUS) };
 	startChip = m_pMap->GetIndex(a_pHitBase->GetPos() + CorrectionPos);
 	
-	CorrectionPos = { float(a_pHitBase->GetRect().right + CHIP_RADIUS),float(a_pHitBase->GetRect().bottom - CHIP_RADIUS) };
+	CorrectionPos = { float(a_pHitBase->GetRect().right - CHIP_RADIUS),float(a_pHitBase->GetRect().bottom + CHIP_RADIUS) };
 	endChip = m_pMap->GetIndex(a_pHitBase->GetPos() + CorrectionPos);
 
 	start_w = Clamp(startChip.first - 1, m_pMap->GetIdxMaxMin().first, 0);
@@ -60,6 +66,27 @@ void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 		}
 	}
 	return;
+}
+
+bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
+{
+	bool bHit = false;
+	for (int en = 0;en < m_pEnemyManager->GetCount();en++) 
+	{
+		EnemyBase* enemy = m_pEnemyManager->GetEnemy(en);
+
+		bool alreadyHit = a_pHitBase->GetHitEnemies(enemy);
+		if (enemy == nullptr || !enemy->GetAlive() || !alreadyHit)continue;
+		float compareDist = enemy->GetRadius() + a_pHitBase->GetRadius();
+		Math::Vector2 enPos = enemy->GetPos();
+		Math::Vector2 hbPos = a_pHitBase->GetPos();
+		if (compareDist > GetDist(hbPos, enPos))
+		{
+			a_pHitBase->SetHitEnemies(enemy);
+			a_pHitBase->IfHitEnemy(enemy);
+		}
+	}
+	return bHit;
 }
 
 RECT C_Hit::CreateRectPos(float a_halfWidth, float a_halfHeight, Math::Vector2 a_pos)
