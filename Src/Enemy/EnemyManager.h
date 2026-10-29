@@ -17,13 +17,16 @@ public:
 
     std::size_t GetCount() const { return m_pAllEnemies.size(); }
     std::size_t GetAliveCount() const;
-    Enemy1* GetEnemy(std::size_t index);
-    const Enemy1* GetEnemy(std::size_t index) const;
+
+    EnemyBase* GetEnemy(std::size_t index);
+    const EnemyBase* GetEnemy(std::size_t index)const;
+
+    Enemy1* GetEnemy1(std::size_t index);
+    const Enemy1* GetEnemy1(std::size_t index) const;
     void SetDebugEnemy(std::size_t index);
     bool SpawnEnemy1(Enemy1::SpawnSettings a_spawn);
     bool SpawnEnemy1(float a_x,float a_y);
-    
-
+   
 private:
     bool LoadStage(int stage);
     void ClearEnemies();

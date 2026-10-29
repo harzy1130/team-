@@ -29,17 +29,11 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_IncreasedASP = 0;
 	//通常攻撃
 	InitAtk();
-	//スキル
-	m_skill.Init();
-	//エフェクト
-	m_effect.InitPlayer(this);
-	//画像
-	m_TexSize = 64;
-	m_TexRadius = 32;
 	m_skill.Init();
 	SetHitClass(a_pHit);
 	SetCameraClass(a_pCamera);
 	SetRect(PTEX_RADIUS, PTEX_RADIUS);
+	SetRadius(PTEX_RADIUS);
 }
 
 void C_PlayerBase::Update()
@@ -47,10 +41,9 @@ void C_PlayerBase::Update()
     if (!m_bAlive) { m_move = { 0, 0 }; return; }
     if (m_damageInvincibleFrames > 0) --m_damageInvincibleFrames;
 	m_move.x = 0.0f;
-	m_move.y -= m_Gravity;
+	m_move.y -= GRAVITY;
 
 	m_skill.Update();
-	m_effect.UpdatePlayer(this);
 	PlayerInput();
 	UpdateAtk();
 	if (m_pCursor->GetMousePos().x > 0) {
@@ -65,6 +58,7 @@ void C_PlayerBase::Update()
 	//当たり判定
 	m_pHit->MapHitCheck(this);
 	m_bJump = !m_bHitRect.bottom;
+	m_pHit->EnemyHitCheck(this);
 
 	//座標確定
 	m_pos += m_move;
@@ -159,6 +153,9 @@ void C_PlayerBase::PlayerInput()
 	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
 		PlayerAtk();
 	}
+	if(GetAsyncKeyState('L') & 0x8000) {
+		ResetHitEnemies();
+	}
 }
 
 //行列合成
@@ -233,4 +230,10 @@ bool C_PlayerBase::TakeDamage(float rawDamage)
         m_skillMove = { 0.0f, 0.0f };
     }
     return true;
+}
+
+void C_PlayerBase::IfHitEnemy(EnemyBase* a_pEnemy)
+{
+	a_pEnemy->TakeDamage(20, m_pos.x);
+
 }

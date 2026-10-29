@@ -87,6 +87,26 @@ void HitBase::SetHitBottom(float a_y)
     m_bHitRect.bottom = true;
 }
 
+void HitBase::SetHitEnemies(HitBase* a_pHitBase)
+{
+    m_hitEnemies.push_back(a_pHitBase);
+}
+
+void HitBase::ResetHitEnemies()
+{
+    m_hitEnemies.clear();
+}
+
+bool HitBase::GetHitEnemies(HitBase* a_pHitBase)
+{
+    bool flg = true;
+    for (auto hits : m_hitEnemies) 
+    {
+        if (a_pHitBase == hits)flg = false;
+    }
+    return flg;
+}
+
 // 現在位置での当たり判定矩形を返す。RECT の座標は整数に変換される。
 RECT HitBase::GetNowRect() const
 {
@@ -116,4 +136,8 @@ void HitBase::ApplyMove()
 {
     m_pos += m_move;
     m_move = Math::Vector2(0.0f, 0.0f);
+}
+
+void HitBase::IfHitEnemy(EnemyBase* a_pEnemy)
+{
 }

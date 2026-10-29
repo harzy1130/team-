@@ -73,6 +73,9 @@
     <Filter Include="Src\Cursor">
       <UniqueIdentifier>{d7061a82-0fbf-443f-a92c-29f3f51968bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Effect">
+      <UniqueIdentifier>{b62e6a21-75f1-40cf-97f1-079f86a47c1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -216,6 +219,9 @@
     <ClInclude Include="Src\Cursor\Cursor.h">
       <Filter>Src\Cursor</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Effect\effect.h">
+      <Filter>Src\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -316,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="Src\Cursor\Cursor.cpp">
       <Filter>Src\Cursor</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Effect\effect.cpp">
+      <Filter>Src\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

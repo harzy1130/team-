@@ -43,7 +43,7 @@ void CharacterGUI::Draw(C_PlayerBase& player, EnemyManager& enemies, C_GameState
         m_selectedEnemy = count > 0 ? std::max(0, std::min(m_selectedEnemy, count - 1)) : 0;
         if (count > 1) ImGui::SliderInt(u8"•\Ž¦‚·‚é“G", &m_selectedEnemy, 0, count - 1);
         enemies.SetDebugEnemy(static_cast<std::size_t>(m_selectedEnemy));
-        const Enemy1* enemy = enemies.GetEnemy(static_cast<std::size_t>(m_selectedEnemy));
+        const Enemy1* enemy = enemies.GetEnemy1(static_cast<std::size_t>(m_selectedEnemy));
         if (enemy != nullptr)
         {
             ImGui::Text("HP: %d", enemy->GetHp());
