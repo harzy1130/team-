@@ -13,17 +13,19 @@ public:
 	
 	virtual void Update() = 0;
 	virtual void Move() = 0;
-	virtual void Draw() = 0;
+	virtual void Draw();
 	virtual void Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlayer);
 
+	bool TakeDamage(int a_damage);
 	//セッター
 	void SetTexture(KdTexture* a_pTex) { m_pTex = a_pTex; }
-	
+	void SetHp(int a_hp);
 	//ゲッター
 	Math::Vector2 GetPos(){return m_pos;}
 	Math::Vector2 GetMove(){return m_move;}
 	bool GetAlive(){return m_bAlive;}
 	float GetAngle(){return m_angle;}
+
 	
 private:
 	void SetPlayerClass(C_PlayerBase* a_pPlayer);
@@ -40,13 +42,16 @@ protected:
 	int m_animationCnt;
 	float m_animationWait;
 	KdTexture* m_pTex;
+	int m_texWidth;
+	int m_texHeight;
 
 	int m_hp = 500;
 	int m_atk = 20;
-	float m_moveSpeed = 5;
+	int m_invincibleFrames = 0;
 	int m_state;
-	float m_size;
 	int m_lr;
+	float m_size;
+	float m_moveSpeed = 5;
 	
 	Math::Vector2 m_gap{0,0};
 	Math::Vector2 m_skillMove{0,0};

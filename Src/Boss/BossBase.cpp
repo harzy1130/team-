@@ -32,6 +32,17 @@ void C_BossBase::MapCollision()
 	MatrixUpdate();
 }
 
+void C_BossBase::Draw()
+{
+	if (!m_bAlive)return;
+	if (m_invincibleFrames > 0 && (m_invincibleFrames / 4) % 2 == 0) return;
+	SHADER.m_spriteShader.SetMatrix(m_mat);
+	SHADER.m_spriteShader.DrawTex(
+		m_pTex, Math::Rectangle(m_texWidth * int(m_animationCnt / m_animationWait), 0, m_texWidth, m_texHeight), 1.0f);
+	Math::Color color = { 1.0, 0, 0, 1.0 };
+	DrawDebugRect(&color);
+}
+
 void C_BossBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlayer)
 {
 	m_pos = { 0,0 };
@@ -49,4 +60,23 @@ void C_BossBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlaye
 	SetHitClass(a_pHit);
 	SetCameraClass(a_pCamera);
 	SetPlayerClass(a_pPlayer);
+}
+
+bool C_BossBase::TakeDamage(int a_damage)
+{
+	if (!m_bAlive || a_damage <= 0 || m_invincibleFrames > 0)return false;
+	SetHp(m_hp - std::min(a_damage, m_hp));
+	if (!m_bAlive)return true;
+	m_invincibleFrames = 30;
+	return true;
+}
+
+void C_BossBase::SetHp(int a_hp)
+{
+	m_hp = std::max(0, a_hp);
+	if (m_hp == 0)
+	{
+		m_bAlive = false;
+		SetMove(0.0f, 0.0f);
+	}
 }

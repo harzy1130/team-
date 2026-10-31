@@ -1,20 +1,11 @@
 #include"Boss.h"
 
-void C_Boss::Draw()
-{
-	if (!m_bAlive)return;
-	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(
-		m_pTex, Math::Rectangle(896 * int(m_animationCnt / m_animationWait), 0, 896, 512), 1.0f);
-	
-	Math::Color color = { 1.0, 0, 0, 1.0 };
-	DrawDebugRect(&color);
-}
 
 void C_Boss::Update()
 {
 	if (!m_bAlive)return;
 	m_animationCnt += 1;
+	if (m_invincibleFrames > 0) --m_invincibleFrames;
 	if (m_animationCnt > (6 * m_animationWait))m_animationCnt = 0;
 	Move();
 	Gravity();
@@ -114,6 +105,8 @@ void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer)
 	m_animationWait = 8;
 	m_scale = { -m_size * m_lr, m_size };
 	m_gap = { CHIP_RADIUS,CHIP_RADIUS };
+	m_texWidth = 896;
+	m_texHeight = 512;
 	SetRect(PTEX_SIZE * 2.5,PTEX_SIZE * 1.5);
 	m_hp = 500;
 	m_atk = 20;
