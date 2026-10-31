@@ -14,7 +14,6 @@ public:
 	C_Boss() {};
 	~C_Boss() {};
 
-	void Draw();
 	void Update();
 	void Move();
 
