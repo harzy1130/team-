@@ -18,6 +18,6 @@ float GetDist(Math::Vector2 a_posA, Math::Vector2 a_posB)
 {
 	float a = a_posA.x - a_posB.x;
 	float b = a_posA.y - a_posB.y;
-	float c = sqrt(a * a - b * b);
+	float c = sqrt(a * a + b * b);
 	return c;
 }
