@@ -31,10 +31,7 @@ void HitBase::DrawDebugRect(Math::Color* color)
     SHADER.m_spriteShader.SetMatrix(Math::Matrix::Identity);
     SHADER.m_spriteShader.DrawCircle(m_draw.x, m_draw.y, 5, color);
 
-    SHADER.m_spriteShader.DrawLine(m_draw.x + m_rect.left, m_draw.y + m_rect.bottom, m_draw.x + m_rect.right, m_draw.y + m_rect.bottom, color);
-    SHADER.m_spriteShader.DrawLine(m_draw.x + m_rect.left, m_draw.y + m_rect.top, m_draw.x + m_rect.right, m_draw.y + m_rect.top, color);
-    SHADER.m_spriteShader.DrawLine(m_draw.x + m_rect.left, m_draw.y + m_rect.top, m_draw.x + m_rect.left, m_draw.y + m_rect.bottom, color);
-    SHADER.m_spriteShader.DrawLine(m_draw.x + m_rect.right, m_draw.y + m_rect.top, m_draw.x + m_rect.right, m_draw.y + m_rect.bottom, color);
+    SHADER.m_spriteShader.DrawBox(m_draw.x, m_draw.y, m_rect.right, m_rect.top, color, false);
 }
 
 // 中心からの半幅・半高さを指定して、ローカル座標の当たり判定矩形を設定する。
@@ -44,6 +41,7 @@ void HitBase::SetRect(long halfWidth, long halfHeight)
     halfHeight = std::max(0L, halfHeight);
     m_rect = RECT{-halfWidth, halfHeight, halfWidth, -halfHeight};
 }
+
 // 不規則な矩形用。-はつけなくてもよい。
 void HitBase::SetRect(long left, long top, long right, long bottom)
 {
@@ -54,57 +52,64 @@ void HitBase::SetRect(long left, long top, long right, long bottom)
     m_rect = { -left, top, right, -bottom };
 }
 
+// どこが当たっているかをリセット
 void HitBase::ResetHitRect()
 {
     m_bHitRect = { false,false,false,false };
 }
 
-void HitBase::SetHitLeft(float a_x)
+// 左が壁に当たっている
+void HitBase::SetMapHitLeft(float a_x)
 {
     m_pos.x = a_x - m_rect.left;
     m_move.x = 0;
     m_bHitRect.left = true;
 }
 
-void HitBase::SetHitTop(float a_y)
+// 上が天井に当たっている
+void HitBase::SetMapHitTop(float a_y)
 {
     m_pos.y = a_y - m_rect.top;
     m_move.y = 0;
     m_bHitRect.top = true;
 }
 
-void HitBase::SetHitRight(float a_x)
+// 右が壁に当たっている
+void HitBase::SetMapHitRight(float a_x)
 {
     m_pos.x = a_x - m_rect.right;
     m_move.x = 0;
     m_bHitRect.right = true;
 }
 
-void HitBase::SetHitBottom(float a_y)
+// 下が床に触れている
+void HitBase::SetMapHitBottom(float a_y)
 {
     m_pos.y = a_y - m_rect.bottom;
     m_move.y = 0;
     m_bHitRect.bottom = true;
 }
 
-void HitBase::SetHitEnemies(HitBase* a_pHitBase)
+// 当たったオブジェクトリストに引数で指定したHitBaseを持つオブジェクトを追加
+void HitBase::SetAlreadyHit(HitBase* a_pHitBase)
 {
-    m_hitEnemies.push_back(a_pHitBase);
+    m_alreadyHit.push_back(a_pHitBase);
 }
 
-void HitBase::ResetHitEnemies()
+// すでに当たっているオブジェクト記録をリセット
+void HitBase::ResetAlreadyHit()
 {
-    m_hitEnemies.clear();
+    m_alreadyHit.clear();
 }
 
-bool HitBase::GetHitEnemies(HitBase* a_pHitBase)
+// 引数に入れたHitBaseを持つオブジェクトが既に当たっているかを返す。当たっていた場合はtrueを返す。
+bool HitBase::GetAlreadyHit(HitBase* a_pHitBase)
 {
-    bool flg = true;
-    for (auto hits : m_hitEnemies) 
+    for (auto hits : m_alreadyHit) 
     {
-        if (a_pHitBase == hits)flg = false;
+        if (a_pHitBase == hits)return true;
     }
-    return flg;
+    return false;
 }
 
 // 現在位置での当たり判定矩形を返す。RECT の座標は整数に変換される。
@@ -139,5 +144,9 @@ void HitBase::ApplyMove()
 }
 
 void HitBase::IfHitEnemy(EnemyBase* a_pEnemy)
+{
+}
+
+void HitBase::IfHitBoss(C_BossBase* a_pBoss)
 {
 }

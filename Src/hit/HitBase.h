@@ -6,6 +6,7 @@
 class C_Hit;
 class C_Camera;
 class EnemyBase;
+class C_BossBase;
 // World coordinates use +Y upwards. m_rect is relative to m_pos.
 class HitBase
 {
@@ -29,20 +30,20 @@ public:
     // どこが当たっているかをリセット
     void ResetHitRect();
     // 左が壁に当たっている
-    void SetHitLeft(float a_x);
+    void SetMapHitLeft(float a_x);
     // 上が天井に当たっている
-    void SetHitTop(float a_y);
+    void SetMapHitTop(float a_y);
     // 右が壁に当たっている
-    void SetHitRight(float a_x);
+    void SetMapHitRight(float a_x);
     // 下が床に触れている
-    void SetHitBottom(float a_y);
+    void SetMapHitBottom(float a_y);
     
-    //
-    void SetHitEnemies(HitBase* a_pHitBase);
-    // 敵のHit記録をリセット
-    void ResetHitEnemies();
-    // 
-    bool GetHitEnemies(HitBase* a_pHitBase);
+    // 当たったオブジェクトリストに引数で指定したHitBaseを持つオブジェクトを追加
+    void SetAlreadyHit(HitBase* a_pHitBase);
+    // すでに当たっているオブジェクト記録をリセット
+    void ResetAlreadyHit();
+    // 引数に入れたHitBaseを持つオブジェクトが既に当たっているかを返す。当たっていた場合はtrueを返す。
+    bool GetAlreadyHit(HitBase* a_pHitBase);
     // 現在のワールド座標を返す。
     Math::Vector2 GetPos() const { return m_pos; }
     // まだ適用していない移動量を返す。
@@ -77,6 +78,7 @@ public:
     void ApplyMove();
     // 敵と当たった時に行う処理を記述する場所
     virtual void IfHitEnemy(EnemyBase* a_pEnemy);
+    virtual void IfHitBoss(C_BossBase* a_pBoss);
 
     void SetHitClass(C_Hit* a_pHit) { m_pHit = a_pHit; };
     void SetCameraClass(C_Camera* a_pCamera) { m_pCamera = a_pCamera; };
@@ -93,5 +95,5 @@ protected:
     C_Hit* m_pHit = nullptr;
 
 private:
-    std::vector<HitBase*> m_hitEnemies;
+    std::vector<HitBase*> m_alreadyHit;
 };
