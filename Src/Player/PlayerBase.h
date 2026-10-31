@@ -21,7 +21,7 @@ public:
     bool IsDamageInvincible() const { return m_damageInvincibleFrames > 0; }
 	// 敵と当たった時に行う処理を記述する場所
 	void IfHitEnemy(EnemyBase* a_pEnemy);
-
+	void IfHitBoss(C_BossBase* a_pBoss);
 	//ゲッター
 	//生存
 	virtual bool GetAFlg()final { return m_bAlive; }

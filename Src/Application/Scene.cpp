@@ -63,7 +63,7 @@ void Scene::Init()
 	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera, &m_cursor);
 	m_boss.Init(&m_hit, &m_camera,&m_player);
-    m_hit.Init(&m_map,&m_enemies);
+    m_hit.Init(&m_map, &m_enemies, &m_boss);
     if (!m_enemies.Init(&m_hit, &m_camera, &m_map))
         OutputDebugStringA("Enemy manager initialization failed.\n");
 	

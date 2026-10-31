@@ -62,6 +62,7 @@ void C_PlayerBase::Update()
 	m_pHit->MapHitCheck(this);
 	m_bJump = !m_bHitRect.bottom;
 	m_pHit->EnemyHitCheck(this);
+	m_pHit->BossHitCheck(this);
 
 	//À•WŠm’è
 	m_pos += m_move;
@@ -157,7 +158,7 @@ void C_PlayerBase::PlayerInput()
 		PlayerAtk();
 	}
 	if(GetAsyncKeyState('L') & 0x8000) {
-		ResetHitEnemies();
+		ResetAlreadyHit();
 	}
 }
 
@@ -239,4 +240,9 @@ void C_PlayerBase::IfHitEnemy(EnemyBase* a_pEnemy)
 {
 	a_pEnemy->TakeDamage(20, m_pos.x);
 
+}
+
+void C_PlayerBase::IfHitBoss(C_BossBase* a_pBoss)
+{
+	a_pBoss->TakeDamage(20);
 }
