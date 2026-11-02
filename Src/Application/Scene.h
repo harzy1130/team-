@@ -3,7 +3,7 @@
 #include "GUI/CharacterGUI.h"
 #include"Boss/Boss.h"
 #include"Enemy/EnemyManager.h"
-#include"Player/PlayerBase.h"
+#include"Player/Player1.h"
 #include"Map/Map.h"
 #include"Camera/Camera.h"
 #include"hit/hit.h"
@@ -13,6 +13,7 @@ class Scene
 {
 private:
 	KdTexture m_playerTex;
+	KdTexture m_player1Tex;
 	KdTexture m_playerAtkTex;
 	KdTexture m_bossTex;
 	KdTexture m_chipTex;
@@ -20,7 +21,7 @@ private:
 	KdTexture m_blackTex;
 
 	C_GameStateManager m_game;
-	C_PlayerBase m_player;
+	C_Player1 m_player;
 	C_Boss m_boss;
 	EnemyManager m_enemies;
 	C_Map m_map;

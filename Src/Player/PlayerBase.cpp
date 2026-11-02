@@ -139,11 +139,23 @@ void C_PlayerBase::PlayerInput()
 	if (!m_bAlive)return;
 	if ((GetAsyncKeyState(VK_RIGHT) & 0x8000)||(GetAsyncKeyState('D') & 0x8000))
 	{
-		m_move.x += 8.0f;
+		if (m_moveMode != E_MoveMode::attacking)
+		{
+			m_move.x += m_moveSpeed;
+			m_moveMode = E_MoveMode::run;
+			m_scaleX = 1;
+		}
+
 	}
 	if ((GetAsyncKeyState(VK_LEFT) & 0x8000) || (GetAsyncKeyState('A') & 0x8000))
 	{
-		m_move.x -= 8.0f;
+		if (m_moveMode != E_MoveMode::attacking)
+		{
+			m_move.x -= m_moveSpeed;
+			m_moveMode = E_MoveMode::run;
+			m_scaleX = -1;
+		}
+
 	}
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
 		if (m_bJump == false) {
@@ -156,6 +168,7 @@ void C_PlayerBase::PlayerInput()
 	}
 	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
 		PlayerAtk();
+		m_moveMode = E_MoveMode::attacking;
 	}
 	if(GetAsyncKeyState('L') & 0x8000) {
 		ResetAlreadyHit();
@@ -176,15 +189,46 @@ void C_PlayerBase::CalcMat()
 	m_AtkMat = m_AtkScaleMat * m_AtkTransMat;
 }
 
+void C_PlayerBase::MatrixUpdate()
+{
+	m_transMat = Math::Matrix::CreateTranslation(
+		m_pos.x - m_pCamera->GetPos().x, m_pos.y - m_pCamera->GetPos().y, 0);
+	m_scaleMat = Math::Matrix::CreateScale(m_scaleX * (1 / 5.0f), 1 / 5.0f, 1);
+	m_rotMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(m_angle));
+	m_mat = m_scaleMat * m_rotMat * m_transMat;
+}
+
+//アニメーション
+void C_PlayerBase::AnimationUpdate()
+{
+	m_moveAnimCount += 0.2f;
+	//攻撃は別のカウントで管理する
+	if (m_moveMode == E_MoveMode::attacking)
+	{
+		m_moveAnimCount = m_atkAnimCount;
+	}
+	if (m_move.x == 0 && m_moveMode != E_MoveMode::attacking)
+	{
+		m_moveMode = E_MoveMode::stand;
+	}
+	if (m_move.x == 0 && m_moveMode == E_MoveMode::attacking && m_bAtk == false)
+	{
+		//m_moveMode = E_MoveMode::stand;
+	}
+	if (m_moveAnimCount >= 8 && m_moveMode == E_MoveMode::run) m_moveAnimCount = 0;
+	if (m_moveAnimCount >= 3 && m_moveMode == E_MoveMode::stand) m_moveAnimCount = 0;
+	//if (m_moveAnimCount >= 4 && m_moveMode == E_MoveMode::attacking) m_moveAnimCount = 0;
+	if (m_moveAnimCount >= 4 && m_moveMode == E_MoveMode::defense) m_moveAnimCount = 0;
+}
+
 //通常攻撃
 void C_PlayerBase::PlayerAtk()
 {
-	if (!m_bAlive || !m_AttackDelay == 0)return;
+	if (!m_bAlive || m_AttackDelay != 0)return;
 	m_maxAtkCount = 10;
 	m_AtkCount = m_maxAtkCount;
 	m_bAtk = true;
 	m_AttackDelay = AtkSpeedCalc();
-
 }
 
 void C_PlayerBase::InitAtk()
@@ -203,13 +247,16 @@ void C_PlayerBase::UpdateAtk()
 	{
 		m_AttackDelay = 0;
 		m_atkAnimCount = 0;
-		m_bAtk = false;
+		
 	}
-	m_atkAnimCount = (3 - m_AttackDelay / AtkSpeedCalc() * 3)*3.5;
-	if (m_atkAnimCount >= 3) 
+	m_atkAnimCount = (4 - m_AttackDelay / AtkSpeedCalc() * 4) * 2.0f;
+	if (m_atkAnimCount >= 4)
 	{
 		m_atkAnimCount = 0;
+		m_bAtk = false;
+		m_moveMode = E_MoveMode::run;
 	}
+
 }
 
 void C_PlayerBase::DrawAtk()

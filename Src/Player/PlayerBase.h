@@ -5,6 +5,14 @@
 #include"Hit/HitBase.h"
 #include"Effect/effect.h"
 
+enum E_MoveMode
+{
+	run = 0,
+	stand = 1,
+	attacking = 2,
+	defense = 3,
+};
+
 class C_Cursor;
 class C_PlayerBase : public HitBase
 {
@@ -85,18 +93,22 @@ protected:
 	//Math::Vector2 m_pos;
 	//Math::Vector2 m_move;
 	Math::Vector2 m_skillMove;
+	float m_moveSpeed=6.5f;
 	float m_speed;
 	float m_scaleX = 1;
 	bool m_bJump;
 	const float m_JumpPower = 20.0f;
+	float m_moveAnimCount = 0;
+	E_MoveMode m_moveMode = E_MoveMode::stand;
+
 
 	//画像用
 	KdTexture* m_pTex;
 	Math::Matrix m_mat;
 	Math::Matrix m_transMat;
 	Math::Matrix m_scaleMat;
-
-
+	Math::Matrix m_rotMat;
+	float m_angle;
 
 	//基礎ステータス
 	int m_Level;
@@ -148,6 +160,11 @@ protected:
 
 	//行列合成
 	virtual void CalcMat()final;
+	virtual void MatrixUpdate()final;
+
+	//アニメーション
+	virtual void AnimationUpdate()final;
+
 
 	//攻撃
 	virtual void PlayerAtk();
