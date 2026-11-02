@@ -46,11 +46,12 @@ void Scene::Init()
 	m_chipTex.Load("Texture/MapChip.png");
 	m_bossTex.Load("Texture/Capricorn.png");
 	m_playerTex.Load("Texture/Chara.png");
+	m_player1Tex.Load("Texture/Player1.png");
 	m_playerAtkTex.Load("Texture/atk1.png");
 	m_blackTex.Load("Texture/black.png");
 	m_map.SetTexture(&m_chipTex);
 	m_boss.SetTexture(&m_bossTex);
-	m_player.SetTex(&m_playerTex);
+	m_player.SetTex(&m_player1Tex);
 	m_player.SetAtkTex(&m_playerAtkTex);
 	m_game.SetTexture(&m_blackTex);
 	m_game.SetBackTexture(&m_backTex);
@@ -75,6 +76,7 @@ void Scene::Release()
 	m_chipTex.Release();
 	m_bossTex.Release();
 	m_playerTex.Release();
+	m_player1Tex.Release();
 	m_playerAtkTex.Release();
 	m_enemies.Release();
 	m_blackTex.Release();
