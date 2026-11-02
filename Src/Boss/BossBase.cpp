@@ -39,8 +39,8 @@ void C_BossBase::Draw()
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(
 		m_pTex, Math::Rectangle(m_texWidth * int(m_animationCnt / m_animationWait), 0, m_texWidth, m_texHeight), 1.0f);
-	Math::Color color = { 1.0, 0, 0, 1.0 };
-	DrawDebugRect(&color);
+	
+	DrawHitBox();
 }
 
 void C_BossBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlayer)

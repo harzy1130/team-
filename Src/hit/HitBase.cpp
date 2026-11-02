@@ -26,12 +26,25 @@ namespace
     }
 }
 
-void HitBase::DrawDebugRect(Math::Color* color)
+void HitBase::DrawHitBox()
 {
+    Math::Color color = { 1.0, 1.0, 0, 1.0 };
     SHADER.m_spriteShader.SetMatrix(Math::Matrix::Identity);
-    SHADER.m_spriteShader.DrawCircle(m_draw.x, m_draw.y, 5, color);
+    SHADER.m_spriteShader.DrawCircle(m_draw.x, m_draw.y, 5, &color);
 
-    SHADER.m_spriteShader.DrawBox(m_draw.x, m_draw.y, m_rect.right, m_rect.top, color, false);
+    SHADER.m_spriteShader.DrawBox(m_draw.x, m_draw.y, m_rect.right, m_rect.top, &color, false);
+
+    color = { 1.0, 0, 0, 1.0 };
+    for (auto hitObj : m_CircleObjects)
+    {
+        int lr = GetPlusMinus(m_scale.x);
+        SHADER.m_spriteShader.DrawCircle(m_draw.x + hitObj.gap.x * lr, m_draw.y + hitObj.gap.y, hitObj.radius,&color,false);
+    }
+	for (auto hitObj : m_RectObjects)
+	{
+		int lr = GetPlusMinus(m_scale.x);
+		SHADER.m_spriteShader.DrawBox(m_draw.x + hitObj.gap.x * lr, m_draw.y + hitObj.gap.y, hitObj.rect.right, hitObj.rect.top, &color, false);
+	}
 }
 
 // 中心からの半幅・半高さを指定して、ローカル座標の当たり判定矩形を設定する。
@@ -90,10 +103,64 @@ void HitBase::SetMapHitBottom(float a_y)
     m_bHitRect.bottom = true;
 }
 
+void HitBase::NewCircleObjects(Math::Vector2 a_gap, float a_radius)
+{
+    S_CircleObjects hitObj = { a_gap,a_radius };
+    m_CircleObjects.push_back(hitObj);
+}
+
+void HitBase::DeleteCircleObjects(std::size_t index)
+{
+    if (index > m_CircleObjects.size())return;
+    auto itr = m_CircleObjects.begin();
+    itr += index;
+    itr = m_CircleObjects.erase(itr);
+    return;
+}
+
+void HitBase::NewRectObjects(Math::Vector2 a_gap, RECT a_rect)
+{
+    S_RectObjects hitObj = { a_gap,a_rect };
+    m_RectObjects.push_back(hitObj);
+}
+
+void HitBase::DeleteRectObjects(std::size_t index)
+{
+    if (index > m_CircleObjects.size())return;
+    auto itr = m_RectObjects.begin();
+    itr += index;
+    itr = m_RectObjects.erase(itr);
+    return;
+}
+
+S_CircleObjects HitBase::GetCircleObjects(std::size_t index)
+{
+    if (index > m_CircleObjects.size())return S_CircleObjects{ { 0,0 },0 };
+    S_CircleObjects hitObj = m_CircleObjects[index];
+    hitObj.gap.x *= GetPlusMinus(m_scale.x);
+    hitObj.gap += m_pos;
+    return hitObj;
+}
+
+S_RectObjects HitBase::GetRectObjects(std::size_t index)
+{
+    if (index > m_RectObjects.size())return S_RectObjects{ { 0,0 },{ 0,0,0,0 } };
+    S_RectObjects hitObj = m_RectObjects[index];
+    hitObj.gap.x *= GetPlusMinus(m_scale.x);
+    hitObj.gap += m_pos;
+    return hitObj;
+}
+
 // 当たったオブジェクトリストに引数で指定したHitBaseを持つオブジェクトを追加
 void HitBase::SetAlreadyHit(HitBase* a_pHitBase)
 {
     m_alreadyHit.push_back(a_pHitBase);
+}
+
+void HitBase::SetCircleObjectsGap(Math::Vector2 a_gap, std::size_t index)
+{
+    if (index > m_CircleObjects.size())return;
+    m_CircleObjects[index].gap = a_gap;
 }
 
 // すでに当たっているオブジェクト記録をリセット
@@ -105,7 +172,7 @@ void HitBase::ResetAlreadyHit()
 // 引数に入れたHitBaseを持つオブジェクトが既に当たっているかを返す。当たっていた場合はtrueを返す。
 bool HitBase::GetAlreadyHit(HitBase* a_pHitBase)
 {
-    for (auto hits : m_alreadyHit) 
+    for (auto hits : m_alreadyHit)
     {
         if (a_pHitBase == hits)return true;
     }

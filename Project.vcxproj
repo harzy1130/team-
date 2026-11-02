@@ -176,6 +176,7 @@
     <ClInclude Include="Src\Map\Map.h" />
     <ClInclude Include="Src\Map\MapConstants.h" />
     <ClInclude Include="Src\Map\StringUtility.h" />
+    <ClInclude Include="Src\Player\Player1.h" />
     <ClInclude Include="Src\Player\PlayerBase.h" />
     <ClInclude Include="Src\Skill\SkillBase.h" />
     <ClInclude Include="Src\System\Audio\KdAudio.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="Src\Hit\Hit.cpp" />
     <ClCompile Include="Src\hit\HitBase.cpp" />
     <ClCompile Include="Src\Map\Map.cpp" />
+    <ClCompile Include="Src\Player\Player1.cpp" />
     <ClCompile Include="Src\Player\PlayerBase.cpp" />
     <ClCompile Include="Src\Skill\SkillBase.cpp" />
     <ClCompile Include="Src\System\Audio\KdAudio.cpp" />

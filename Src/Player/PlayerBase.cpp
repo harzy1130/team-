@@ -50,11 +50,11 @@ void C_PlayerBase::Update()
 	UpdateAtk();
 	m_effect.UpdatePlayer(this);
 	if (m_pCursor->GetMousePos().x > 0) {
-		m_scaleX = 1;
+		m_scale = { 1,1 };
 	}
 	else
 	{
-		m_scaleX = -1;
+		m_scale = { -1,1 };
 	}
 	
 	m_move += m_skillMove;
@@ -66,7 +66,7 @@ void C_PlayerBase::Update()
 
 	//ç¿ïWämíË
 	m_pos += m_move;
-	m_AtkPos = { m_pos.x + (m_scaleX * 55),m_pos.y};
+	m_AtkPos = { m_pos.x + (m_scale.x * 55),m_pos.y};
 
 	if (m_pos.y <= -300) {
 		m_pos.y = -300;
@@ -143,7 +143,7 @@ void C_PlayerBase::PlayerInput()
 		{
 			m_move.x += m_moveSpeed;
 			m_moveMode = E_MoveMode::run;
-			m_scaleX = 1;
+			m_scale = { 1,1 };
 		}
 
 	}
@@ -153,7 +153,7 @@ void C_PlayerBase::PlayerInput()
 		{
 			m_move.x -= m_moveSpeed;
 			m_moveMode = E_MoveMode::run;
-			m_scaleX = -1;
+			m_scale = { -1,1 };
 		}
 
 	}
@@ -178,22 +178,24 @@ void C_PlayerBase::PlayerInput()
 //çsóÒçáê¨
 void C_PlayerBase::CalcMat()
 {
+	m_draw = m_pos - m_pCamera->GetPos();
 	m_transMat= Math::Matrix::CreateTranslation(
-		m_pos.x - m_pCamera->GetPos().x, m_pos.y - m_pCamera->GetPos().y, 0);
-	m_scaleMat= Math::Matrix::CreateScale(m_scaleX, 1, 1);
+		m_draw.x, m_draw.y, 0);
+	m_scaleMat= Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
 	m_mat = m_scaleMat * m_transMat;
 
 	m_AtkTransMat = Math::Matrix::CreateTranslation(
 		m_AtkPos.x - m_pCamera->GetPos().x, m_AtkPos.y - m_pCamera->GetPos().y, 0);
-	m_AtkScaleMat = Math::Matrix::CreateScale(m_scaleX, 1, 1);
+	m_AtkScaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
 	m_AtkMat = m_AtkScaleMat * m_AtkTransMat;
 }
 
 void C_PlayerBase::MatrixUpdate()
 {
+	m_draw = m_pos - m_pCamera->GetPos();
 	m_transMat = Math::Matrix::CreateTranslation(
-		m_pos.x - m_pCamera->GetPos().x, m_pos.y - m_pCamera->GetPos().y, 0);
-	m_scaleMat = Math::Matrix::CreateScale(m_scaleX * (1 / 5.0f), 1 / 5.0f, 1);
+		m_draw.x, m_draw.y, 0);
+	m_scaleMat = Math::Matrix::CreateScale(m_scale.x * (1 / 5.0f), m_scale.y * (1 / 5.0f), 1);
 	m_rotMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(m_angle));
 	m_mat = m_scaleMat * m_rotMat * m_transMat;
 }

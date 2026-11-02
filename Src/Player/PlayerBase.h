@@ -36,7 +36,7 @@ public:
 	//移動
 	virtual Math::Vector2 GetSkillMove()final { return m_skillMove; }
 	virtual bool GetJumpFlg()final { return m_bJump; }
-	virtual float GetScaleX()final { return m_scaleX; }
+	virtual float GetScaleX()final { return m_scale.x; }
 	//基本ステータス
 	virtual float GetHP()final { return m_HP; }
 	virtual float GetMAXHP()final { return m_MAXHP; }
@@ -95,7 +95,6 @@ protected:
 	Math::Vector2 m_skillMove;
 	float m_moveSpeed=6.5f;
 	float m_speed;
-	float m_scaleX = 1;
 	bool m_bJump;
 	const float m_JumpPower = 20.0f;
 	float m_moveAnimCount = 0;

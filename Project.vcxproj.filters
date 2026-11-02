@@ -222,6 +222,9 @@
     <ClInclude Include="Src\Effect\effect.h">
       <Filter>Src\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Player\Player1.h">
+      <Filter>Src\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -325,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="Src\Effect\effect.cpp">
       <Filter>Src\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Player\Player1.cpp">
+      <Filter>Src\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

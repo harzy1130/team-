@@ -69,6 +69,16 @@ struct S_HitRect
 	bool right;
 	bool bottom;
 };
+
+struct S_CircleObjects {
+	Math::Vector2 gap;
+	float radius;
+};
+
+struct S_RectObjects {
+	Math::Vector2 gap;
+	RECT rect;
+};
 //ƒJƒƒ‰ˆÚ“®’è”==============================
 
 static const float CAMERA_SPEED = 0.1f;

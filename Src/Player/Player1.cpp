@@ -67,7 +67,7 @@ void C_Player1::Update()
 
 	//ç¿ïWämíË
 	m_pos += m_move;
-	m_AtkPos = { m_pos.x + (m_scaleX * 55),m_pos.y };
+	m_AtkPos = { m_pos.x + (m_scale.x * 55),m_pos.y };
 
 	if (m_pos.y <= -300) {
 		m_pos.y = -300;
@@ -87,5 +87,6 @@ void C_Player1::Draw()
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(
 		m_pTex, Math::Rectangle(600*(int)m_moveAnimCount, 600*m_moveMode, 600, 600), 1.0f);
+	DrawHitBox();
 	//DrawAtk();
 }

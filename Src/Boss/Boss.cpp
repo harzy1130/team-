@@ -19,7 +19,7 @@ void C_Boss::Move()
 	Walk();
 	JumpCharge();
 	DashCharge();
-	m_move.x += m_skillMove.x * -m_lr;
+	m_move.x += m_skillMove.x * m_lr;
 
 }
 void C_Boss::ChangeChargeStance()
@@ -50,14 +50,14 @@ void C_Boss::StartWalk()
 void C_Boss::Walk()
 {
 	if (m_state != State(walk))return;
-	m_lr = GetPlusMinus(-(m_pPlayer->GetPos().x - m_pos.x));
+	m_lr = GetPlusMinus(m_pPlayer->GetPos().x - m_pos.x);
 	m_scale = { m_size * m_lr, m_size };
 	m_chargeWait--;
 	if (m_chargeWait < 0)m_chargeWait = 0;
 
 	bool CheckDist = m_chargeRange > GetDist(m_pos, m_pPlayer->GetPos());
 	if (m_chargeWait <= 0 && CheckDist)ChangeChargeStance();
-	m_rawMove.x += (m_moveSpeed / 15) * -m_lr;
+	m_rawMove.x += (m_moveSpeed / 15) * m_lr;
 	m_rawMove.x = Clamp(m_rawMove.x, m_moveSpeed, -m_moveSpeed);
 	m_move += m_rawMove;
 }
@@ -104,10 +104,13 @@ void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer)
 	m_size = 0.5;
 	m_animationWait = 8;
 	m_scale = { -m_size * m_lr, m_size };
-	m_gap = { CHIP_RADIUS,CHIP_RADIUS };
+	m_gap = { -CHIP_RADIUS,CHIP_RADIUS };
 	m_texWidth = 896;
 	m_texHeight = 512;
 	SetRect(PTEX_SIZE * 2.5,PTEX_SIZE * 1.5);
+	NewCircleObjects({PTEX_SIZE,0},PTEX_SIZE);
+	NewCircleObjects({PTEX_SIZE * 2 + 20,PTEX_SIZE},PTEX_RADIUS);
+	NewRectObjects({0, 0}, {-PTEX_SIZE, PTEX_SIZE, PTEX_SIZE, -PTEX_SIZE});
 	m_hp = 500;
 	m_atk = 20;
 	m_moveSpeed = 5.0f;

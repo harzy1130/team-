@@ -15,7 +15,7 @@ public:
     virtual ~HitBase() = default;
 
     // デバッグ用の矩形表示
-    void DrawDebugRect(Math::Color* color);
+    void DrawHitBox();
 
     // 現在のワールド座標を設定する。
     void SetPos(float x, float y) { m_pos = Math::Vector2(x, y); }
@@ -37,11 +37,20 @@ public:
     void SetMapHitRight(float a_x);
     // 下が床に触れている
     void SetMapHitBottom(float a_y);
-    
     // 当たったオブジェクトリストに引数で指定したHitBaseを持つオブジェクトを追加
     void SetAlreadyHit(HitBase* a_pHitBase);
+    void SetCircleObjectsGap(Math::Vector2 a_gap, std::size_t index);
     // すでに当たっているオブジェクト記録をリセット
     void ResetAlreadyHit();
+    // 新しく円を追加
+    void NewCircleObjects(Math::Vector2 a_gap, float a_radius);
+    // 円を削除
+    void DeleteCircleObjects(std::size_t index);
+
+    void NewRectObjects(Math::Vector2 a_gap, RECT a_rect);
+
+    void DeleteRectObjects(std::size_t index);
+
     // 引数に入れたHitBaseを持つオブジェクトが既に当たっているかを返す。当たっていた場合はtrueを返す。
     bool GetAlreadyHit(HitBase* a_pHitBase);
     // 現在のワールド座標を返す。
@@ -58,6 +67,14 @@ public:
     RECT GetFutureRect() const;
     // 物体を中心とした円の半径を返す
     float GetRadius()const { return m_radius; }
+    // 当たり判定用の円を呼び出す
+    S_CircleObjects GetCircleObjects(std::size_t index);
+    // 当たり判定用の円の総数を呼び出す
+    std::size_t GetCircleObjectsCount() { return m_CircleObjects.size(); }
+
+    S_RectObjects GetRectObjects(std::size_t index);
+
+    std::size_t GetRectObjectsCount() { return m_RectObjects.size(); }
 
     // 現在の当たり判定の上端をワールド座標で返す（Y 軸は上向きが正）。
     float GetHitTop() const { return m_pos.y + m_rect.top; }
@@ -76,8 +93,9 @@ public:
     // Apply once after any collision correction, then clear the pending move.
     // 移動量を現在位置に一度だけ適用し、適用済みの移動量を 0 に戻す。
     void ApplyMove();
-    // 敵と当たった時に行う処理を記述する場所
+    // 敵と当たった時に行う処理
     virtual void IfHitEnemy(EnemyBase* a_pEnemy);
+    // ボスと当たった時に行う処理
     virtual void IfHitBoss(C_BossBase* a_pBoss);
 
     void SetHitClass(C_Hit* a_pHit) { m_pHit = a_pHit; };
@@ -85,6 +103,8 @@ public:
 
 protected:
     RECT m_rect{};
+    std::vector<S_CircleObjects> m_CircleObjects;
+    std::vector<S_RectObjects> m_RectObjects;
     S_HitRect m_bHitRect;
     Math::Vector2 m_pos{ 0.0f, 0.0f };
     Math::Vector2 m_draw{ 0.0f, 0.0f };

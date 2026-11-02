@@ -2,21 +2,24 @@
 #include"Constants/Constants.h"
 #include"Enemy/EnemyManager.h"
 #include"Boss/BossBase.h"
+#include"Player/PlayerBase.h"
 #include"HitBase.h"
 
 class C_Map;
 class EnemyManager;
 class C_BossBase;
+class C_PlayerBase;
 class C_Hit
 {
 public:
 	C_Hit() = default;
 	~C_Hit() = default;
 	// 初期化関数
-	void Init(C_Map* a_pMap, EnemyManager* a_pEnemyManager,C_BossBase* a_pBoss);
+	void Init(C_Map* a_pMap, EnemyManager* a_pEnemyManager, C_BossBase* a_pBoss, C_PlayerBase* a_pPlayer);
 	void SetMapClass(C_Map* a_pMap) { m_pMap = a_pMap; }
 	void SetEnemyManager(EnemyManager* a_pEnemyManager) { m_pEnemyManager = a_pEnemyManager; }
 	void SetBossClass(C_BossBase* a_pBoss) { m_pBoss = a_pBoss; }
+	void SetPlayerClass(C_PlayerBase* a_pPlayer) { m_pPlayer = a_pPlayer; }
 
 	// 引数に入れたHitBaseを持つポインタにMapへの当たり判定を持たせる。
 	void MapHitCheck(HitBase* a_pHitBase);
@@ -27,7 +30,7 @@ public:
 	// 円と円の当たり判定を行う
 	bool CircleHit(Math::Vector2 a_pos1, float a_radius1,Math::Vector2 a_pos2, float a_radius2);
 	// 円と矩形の当たり判定を行う
-	bool RectCirclrHit(Math::Vector2 a_rectPos, RECT a_rect, Math::Vector2 a_circlePos, float a_circleRadius);
+	bool RectCircleHit(Math::Vector2 a_rectPos, RECT a_rect, Math::Vector2 a_circlePos, float a_circleRadius);
 	// 矩形と矩形の当たり判定を行う。
 	bool RectHit(Math::Vector2 a_pos1, RECT a_rect1, Math::Vector2 a_pos2, RECT a_rect2);
 private:
@@ -36,4 +39,5 @@ private:
 	C_Map* m_pMap = nullptr;
 	EnemyManager* m_pEnemyManager = nullptr;
 	C_BossBase* m_pBoss = nullptr;
+	C_PlayerBase* m_pPlayer = nullptr;
 };

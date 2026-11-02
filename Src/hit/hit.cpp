@@ -2,7 +2,7 @@
 #include"Map/Map.h"
 #include"Pch.h"
 
-void C_Hit::Init(C_Map* a_pMap, EnemyManager* a_pEnemyManager, C_BossBase* a_pBoss)
+void C_Hit::Init(C_Map* a_pMap, EnemyManager* a_pEnemyManager, C_BossBase* a_pBoss, C_PlayerBase* a_pPlayer)
 {
 	SetMapClass(a_pMap);
 	SetEnemyManager(a_pEnemyManager);
@@ -90,10 +90,50 @@ bool C_Hit::BossHitCheck(HitBase* a_pHitBase)
 {
 	bool alreadyHit = a_pHitBase->GetAlreadyHit(m_pBoss);
 	if (!m_pBoss->GetAlive() || m_pBoss == nullptr || alreadyHit)return false;
-	if (RectCirclrHit(m_pBoss->GetPos(), m_pBoss->GetRect(), a_pHitBase->GetPos(), a_pHitBase->GetRadius())) 
+	//if (RectCirclrHit(m_pBoss->GetPos(), m_pBoss->GetRect(), a_pHitBase->GetPos(), a_pHitBase->GetRadius())) 
+	bool isHit = false;
+	for (int i = 0;i < m_pBoss->GetCircleObjectsCount();i++)
+	{
+		S_CircleObjects hitobj = m_pBoss->GetCircleObjects(i);
+		for (int c = 0;c < a_pHitBase->GetCircleObjectsCount();c++) {
+			S_CircleObjects cHitobj = a_pHitBase->GetCircleObjects(c);
+			isHit = CircleHit(hitobj.gap, hitobj.radius, cHitobj.gap, cHitobj.radius);
+			if (isHit)break;
+		}
+		if (!isHit) {
+			for (int r = 0;r < a_pHitBase->GetRectObjectsCount();r++)
+			{
+				S_RectObjects rHitobj = a_pHitBase->GetRectObjects(r);
+				isHit = RectCircleHit(rHitobj.gap, rHitobj.rect, hitobj.gap, hitobj.radius);
+				if (isHit)break;
+			}
+		}
+		if (isHit)break;
+		
+	}
+	if (!isHit)
+	for(int i = 0;i < m_pBoss->GetRectObjectsCount();i++)
+	{
+		S_RectObjects hitobj = m_pBoss->GetRectObjects(i);
+		for (int c = 0;c < a_pHitBase->GetCircleObjectsCount();c++) {
+			S_CircleObjects cHitobj = a_pHitBase->GetCircleObjects(c);
+			isHit = RectCircleHit(hitobj.gap, hitobj.rect, cHitobj.gap, cHitobj.radius);
+			if (isHit)break;
+		}
+		if (!isHit)
+		for (int r = 0;r < a_pHitBase->GetRectObjectsCount();r++)
+		{
+			S_RectObjects rHitobj = a_pHitBase->GetRectObjects(r);
+			isHit = RectHit(rHitobj.gap, rHitobj.rect, hitobj.gap, hitobj.rect);
+			if (isHit)break;
+		}
+		if (isHit)break;
+	}
+	if (isHit)
 	{
 		a_pHitBase->SetAlreadyHit(m_pBoss);
 		a_pHitBase->IfHitBoss(m_pBoss);
+		return true;
 	}
 	return false;
 }
@@ -105,7 +145,7 @@ bool C_Hit::CircleHit(Math::Vector2 a_pos1, float a_radius1, Math::Vector2 a_pos
 	return false;
 }
 
-bool C_Hit::RectCirclrHit(Math::Vector2 a_rectPos, RECT a_rect, Math::Vector2 a_circlePos, float a_circleRadius)
+bool C_Hit::RectCircleHit(Math::Vector2 a_rectPos, RECT a_rect, Math::Vector2 a_circlePos, float a_circleRadius)
 {
  	RECT rect = CreateRectPos(a_rect.right + a_circleRadius, a_rect.top, a_rectPos);
 	if (RectInPos(rect, a_circlePos))return true;
