@@ -35,6 +35,8 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	SetCameraClass(a_pCamera);
 	SetRect(PTEX_RADIUS, 60);
 	SetRadius(PTEX_RADIUS);
+	NewRectObjects({ 0, 0 }, { -16, 48,16,-60});
+	m_hitRange = PTEX_SIZE;
 	//ó‘ÔˆÙí
 	m_effect.InitPlayer(this);
 }
@@ -64,6 +66,7 @@ void C_Player1::Update()
 	m_pHit->MapHitCheck(this);
 	m_bJump = !m_bHitRect.bottom;
 	m_pHit->EnemyHitCheck(this);
+	m_pHit->BossHitCheck(this);
 
 	//À•WŠm’è
 	m_pos += m_move;

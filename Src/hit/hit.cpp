@@ -75,12 +75,14 @@ bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
 	for (int en = 0;en < m_pEnemyManager->GetCount();en++) 
 	{
 		EnemyBase* enemy = m_pEnemyManager->GetEnemy(en);
-		bool alreadyHit = a_pHitBase->GetAlreadyHit(enemy);
-		if (enemy == nullptr || !enemy->GetAlive() || alreadyHit)continue;
-		if(CircleHit(enemy->GetPos(),enemy->GetRadius(),a_pHitBase->GetPos(),a_pHitBase->GetRadius()))
+		if ( !enemy->GetAlive())continue;
+		//すべての当たり判定をチェック
+		bool isHit = CheckHitBox(a_pHitBase, enemy);
+		if (isHit)
 		{
 			a_pHitBase->SetAlreadyHit(enemy);
 			a_pHitBase->IfHitEnemy(enemy);
+			bHit = true;
 		}
 	}
 	return bHit;
@@ -88,51 +90,25 @@ bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
 
 bool C_Hit::BossHitCheck(HitBase* a_pHitBase)
 {
-	bool alreadyHit = a_pHitBase->GetAlreadyHit(m_pBoss);
-	if (!m_pBoss->GetAlive() || m_pBoss == nullptr || alreadyHit)return false;
-	//if (RectCirclrHit(m_pBoss->GetPos(), m_pBoss->GetRect(), a_pHitBase->GetPos(), a_pHitBase->GetRadius())) 
-	bool isHit = false;
-	for (int i = 0;i < m_pBoss->GetCircleObjectsCount();i++)
-	{
-		S_CircleObjects hitobj = m_pBoss->GetCircleObjects(i);
-		for (int c = 0;c < a_pHitBase->GetCircleObjectsCount();c++) {
-			S_CircleObjects cHitobj = a_pHitBase->GetCircleObjects(c);
-			isHit = CircleHit(hitobj.gap, hitobj.radius, cHitobj.gap, cHitobj.radius);
-			if (isHit)break;
-		}
-		if (!isHit) {
-			for (int r = 0;r < a_pHitBase->GetRectObjectsCount();r++)
-			{
-				S_RectObjects rHitobj = a_pHitBase->GetRectObjects(r);
-				isHit = RectCircleHit(rHitobj.gap, rHitobj.rect, hitobj.gap, hitobj.radius);
-				if (isHit)break;
-			}
-		}
-		if (isHit)break;
-		
-	}
-	if (!isHit)
-	for(int i = 0;i < m_pBoss->GetRectObjectsCount();i++)
-	{
-		S_RectObjects hitobj = m_pBoss->GetRectObjects(i);
-		for (int c = 0;c < a_pHitBase->GetCircleObjectsCount();c++) {
-			S_CircleObjects cHitobj = a_pHitBase->GetCircleObjects(c);
-			isHit = RectCircleHit(hitobj.gap, hitobj.rect, cHitobj.gap, cHitobj.radius);
-			if (isHit)break;
-		}
-		if (!isHit)
-		for (int r = 0;r < a_pHitBase->GetRectObjectsCount();r++)
-		{
-			S_RectObjects rHitobj = a_pHitBase->GetRectObjects(r);
-			isHit = RectHit(rHitobj.gap, rHitobj.rect, hitobj.gap, hitobj.rect);
-			if (isHit)break;
-		}
-		if (isHit)break;
-	}
+	if (!m_pBoss->GetAlive())return false; 
+	//すべての当たり判定をチェック
+	bool isHit = CheckHitBox(a_pHitBase, m_pBoss);
 	if (isHit)
 	{
 		a_pHitBase->SetAlreadyHit(m_pBoss);
 		a_pHitBase->IfHitBoss(m_pBoss);
+		return true;
+	}
+	return false;
+}
+
+bool C_Hit::PlayerHitCheck(HitBase* a_pHitBase)
+{
+	if (!m_pPlayer->GetAFlg())return false;
+	bool isHit = CheckHitBox(a_pHitBase, m_pPlayer);
+	if (isHit)
+	{
+		a_pHitBase->SetAlreadyHit(m_pPlayer);
 		return true;
 	}
 	return false;
@@ -188,5 +164,48 @@ bool C_Hit::RectInPos(RECT a_rect, Math::Vector2 a_pos)
 {
 	if (a_rect.left < a_pos.x && a_pos.x < a_rect.right &&
 		a_rect.bottom < a_pos.y && a_pos.y < a_rect.top)return true;
+	return false;
+}
+
+bool C_Hit::CheckHitBox(HitBase* a_pHitBase, HitBase* a_pTarget)
+{
+	//すでに当たっていた場合はスキップ
+	bool alreadyHit = a_pHitBase->GetAlreadyHit(a_pTarget);
+	if (a_pTarget == nullptr || alreadyHit)return false;
+	//当たり判定範囲外ならスキップ（軽くするため）
+	bool checkRange = CircleHit(a_pTarget->GetPos(), a_pTarget->GetHitRange(), a_pHitBase->GetPos(), a_pHitBase->GetHitRange());
+	if (!checkRange)return false;
+	bool isHit = false;
+	for (int i = 0;i < a_pTarget->GetCircleObjectsCount();i++)
+	{
+		S_CircleObjects hitobj = a_pTarget->GetCircleObjects(i);
+		for (int c = 0;c < a_pHitBase->GetCircleObjectsCount();c++) {
+			S_CircleObjects cHitobj = a_pHitBase->GetCircleObjects(c);
+			isHit = CircleHit(hitobj.gap, hitobj.radius, cHitobj.gap, cHitobj.radius);
+			if (isHit)return true;
+		}
+		for (int r = 0;r < a_pHitBase->GetRectObjectsCount();r++)
+		{
+			S_RectObjects rHitobj = a_pHitBase->GetRectObjects(r);
+			isHit = RectCircleHit(rHitobj.gap, rHitobj.rect, hitobj.gap, hitobj.radius);
+			if (isHit)return true;
+		}
+	}
+	for (int i = 0;i < a_pTarget->GetRectObjectsCount();i++)
+	{
+		S_RectObjects hitobj = a_pTarget->GetRectObjects(i);
+		for (int c = 0;c < a_pHitBase->GetCircleObjectsCount();c++)
+		{
+			S_CircleObjects cHitobj = a_pHitBase->GetCircleObjects(c);
+			isHit = RectCircleHit(hitobj.gap, hitobj.rect, cHitobj.gap, cHitobj.radius);
+			if (isHit)return true;
+		}
+		for (int r = 0;r < a_pHitBase->GetRectObjectsCount();r++)
+		{
+			S_RectObjects rHitobj = a_pHitBase->GetRectObjects(r);
+			isHit = RectHit(rHitobj.gap, rHitobj.rect, hitobj.gap, hitobj.rect);
+			if (isHit)return true;
+		}
+	}
 	return false;
 }
