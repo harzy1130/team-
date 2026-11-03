@@ -33,17 +33,23 @@ void HitBase::DrawHitBox()
     SHADER.m_spriteShader.DrawCircle(m_draw.x, m_draw.y, 5, &color);
 
     SHADER.m_spriteShader.DrawBox(m_draw.x, m_draw.y, m_rect.right, m_rect.top, &color, false);
-
+    color = { 0,1,1,1 };
+	SHADER.m_spriteShader.DrawCircle(m_draw.x, m_draw.y, m_hitRange, &color, false);
     color = { 1.0, 0, 0, 1.0 };
-    for (auto hitObj : m_CircleObjects)
+    for (auto const hitCircle : m_CircleObjects)
     {
         int lr = GetPlusMinus(m_scale.x);
-        SHADER.m_spriteShader.DrawCircle(m_draw.x + hitObj.gap.x * lr, m_draw.y + hitObj.gap.y, hitObj.radius,&color,false);
+        SHADER.m_spriteShader.DrawCircle(m_draw.x + hitCircle.gap.x * lr, m_draw.y + hitCircle.gap.y, hitCircle.radius,&color,false);
     }
-	for (auto hitObj : m_RectObjects)
+	for (auto const hitRect : m_RectObjects)
 	{
 		int lr = GetPlusMinus(m_scale.x);
-		SHADER.m_spriteShader.DrawBox(m_draw.x + hitObj.gap.x * lr, m_draw.y + hitObj.gap.y, hitObj.rect.right, hitObj.rect.top, &color, false);
+		Math::Vector2 pos = { m_draw.x + hitRect.gap.x * lr, m_draw.y + hitRect.gap.y };
+		SHADER.m_spriteShader.DrawLine(pos.x + hitRect.rect.left, pos.y + hitRect.rect.top,     pos.x + hitRect.rect.right, pos.y + hitRect.rect.top, &color);
+		SHADER.m_spriteShader.DrawLine(pos.x + hitRect.rect.left, pos.y + hitRect.rect.bottom,  pos.x + hitRect.rect.right, pos.y + hitRect.rect.bottom, &color);
+		SHADER.m_spriteShader.DrawLine(pos.x + hitRect.rect.right, pos.y + hitRect.rect.top,     pos.x + hitRect.rect.right, pos.y + hitRect.rect.bottom, &color);
+		SHADER.m_spriteShader.DrawLine(pos.x + hitRect.rect.left, pos.y + hitRect.rect.top,     pos.x + hitRect.rect.left, pos.y + hitRect.rect.bottom, &color);
+
 	}
 }
 
@@ -215,5 +221,9 @@ void HitBase::IfHitEnemy(EnemyBase* a_pEnemy)
 }
 
 void HitBase::IfHitBoss(C_BossBase* a_pBoss)
+{
+}
+
+void HitBase::IfHitPlayer(C_PlayerBase* a_pPlayer)
 {
 }

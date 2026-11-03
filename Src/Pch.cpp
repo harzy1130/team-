@@ -21,3 +21,12 @@ float GetDist(Math::Vector2 a_posA, Math::Vector2 a_posB)
 	float c = sqrt(a * a + b * b);
 	return c;
 }
+
+RECT CreateRect(long a_halfWidth, long a_halfHeight)
+{
+	RECT rect;
+	a_halfWidth = std::max(0L, a_halfWidth);
+	a_halfHeight = std::max(0L, a_halfHeight);
+	rect = { -a_halfWidth, a_halfHeight, a_halfWidth, -a_halfHeight };
+	return rect;
+}

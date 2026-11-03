@@ -27,6 +27,8 @@ public:
 	bool EnemyHitCheck(HitBase* a_pHitBase);
 	// 引数に入れたHitBaseを持つポインタにボスへの当たり判定を持たせる。
 	bool BossHitCheck(HitBase* a_pHitBase);
+	// 引数に入れたHitBaseを持つポインタにプレイヤーへの当たり判定を持たせる。
+	bool PlayerHitCheck(HitBase* a_pHitBase);
 	// 円と円の当たり判定を行う
 	bool CircleHit(Math::Vector2 a_pos1, float a_radius1,Math::Vector2 a_pos2, float a_radius2);
 	// 円と矩形の当たり判定を行う
@@ -36,6 +38,7 @@ public:
 private:
 	RECT CreateRectPos(float a_halfWidth, float a_halfHeight, Math::Vector2 a_pos);
 	bool RectInPos(RECT a_rect, Math::Vector2 a_pos);
+	bool CheckHitBox(HitBase* a_pHitBase, HitBase* a_pTarget);
 	C_Map* m_pMap = nullptr;
 	EnemyManager* m_pEnemyManager = nullptr;
 	C_BossBase* m_pBoss = nullptr;

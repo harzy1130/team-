@@ -102,3 +102,5 @@ float Clamp(float a_value, float a_max, float a_min);
 int GetPlusMinus(float a_value);
 //Math::vector2A‚©‚çB‚Ü‚Å‚Ì‹——£‚ğ‹‚ß‚é
 float GetDist(Math::Vector2 a_posA, Math::Vector2 a_posB);
+//“ñ‚Â‚Ìˆø”‚©‚çRECT‚ğì‚éBa_halfWidth,a_halfHeight‚Í’†S‚©‚ç‚Ì”¼•A”¼‚‚³
+RECT CreateRect(long a_halfWidth, long a_halfHeight);

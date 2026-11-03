@@ -7,6 +7,7 @@ class C_Hit;
 class C_Camera;
 class EnemyBase;
 class C_BossBase;
+class C_PlayerBase;
 // World coordinates use +Y upwards. m_rect is relative to m_pos.
 class HitBase
 {
@@ -76,6 +77,8 @@ public:
 
     std::size_t GetRectObjectsCount() { return m_RectObjects.size(); }
 
+    float GetHitRange() { return m_hitRange; }
+
     // 現在の当たり判定の上端をワールド座標で返す（Y 軸は上向きが正）。
     float GetHitTop() const { return m_pos.y + m_rect.top; }
     // 現在の当たり判定の下端をワールド座標で返す。
@@ -98,6 +101,8 @@ public:
     // ボスと当たった時に行う処理
     virtual void IfHitBoss(C_BossBase* a_pBoss);
 
+	virtual void IfHitPlayer(C_PlayerBase* a_pPlayer);
+
     void SetHitClass(C_Hit* a_pHit) { m_pHit = a_pHit; };
     void SetCameraClass(C_Camera* a_pCamera) { m_pCamera = a_pCamera; };
 
@@ -111,6 +116,7 @@ protected:
     Math::Vector2 m_scale{ 1.0f, 1.0f };
     Math::Vector2 m_move{ 0.0f, 0.0f };
     float m_radius = 0;
+	float m_hitRange = 0;
     C_Camera* m_pCamera = nullptr;
     C_Hit* m_pHit = nullptr;
 
