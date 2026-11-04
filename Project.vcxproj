@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -168,6 +168,8 @@
     <ClInclude Include="Src\Cursor\Cursor.h" />
     <ClInclude Include="Src\Effect\effect.h" />
     <ClInclude Include="Src\Enemy\Enemy1.h" />
+    <ClInclude Include="Src\Enemy\Enemy2.h" />
+    <ClInclude Include="Src\projectile\enemyprojectile.h" />
     <ClInclude Include="Src\Enemy\EnemyBase.h" />
     <ClInclude Include="Src\GameStateManager\GameStateManager.h" />
     <ClInclude Include="Src\Hit\Hit.h" />
@@ -210,6 +212,8 @@
     <ClCompile Include="Src\Cursor\Cursor.cpp" />
     <ClCompile Include="Src\Effect\effect.cpp" />
     <ClCompile Include="Src\Enemy\Enemy1.cpp" />
+    <ClCompile Include="Src\Enemy\Enemy2.cpp" />
+    <ClCompile Include="Src\projectile\enemyprojectile.cpp" />
     <ClCompile Include="Src\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Src\GameStateManager\GameStateManager.cpp" />
     <ClCompile Include="Src\Hit\Hit.cpp" />
