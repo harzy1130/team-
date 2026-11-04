@@ -11,6 +11,8 @@ void C_Boss::Update()
 	Gravity();
 	
 	MapCollision();
+	m_pHit->PlayerHitCheck(this);
+	ResetAlreadyHit();
 }
 
 void C_Boss::Move()
@@ -103,21 +105,16 @@ void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer)
 	C_BossBase::Init(a_pHit, a_pCamera, a_pPlayer);
 	m_size = 0.5;
 	m_animationWait = 8;
-	m_scale = { -m_size * m_lr, m_size };
-	m_gap = { -CHIP_RADIUS,CHIP_RADIUS };
-	m_texWidth = 896;
-	m_texHeight = 512;
-	m_hitRange = m_texWidth/4;
-	SetRect(PTEX_SIZE * 2.5,PTEX_SIZE * 1.5);
-	NewCircleObjects({PTEX_SIZE,0},PTEX_SIZE);
-	NewCircleObjects({PTEX_SIZE * 2 + 20,PTEX_SIZE},PTEX_RADIUS);
-	NewRectObjects({0, 20}, CreateRect(PTEX_SIZE,40));
-	NewRectObjects({ 20,-32 }, CreateRect(10, 40));
+	m_scale = {m_size, m_size };
+	if (LoadHitBox("Src/Boss/CapricornHitBox.csv"));
 	m_hp = 500;
-	m_atk = 20;
+	m_atk = 10;
 	m_moveSpeed = 5.0f;
 	m_state = State(walk);
 	m_angle = 0;
 	m_chargeWait = 0;
 }
-
+void C_Boss::IfHitPlayer(C_PlayerBase* a_pPlayer)
+{
+	a_pPlayer->TakeDamage(m_atk);
+}

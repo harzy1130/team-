@@ -3,6 +3,7 @@
 #include"Camera/Camera.h"
 #include"Constants/Constants.h"
 
+
 class C_Hit;
 class C_Camera;
 class EnemyBase;
@@ -96,6 +97,9 @@ public:
     // Apply once after any collision correction, then clear the pending move.
     // 移動量を現在位置に一度だけ適用し、適用済みの移動量を 0 に戻す。
     void ApplyMove();
+    // HitBaseを読み込む
+	bool LoadHitBox(const std::string& a_filePath);
+
     // 敵と当たった時に行う処理
     virtual void IfHitEnemy(EnemyBase* a_pEnemy);
     // ボスと当たった時に行う処理
@@ -115,8 +119,11 @@ protected:
     Math::Vector2 m_draw{ 0.0f, 0.0f };
     Math::Vector2 m_scale{ 1.0f, 1.0f };
     Math::Vector2 m_move{ 0.0f, 0.0f };
+	Math::Vector2 m_gap{ 0.0f, 0.0f };
     float m_radius = 0;
 	float m_hitRange = 0;
+	int m_texWidth = 0;
+	int m_texHeight = 0;
     C_Camera* m_pCamera = nullptr;
     C_Hit* m_pHit = nullptr;
 

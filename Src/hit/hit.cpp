@@ -1,4 +1,5 @@
-ï»¿#include"Hit.h"
+#include"Hit.h"
+#include"HitBase.h"
 #include"Map/Map.h"
 #include"Pch.h"
 #include "Enemy/EnemyManager.h"
@@ -31,26 +32,26 @@ void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 	end_h = Clamp(endChip.second + 2, m_pMap->GetIdxMaxMin().second, 0);
 
 	a_pHitBase->ResetHitRect();
-	//å¼•æ•°ã®ã‚­ãƒ£ãƒ©ãƒ™ãƒ¼ã‚¹ã‹ã‚‰ç¾åœ¨ã¨æœªæ¥ã®çŸ©å½¢ã‚’å–å¾—
+	//ˆø”‚ÌƒLƒƒƒ‰ƒx[ƒX‚©‚çŒ»İ‚Æ–¢—ˆ‚Ì‹éŒ`‚ğæ“¾
 	RECT now_Rect = a_pHitBase->GetNowRect();
 	RECT fut_Rect = a_pHitBase->GetFutureRect();
 	for(int h = start_h;h <= end_h;h++)
 	{
 		for(int w = start_w;w <= end_w;w++)
 		{
-			//å½“ãŸã‚Šåˆ¤å®šãŒãªã„å ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
+			//“–‚½‚è”»’è‚ª‚È‚¢ê‡‚ÍƒXƒLƒbƒv
 			if (!m_pMap->GetCollisionFlg(h, w))continue;
-			//ãƒãƒƒãƒ—ãƒãƒƒãƒ—ã®çŸ©å½¢ã‚’ç”Ÿæˆ
+			//ƒ}ƒbƒvƒ`ƒbƒv‚Ì‹éŒ`‚ğ¶¬
 			RECT chip_Rect = CreateRectPos(CHIP_RADIUS,CHIP_RADIUS,m_pMap->GetPosition(h,w));
 
 			if (now_Rect.top > chip_Rect.bottom &&
 				now_Rect.bottom < chip_Rect.top) {
-				//å³ã®åˆ¤å®š
+				//‰E‚Ì”»’è
 				if (fut_Rect.right > chip_Rect.right &&
 					fut_Rect.left < chip_Rect.right) {
 					a_pHitBase->SetMapHitLeft(chip_Rect.right);
 				}
-				//å·¦ã®åˆ¤å®š
+				//¶‚Ì”»’è
 				else if (fut_Rect.right > chip_Rect.left &&
 					fut_Rect.left < chip_Rect.left) {
 					a_pHitBase->SetMapHitRight(chip_Rect.left);
@@ -58,12 +59,12 @@ void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 			}
 			else if (now_Rect.right > chip_Rect.left &&
 				now_Rect.left < chip_Rect.right) {
-				//ä¸Šã®åˆ¤å®š
+				//ã‚Ì”»’è
 				if (fut_Rect.top > chip_Rect.top &&
 					fut_Rect.bottom < chip_Rect.top) {
 					a_pHitBase->SetMapHitBottom(chip_Rect.top);
 				}
-				//ä¸‹ã®åˆ¤å®š
+				//‰º‚Ì”»’è
 				if (fut_Rect.top > chip_Rect.bottom &&
 					fut_Rect.bottom < chip_Rect.bottom) {
 					a_pHitBase->SetMapHitTop(chip_Rect.bottom);
@@ -81,7 +82,7 @@ bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
 	{
 		EnemyBase* enemy = m_pEnemyManager->GetEnemy(en);
 		if ( !enemy->GetAlive())continue;
-		//ã™ã¹ã¦ã®å½“ãŸã‚Šåˆ¤å®šã‚’ãƒã‚§ãƒƒã‚¯
+		//‚·‚×‚Ä‚Ì“–‚½‚è”»’è‚ğƒ`ƒFƒbƒN
 		bool isHit = CheckHitBox(a_pHitBase, enemy);
 		if (isHit)
 		{
@@ -96,7 +97,7 @@ bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
 bool C_Hit::BossHitCheck(HitBase* a_pHitBase)
 {
 	if (!m_pBoss->GetAlive())return false; 
-	//ã™ã¹ã¦ã®å½“ãŸã‚Šåˆ¤å®šã‚’ãƒã‚§ãƒƒã‚¯
+	//‚·‚×‚Ä‚Ì“–‚½‚è”»’è‚ğƒ`ƒFƒbƒN
 	bool isHit = CheckHitBox(a_pHitBase, m_pBoss);
 	if (isHit)
 	{
@@ -114,6 +115,7 @@ bool C_Hit::PlayerHitCheck(HitBase* a_pHitBase)
 	if (isHit)
 	{
 		a_pHitBase->SetAlreadyHit(m_pPlayer);
+		a_pHitBase->IfHitPlayer(m_pPlayer);
 		return true;
 	}
 	return false;
@@ -174,10 +176,10 @@ bool C_Hit::RectInPos(RECT a_rect, Math::Vector2 a_pos)
 
 bool C_Hit::CheckHitBox(HitBase* a_pHitBase, HitBase* a_pTarget)
 {
-	//ã™ã§ã«å½“ãŸã£ã¦ã„ãŸå ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
+	//‚·‚Å‚É“–‚½‚Á‚Ä‚¢‚½ê‡‚ÍƒXƒLƒbƒv
 	bool alreadyHit = a_pHitBase->GetAlreadyHit(a_pTarget);
 	if (a_pTarget == nullptr || alreadyHit)return false;
-	//å½“ãŸã‚Šåˆ¤å®šç¯„å›²å¤–ãªã‚‰ã‚¹ã‚­ãƒƒãƒ—ï¼ˆè»½ãã™ã‚‹ãŸã‚ï¼‰
+	//“–‚½‚è”»’è”ÍˆÍŠO‚È‚çƒXƒLƒbƒviŒy‚­‚·‚é‚½‚ßj
 	bool checkRange = CircleHit(a_pTarget->GetPos(), a_pTarget->GetHitRange(), a_pHitBase->GetPos(), a_pHitBase->GetHitRange());
 	if (!checkRange)return false;
 	bool isHit = false;
@@ -215,8 +217,8 @@ bool C_Hit::CheckHitBox(HitBase* a_pHitBase, HitBase* a_pTarget)
 	return false;
 }
 
-// ä¸–ç•Œåº§æ¨™ã§çŸ©å½¢åŒå£«ã®æ°´å¹³è·é›¢ãƒ»ä¸Šä¸‹ã®é‡ãªã‚Šãƒ»æŒ‡å®šæ–¹å‘ã‚’èª¿ã¹ã‚‹ã€‚
-// horizontalReach ã®å¢ƒç•Œã¯å«ã¿ã€ä¸Šä¸‹ã®è¾ºãŒè§¦ã‚Œã‚‹ã ã‘ã®å ´åˆã¯å‘½ä¸­ã—ãªã„ã€‚
+// ¢ŠEÀ•W‚Å‹éŒ`“¯m‚Ì…•½‹——£Eã‰º‚Ìd‚È‚èEw’è•ûŒü‚ğ’²‚×‚éB
+// horizontalReach ‚Ì‹«ŠE‚ÍŠÜ‚İAã‰º‚Ì•Ó‚ªG‚ê‚é‚¾‚¯‚Ìê‡‚Í–½’†‚µ‚È‚¢B
 bool C_Hit::CheckAttackHit(const HitBase& attacker, const HitBase& target,
     float horizontalReach, int facingDirection) const
 {

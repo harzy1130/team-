@@ -1,10 +1,35 @@
-ï»¿#pragma once
+#pragma once
 #include"Constants/Constants.h"
-
-
-
 #include"HitBase.h"
-
+//==========================================================================================================//
+//									“–‚½‚è”»’è‚Ìg‚¢•û‚É‚Â‚¢‚Ä												//
+//‚Í‚¶‚ß‚É																									//
+//	‘O’ñ‚Æ‚µ‚ÄA“–‚½‚è”»’è‚ÍHitBaseƒNƒ‰ƒX‚ğŒp³‚µ‚½ƒNƒ‰ƒX‚É‘Î‚µ‚Äg—p‚·‚éB									//
+//	Œ»ó‚ÍƒvƒŒƒCƒ„[A“GAƒ{ƒX‚Ì3í—Ş‚ªHitBase‚ğŒp³‚µ‚Ä‚¢‚éB												//
+//  •Ší‚â’e‚È‚Ç‚ÍŒ»ó‚Å‚Í‘Î‰‚µ‚«‚ê‚Ä‚¢‚È‚¢‚½‚ßA•ÊƒNƒ‰ƒX‚Åì¬‚µAHitBase‚ğŒp³‚³‚¹‚é•K—v‚ª‚ ‚éB			//
+//	g‚¤‚Æ‚«‚Í“–‚½‚é‘¤iUŒ‚‘¤j‚ªg—p‚µAŠî–{“I‚É‚Í‘Šè‚É‘Î‚µ‚Ä‚Ìˆ—‚ğs‚¤B								//
+//@—áFPlayer‚ÉBoss‚É‘Î‚µ‚Ä‚Ì”»’è‚ğ‚½‚¹‚éê‡‚ÍAIfHitBossŠÖ”“à‚É‚ÍBoss‚É‘Î‚µ‚Ä‚Ìˆ—‚ğ‹Lq‚·‚éB		//
+//																											//
+//g‚¢•û																									//
+// 	1.“–‚½‚è”»’è‚ğ‚½‚¹‚½‚¢ƒNƒ‰ƒX‚ÉHitBase‚ğŒp³‚³‚¹‚éB													//
+//																											//
+//  2.hit.h‚ğƒCƒ“ƒNƒ‹[ƒh‚µAC_Hit‚Ì‘O•ûéŒ¾‚ÆƒNƒ‰ƒX‚Ìƒ|ƒCƒ“ƒ^‚ğì¬‚·‚éB									//
+// 																											//
+//	3.“–‚½‚è”»’è‚ğ‚½‚¹‚½‚¢ƒNƒ‰ƒX‚ÌInitŠÖ”‚Ìˆø”‚ÅC_Hit‚Ìƒ|ƒCƒ“ƒ^‚ğó‚¯æ‚èAŠÖ”“à‚ÅSetHitClass‚ğg—p	//
+//	@‚µAƒ|ƒCƒ“ƒ^‚ğƒZƒbƒg‚·‚éB‚Ü‚½A“–‚½‚è”»’è‚Ì‚½‚ß‚ÌHitBoxî•ñ‚ÍHitBoxEditor‚Åì‚Á‚½.csv‚ğLoadHitBox	//
+//    ‚Å“Ç‚İ‚Ş‚±‚Æ‚ğ„§‚·‚éB‘å‚«‚³‚ğ•ÏX‚·‚éê‡‚ÍLoadHitBoxÀs‘O‚ÉHitBase‚Ìm_scale‚É“ü‚ê‚é‚±‚ÆB		//
+//																											//
+//  4.“–‚½‚è”»’è‚ğ‚½‚¹‚½‚¢ƒNƒ‰ƒX‚ÌUpdateŠÖ”“à‚ÅAC_Hit‚Ì``CheckHitŠÖ”‚ğg—p‚·‚éB						//
+//	@ˆø”‚É‚Íthis‚ğ“n‚·B–ß‚è’l‚ÍboolŒ^‚ÅA“–‚½‚Á‚½ê‡‚ÍtrueA“–‚½‚ç‚È‚©‚Á‚½ê‡‚Ífalse‚ª•Ô‚éB			//
+//																											//
+//  5.“–‚½‚Á‚½ê‡‚Ìˆ—‚ğ‘‚­‚½‚ß‚ÌIfHit``‚ğ“–‚½‚è”»’è‚ğs‚¤ƒNƒ‰ƒX‚É’Ç‰Á‚µAŠÖ”“à‚Éˆ—‚ğ‹Lq‚·‚éB		//
+//	  HitBase“à‚ÌŠÖ”‚Æ“¯‚¶–¼‘O‚¾‚Á‚½ê‡‚Í©“®‚ÅŒÄ‚Ño‚³‚ê‚é‚ª–¼‘O‚ªˆá‚Á‚½ê‡‚ÍAŒÄ‚Ño‚³‚ê‚È‚¢‚Ì‚Å		//
+//	@‚±‚Ìƒwƒbƒ_[‚©‚çŠÖ”–¼‚ğƒRƒsƒy‚·‚é‚±‚Æ‚ğ„§‚·‚éB													//
+//																											//
+//	6.“–‚½‚è”»’è‚ğs‚¤‚ÆA“–‚½‚Á‚½‘Šè‚ÌƒAƒhƒŒƒX‚ğŠi”[‚µA“¯‚¶‘Šè‚Æ‚Í”»’è‚ğ‚µ‚È‚­‚È‚é‚Ì‚ÅA”CˆÓ‚Ìƒ^ƒCƒ~	//
+//  @ƒ“ƒO‚ÅResetAlreadyHitŠÖ”‚ğŒÄ‚Ño‚·•K—v‚ª‚ ‚éBŒÄ‚Ño‚·ƒ^ƒCƒ~ƒ“ƒO‚ÍAUŒ‚‚ªI‚í‚Á‚½ƒ^ƒCƒ~ƒ“ƒO‚âA		//
+//    UŒ‚ŠJn‘O‚ÉŒÄ‚Ño‚·‚Ì‚ª–]‚Ü‚µ‚¢B																	//
+//==========================================================================================================//
 class C_Map;
 class EnemyManager;
 class C_BossBase;
@@ -14,28 +39,28 @@ class C_Hit
 public:
 	C_Hit() = default;
 	~C_Hit() = default;
-	// åˆæœŸåŒ–é–¢æ•°
+	// ‰Šú‰»ŠÖ”
 	void Init(C_Map* a_pMap, EnemyManager* a_pEnemyManager, C_BossBase* a_pBoss, C_PlayerBase* a_pPlayer);
 	void SetMapClass(C_Map* a_pMap) { m_pMap = a_pMap; }
 	void SetEnemyManager(EnemyManager* a_pEnemyManager) { m_pEnemyManager = a_pEnemyManager; }
 	void SetBossClass(C_BossBase* a_pBoss) { m_pBoss = a_pBoss; }
 	void SetPlayerClass(C_PlayerBase* a_pPlayer) { m_pPlayer = a_pPlayer; }
 
-	// å¼•æ•°ã«å…¥ã‚ŒãŸHitBaseã‚’æŒã¤ãƒã‚¤ãƒ³ã‚¿ã«Mapã¸ã®å½“ãŸã‚Šåˆ¤å®šã‚’æŒãŸã›ã‚‹ã€‚
+	// ˆø”‚É“ü‚ê‚½HitBase‚ğ‚Âƒ|ƒCƒ“ƒ^‚ÉMap‚Ö‚Ì“–‚½‚è”»’è‚ğ‚½‚¹‚éB
 	void MapHitCheck(HitBase* a_pHitBase);
-	// å¼•æ•°ã«å…¥ã‚ŒãŸHitBaseã‚’æŒã¤ãƒã‚¤ãƒ³ã‚¿ã«æ•µã¸ã®å½“ãŸã‚Šåˆ¤å®šã‚’æŒãŸã›ã‚‹ã€‚
+	// ˆø”‚É“ü‚ê‚½HitBase‚ğ‚Âƒ|ƒCƒ“ƒ^‚É“G‚Ö‚Ì“–‚½‚è”»’è‚ğ‚½‚¹‚éB
 	bool EnemyHitCheck(HitBase* a_pHitBase);
-	// å¼•æ•°ã«å…¥ã‚ŒãŸHitBaseã‚’æŒã¤ãƒã‚¤ãƒ³ã‚¿ã«ãƒœã‚¹ã¸ã®å½“ãŸã‚Šåˆ¤å®šã‚’æŒãŸã›ã‚‹ã€‚
+	// ˆø”‚É“ü‚ê‚½HitBase‚ğ‚Âƒ|ƒCƒ“ƒ^‚Éƒ{ƒX‚Ö‚Ì“–‚½‚è”»’è‚ğ‚½‚¹‚éB
 	bool BossHitCheck(HitBase* a_pHitBase);
-	// å¼•æ•°ã«å…¥ã‚ŒãŸHitBaseã‚’æŒã¤ãƒã‚¤ãƒ³ã‚¿ã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®å½“ãŸã‚Šåˆ¤å®šã‚’æŒãŸã›ã‚‹ã€‚
+	// ˆø”‚É“ü‚ê‚½HitBase‚ğ‚Âƒ|ƒCƒ“ƒ^‚ÉƒvƒŒƒCƒ„[‚Ö‚Ì“–‚½‚è”»’è‚ğ‚½‚¹‚éB
 	bool PlayerHitCheck(HitBase* a_pHitBase);
-	// å††ã¨å††ã®å½“ãŸã‚Šåˆ¤å®šã‚’è¡Œã†
+	// ‰~‚Æ‰~‚Ì“–‚½‚è”»’è‚ğs‚¤
 	bool CircleHit(Math::Vector2 a_pos1, float a_radius1,Math::Vector2 a_pos2, float a_radius2);
-	// å††ã¨çŸ©å½¢ã®å½“ãŸã‚Šåˆ¤å®šã‚’è¡Œã†
+	// ‰~‚Æ‹éŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤
 	bool RectCircleHit(Math::Vector2 a_rectPos, RECT a_rect, Math::Vector2 a_circlePos, float a_circleRadius);
-	// çŸ©å½¢ã¨çŸ©å½¢ã®å½“ãŸã‚Šåˆ¤å®šã‚’è¡Œã†ã€‚
+	// ‹éŒ`‚Æ‹éŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤B
 	bool RectHit(Math::Vector2 a_pos1, RECT a_rect1, Math::Vector2 a_pos2, RECT a_rect2);
-    // è·é›¢ãƒ»ä¸Šä¸‹ã®é‡ãªã‚Šãƒ»å‘ãã ã‘ã‚’èª¿ã¹ã€æ”»æ’ƒã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚„ãƒ€ãƒ¡ãƒ¼ã‚¸ã¯å‘¼ã³å‡ºã—å´ã§ç®¡ç†ã™ã‚‹ã€‚
+    // ‹——£Eã‰º‚Ìd‚È‚èEŒü‚«‚¾‚¯‚ğ’²‚×AUŒ‚ƒ^ƒCƒ~ƒ“ƒO‚âƒ_ƒ[ƒW‚ÍŒÄ‚Ño‚µ‘¤‚ÅŠÇ—‚·‚éB
     bool CheckAttackHit(const HitBase& attacker, const HitBase& target,
         float horizontalReach, int facingDirection = 0) const;
 private:

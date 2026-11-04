@@ -216,6 +216,91 @@ void HitBase::ApplyMove()
     m_move = Math::Vector2(0.0f, 0.0f);
 }
 
+bool HitBase::LoadHitBox(const std::string& a_filePath)
+{
+	using namespace std;
+	//ifstream・・・ファイル入力を操作するクラス
+	ifstream ifs(a_filePath);
+	//開く
+	if (!ifs.is_open())
+        return false;
+	//1行読み込み
+	string lineString;
+	while (1)
+	{
+		if (getline(ifs, lineString))
+		{
+			istringstream iss(lineString);
+			string label;
+			if (getline(iss, label, ','))
+			{
+				if (label == "TexSize")
+				{
+					string width, height;
+					getline(iss, width, ',');
+					getline(iss, height, ',');
+					m_texWidth = stoi(width);
+					m_texHeight = stoi(height);
+				}
+				if (label == "Gap")
+				{
+					string gapX, gapY;
+					getline(iss, gapX, ',');
+					getline(iss, gapY, ',');
+					Math::Vector2 gPos = { stof(gapX) * m_scale.x, stof(gapY) * m_scale.y };
+					m_gap = gPos;
+				}
+				if (label == "HitRange")
+				{
+					string hitRange;
+					getline(iss, hitRange, ',');
+					m_hitRange = stof(hitRange) * m_scale.x;
+				}
+				if (label == "MapHitBox")
+				{
+					string left, top, right, bottom;
+					getline(iss, left, ',');
+					getline(iss, top, ',');
+					getline(iss, right, ',');
+					getline(iss, bottom, ',');
+					m_rect = {  int(stof(left) * m_scale.x),
+                                int(stof(top) * m_scale.y),
+                                int(stof(right) * m_scale.x),
+                                int(stof(bottom) * m_scale.y) };
+				}
+				if (label == "Circle")
+				{
+					string gapX, gapY, radius;
+					getline(iss, gapX, ',');
+					getline(iss, gapY, ',');
+					getline(iss, radius, ',');
+					Math::Vector2 gap = { stof(gapX) * m_scale.x, stof(gapY) * m_scale.y };
+                    m_CircleObjects.push_back({gap, stof(radius) * m_scale.x});
+				}
+				if (label == "Rect")
+				{
+					string gapX, gapY, left, top, right, bottom;
+					getline(iss, gapX, ',');
+					getline(iss, gapY, ',');
+					getline(iss, left, ',');
+					getline(iss, top, ',');
+					getline(iss, right, ',');
+					getline(iss, bottom, ',');
+					Math::Vector2 gap = { stof(gapX) * m_scale.x, stof(gapY) * m_scale.y };
+					RECT rect = {   int(stof(left) * m_scale.x),
+                                    int(stof(top) * m_scale.y), 
+                                    int(stof(right) * m_scale.x), 
+                                    int(stof(bottom) * m_scale.y) };
+					m_RectObjects.push_back({ gap, rect });
+				}
+			}
+		}
+		else break;
+	}
+	ifs.close();
+	return true;
+}
+
 void HitBase::IfHitEnemy(EnemyBase* a_pEnemy)
 {
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include"BossBase.h"
 
+
 enum State {
 	stance,
 	walk,
@@ -29,6 +30,7 @@ public:
 	void StartJumpCharge();
 	void JumpCharge();
 	void Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer);
+	void IfHitPlayer(C_PlayerBase* a_pPlayer);
 private:
 	int m_chargeWait;
 	float m_chargeRange = CHIP_SIZE * 10;

@@ -73,7 +73,9 @@
     <Filter Include="Src\Cursor">
       <UniqueIdentifier>{d7061a82-0fbf-443f-a92c-29f3f51968bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\projectile"><UniqueIdentifier>{20e52504-9a31-43e8-b37f-b9a600e4a40c}</UniqueIdentifier></Filter>
+    <Filter Include="Src\projectile">
+      <UniqueIdentifier>{20e52504-9a31-43e8-b37f-b9a600e4a40c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Src\Effect">
       <UniqueIdentifier>{b62e6a21-75f1-40cf-97f1-079f86a47c1d}</UniqueIdentifier>
     </Filter>
@@ -190,8 +192,12 @@
     <ClInclude Include="Src\Map\StringUtility.h">
       <Filter>Src\Map</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Enemy\Enemy2.h"><Filter>Src\Enemy</Filter></ClInclude>
-    <ClInclude Include="Src\projectile\enemyprojectile.h"><Filter>Src\projectile</Filter></ClInclude>
+    <ClInclude Include="Src\Enemy\Enemy2.h">
+      <Filter>Src\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\projectile\enemyprojectile.h">
+      <Filter>Src\projectile</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Enemy\Enemy1.h">
       <Filter>Src\Enemy</Filter>
     </ClInclude>
@@ -226,6 +232,9 @@
       <Filter>Src\Effect</Filter>
     </ClInclude>
     <ClInclude Include="Src\Player\Player1.h">
+      <Filter>Src\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Player\Sword.h">
       <Filter>Src\Player</Filter>
     </ClInclude>
   </ItemGroup>
@@ -305,8 +314,12 @@
     <ClCompile Include="Src\Map\Map.cpp">
       <Filter>Src\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Enemy\Enemy2.cpp"><Filter>Src\Enemy</Filter></ClCompile>
-    <ClCompile Include="Src\projectile\enemyprojectile.cpp"><Filter>Src\projectile</Filter></ClCompile>
+    <ClCompile Include="Src\Enemy\Enemy2.cpp">
+      <Filter>Src\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\projectile\enemyprojectile.cpp">
+      <Filter>Src\projectile</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Enemy\Enemy1.cpp">
       <Filter>Src\Enemy</Filter>
     </ClCompile>
@@ -335,6 +348,9 @@
       <Filter>Src\Effect</Filter>
     </ClCompile>
     <ClCompile Include="Src\Player\Player1.cpp">
+      <Filter>Src\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Player\Sword.cpp">
       <Filter>Src\Player</Filter>
     </ClCompile>
   </ItemGroup>

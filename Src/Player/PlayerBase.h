@@ -3,6 +3,7 @@
 #include"Skill/SkillBase.h"
 #include"Camera/Camera.h"
 #include"Hit/HitBase.h"
+#include"Hit/Hit.h"
 #include"Effect/effect.h"
 
 enum E_MoveMode

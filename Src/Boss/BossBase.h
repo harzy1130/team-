@@ -42,8 +42,6 @@ protected:
 	int m_animationCnt;
 	float m_animationWait;
 	KdTexture* m_pTex;
-	int m_texWidth;
-	int m_texHeight;
 
 	int m_hp = 500;
 	int m_atk = 20;
@@ -53,7 +51,6 @@ protected:
 	float m_size;
 	float m_moveSpeed = 5;
 	
-	Math::Vector2 m_gap{0,0};
 	Math::Vector2 m_skillMove{0,0};
 	Math::Vector2 m_rawMove{ 0,0 };
 	C_PlayerBase* m_pPlayer;
