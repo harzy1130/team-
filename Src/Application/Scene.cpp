@@ -18,7 +18,7 @@ void Scene::Draw2D()
 			m_boss.Draw();
 		}
 	}
-	m_game.SceneChangeDraw();
+	m_game.SceneTransDraw();
 }
 
 void Scene::Update()
@@ -40,7 +40,7 @@ void Scene::Update()
 
 void Scene::Init()
 {
-	m_game.Init();
+	m_game.Init(&m_map, &m_player);
 
 	m_backTex.Load("Texture/back1.png");
 	m_chipTex.Load("Texture/MapChip.png");
@@ -53,13 +53,8 @@ void Scene::Init()
 	m_boss.SetTexture(&m_bossTex);
 	m_player.SetTex(&m_player1Tex);
 	m_player.SetAtkTex(&m_playerAtkTex);
-	m_game.SetTexture(&m_blackTex);
-	m_game.SetBackTexture(&m_backTex);
+	m_game.SetTexture(&m_blackTex, &m_backTex);
 	m_camera.Init();
-
-	m_game.SetMapData(&m_map);
-	m_game.SetPlayerData(&m_player);
-
 
 	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera, &m_cursor);
