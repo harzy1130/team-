@@ -1,4 +1,4 @@
-#include "Pch.h"
+﻿#include "Pch.h"
 #include "EnemyManager.h"
 #include "Map/Map.h"
 #include <algorithm>
@@ -13,15 +13,23 @@ bool EnemyManager::Init(C_Hit* hit, C_Camera* camera, C_Map* map, const char* sp
     m_camera = camera;
     m_map = map;
     m_spawnFile = spawnFile != nullptr ? spawnFile : "";
-    return m_hit != nullptr && m_camera != nullptr && m_map != nullptr && !m_spawnFile.empty();
+    if (m_hit == nullptr || m_camera == nullptr || m_map == nullptr || m_spawnFile.empty()) return false;
+    // 初回のステージ更新を止めないよう、タイトル表示前に画像を準備する。
+    if (!Enemy1::PreloadSprites() || !Enemy2::PreloadSprites())
+    {
+        OutputDebugStringA("Enemy sprite preload failed.\n");
+        return false;
+    }
+    return true;
 }
 
 void EnemyManager::Update(C_PlayerBase* player, bool active)
 {
-    if (GetAsyncKeyState('E') && GetAsyncKeyState('1') & 0x8000) {
-        Math::Vector2 pos = m_camera->GetPos();
-        SpawnEnemy1(pos.x, pos.y);
-    }
+    // 両キーの押下状態を確認し、組み合わせが成立した瞬間だけ召喚する。
+    const bool spawnDown = (GetAsyncKeyState('E') & 0x8000) != 0
+        && (GetAsyncKeyState('1') & 0x8000) != 0;
+    const bool spawnPressed = spawnDown && !m_debugSpawnWasDown;
+    m_debugSpawnWasDown = spawnDown;
     if (!active || m_map == nullptr || m_hit == nullptr || m_camera == nullptr)
     {
         if (m_wasActive) ClearEnemies();
@@ -35,12 +43,24 @@ void EnemyManager::Update(C_PlayerBase* player, bool active)
         m_stage = m_map->GetStageNum();
         m_wasActive = true;
     }
+    // ステージ読み込みと参照先の確認を終えてから生成する。
+    if (spawnPressed)
+    {
+        const auto pos = m_camera->GetPos();
+        SpawnEnemy1(pos.x, pos.y);
+    }
+    const EnemyBase* debugEnemy = GetEnemy(m_debugEnemy);
     for (std::size_t i = 0; i < m_enemies1.size(); ++i)
     {
-        m_enemies1[i]->SetDamageTestEnabled(i == m_debugEnemy);
+        m_enemies1[i]->SetDamageTestEnabled(m_enemies1[i].get() == debugEnemy);
         m_enemies1[i]->Update(player, true);
     }
-    //��ɊǗ��z��̗v�f���폜
+    for (const auto& enemy : m_enemies2)
+    {
+        enemy->SetDamageTestEnabled(enemy.get() == debugEnemy);
+        enemy->Update(player, true);
+    }
+    //先に管理配列の要素を削除
     m_pAllEnemies.erase(std::remove_if(m_pAllEnemies.begin(), m_pAllEnemies.end(),
         [](const EnemyBase* pEB) {
             if (pEB->GetAlive())return false;
@@ -55,7 +75,12 @@ void EnemyManager::Update(C_PlayerBase* player, bool active)
 			return true;
         }),
 		m_enemies1.end());
-    if (m_debugEnemy >= m_enemies1.size())
+    m_enemies2.erase(std::remove_if(m_enemies2.begin(), m_enemies2.end(),
+        [](const std::unique_ptr<Enemy2>& enemy) {
+            if (enemy->GetAlive()) return false;
+            enemy->Release(); return true;
+        }), m_enemies2.end());
+    if (m_debugEnemy >= m_pAllEnemies.size())
     {
         m_debugEnemy = 0;
     }
@@ -86,14 +111,15 @@ bool EnemyManager::LoadStage(int stage)
             continue;
         }
         if (rowStage != stage) continue;
-        if (type != 1 || !std::isfinite(spawn.x) || !std::isfinite(spawn.y)
+        if ((type != 1 && type != 2) || !std::isfinite(spawn.x) || !std::isfinite(spawn.y)
             || !std::isfinite(spawn.leftX) || !std::isfinite(spawn.rightX)
             || spawn.leftX > spawn.rightX || spawn.x < spawn.leftX || spawn.x > spawn.rightX)
         {
             OutputDebugStringA("Unsupported enemy type or invalid spawn range was skipped.\n");
             continue;
         }
-        if (!SpawnEnemy1(spawn))continue;
+        if (type == 1) SpawnEnemy1(spawn);
+        else SpawnEnemy2({spawn.x, spawn.y, spawn.leftX, spawn.rightX});
     }
     return true;
 }
@@ -133,7 +159,7 @@ bool EnemyManager::SpawnEnemy1(float a_x, float a_y)
 
 void EnemyManager::DrawVision()
 {
-    for (const auto& enemy : m_enemies1) enemy->DrawVision();
+    for (auto* enemy : m_pAllEnemies) enemy->DrawVision();
 }
 
 void EnemyManager::Draw()
@@ -144,7 +170,7 @@ void EnemyManager::Draw()
 std::size_t EnemyManager::GetAliveCount() const
 {
     std::size_t count = 0;
-    for (const auto& enemy : m_enemies1) if (enemy->GetAlive()) ++count;
+    for (const auto* enemy : m_pAllEnemies) if (enemy->GetAlive()) ++count;
     return count;
 }
 
@@ -170,7 +196,7 @@ const Enemy1* EnemyManager::GetEnemy1(std::size_t index) const
 
 void EnemyManager::SetDebugEnemy(std::size_t index)
 {
-    m_debugEnemy = index < m_enemies1.size() ? index : 0;
+    m_debugEnemy = index < m_pAllEnemies.size() ? index : 0;
 }
 
 void EnemyManager::ClearEnemies()
@@ -178,6 +204,8 @@ void EnemyManager::ClearEnemies()
     m_pAllEnemies.clear();
     for (const auto& enemy : m_enemies1) enemy->Release();
     m_enemies1.clear();
+    for (const auto& enemy : m_enemies2) enemy->Release();
+    m_enemies2.clear();
     m_debugEnemy = 0;
 }
 
@@ -190,4 +218,29 @@ void EnemyManager::Release()
     m_stage = -1;
     m_wasActive = false;
     m_spawnFile.clear();
+    m_debugSpawnWasDown = false;
+}
+
+Enemy2* EnemyManager::GetEnemy2(std::size_t index)
+{
+    return index < m_enemies2.size() ? m_enemies2[index].get() : nullptr;
+}
+
+const Enemy2* EnemyManager::GetEnemy2(std::size_t index) const
+{
+    return index < m_enemies2.size() ? m_enemies2[index].get() : nullptr;
+}
+
+bool EnemyManager::SpawnEnemy2(const Enemy2::SpawnSettings& spawn)
+{
+    auto enemy = std::make_unique<Enemy2>();
+    if (!enemy->Init(m_hit, m_camera, m_map, spawn) || !enemy->PlaceOnMap(m_map))
+    {
+        OutputDebugStringA("Enemy2 spawn failed: texture or ground unavailable.\n");
+        return false;
+    }
+    EnemyBase* base = enemy.get();
+    m_enemies2.push_back(std::move(enemy));
+    m_pAllEnemies.push_back(base);
+    return true;
 }

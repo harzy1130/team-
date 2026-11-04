@@ -1,10 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include "Enemy1.h"
+#include "Enemy2.h"
 #include <memory>
 #include <string>
 #include <vector>
 
-// ƒXƒe[ƒW‚²‚Æ‚Ì”z’uƒf[ƒ^‚©‚ç“G‚ğ¶¬‚µAXVE•`‰æE‰ğ•ú‚ğ‚Ü‚Æ‚ß‚Äs‚¤B
+// ã‚¹ãƒ†ãƒ¼ã‚¸ã”ã¨ã®é…ç½®ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ•µã‚’ç”Ÿæˆã—ã€æ›´æ–°ãƒ»æç”»ãƒ»è§£æ”¾ã‚’ã¾ã¨ã‚ã¦è¡Œã†ã€‚
 class EnemyManager
 {
 public:
@@ -23,6 +24,9 @@ public:
 
     Enemy1* GetEnemy1(std::size_t index);
     const Enemy1* GetEnemy1(std::size_t index) const;
+    Enemy2* GetEnemy2(std::size_t index);
+    const Enemy2* GetEnemy2(std::size_t index) const;
+    bool SpawnEnemy2(const Enemy2::SpawnSettings& spawn);
     void SetDebugEnemy(std::size_t index);
     bool SpawnEnemy1(Enemy1::SpawnSettings a_spawn);
     bool SpawnEnemy1(float a_x,float a_y);
@@ -30,16 +34,18 @@ public:
 private:
     bool LoadStage(int stage);
     void ClearEnemies();
-    // ƒeƒNƒXƒ`ƒƒ‚ğ‚Â“G–{‘Ì‚ÍƒRƒs[‚¹‚¸AŠ—Lƒ|ƒCƒ“ƒ^[‚Å•Û‚·‚éB
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’æŒã¤æ•µæœ¬ä½“ã¯ã‚³ãƒ”ãƒ¼ã›ãšã€æ‰€æœ‰ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã§ä¿æŒã™ã‚‹ã€‚
     std::vector<std::unique_ptr<Enemy1>> m_enemies1;
+    std::vector<std::unique_ptr<Enemy2>> m_enemies2;
     C_Hit* m_hit = nullptr;
     C_Camera* m_camera = nullptr;
     C_Map* m_map = nullptr;
     std::string m_spawnFile;
     int m_stage = -1;
     bool m_wasActive = false;
+    bool m_debugSpawnWasDown = false;
     std::size_t m_debugEnemy = 0;
 
-    // m_enemies ‚ªŠ—L‚µA‚±‚±‚Å‚Í EnemyBase ‚Æ‚µ‚ÄQÆ‚·‚é”ñŠ—Lƒ|ƒCƒ“ƒ^[ˆê——B
+    // m_enemies ãŒæ‰€æœ‰ã—ã€ã“ã“ã§ã¯ EnemyBase ã¨ã—ã¦å‚ç…§ã™ã‚‹éæ‰€æœ‰ãƒã‚¤ãƒ³ã‚¿ãƒ¼ä¸€è¦§ã€‚
     std::vector<EnemyBase*> m_pAllEnemies;
 };
