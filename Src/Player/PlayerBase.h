@@ -28,8 +28,7 @@ public:
     bool TakeDamage(float rawDamage);
     bool IsDamageInvincible() const { return m_damageInvincibleFrames > 0; }
 	// 敵と当たった時に行う処理を記述する場所
-	void IfHitEnemy(EnemyBase* a_pEnemy);
-	void IfHitBoss(C_BossBase* a_pBoss);
+	//dd
 	//ゲッター
 	//生存
 	virtual bool GetAFlg()final { return m_bAlive; }
@@ -49,6 +48,8 @@ public:
 	virtual float GetCrtDmg()final { return m_CrtDmgP; }
 	virtual float GetCrtRate()final { return m_CrtRate; }
 	virtual float GetSkillHaste()final { return m_SkillHaste; }
+	//攻撃関係
+	virtual bool GetAtkFlg()final { return m_bAtk; }
 
 	//セッター
 	//生存
@@ -78,6 +79,8 @@ public:
 	virtual void SetHPRegene(float a_HPR)final { m_HPRegene = a_HPR; }
 	virtual void SetCrtDmg(float a_CD)final { m_CrtDmgP = a_CD; }
 	virtual void SetCrtRate(float a_CR)final { m_CrtRate = a_CR; }
+	//計算関数
+	virtual float CrtDmgCalc()final;
 	//参照する外部クラス
 	virtual void SetHitClass(C_Hit* a_pHit) final { m_pHit = a_pHit; }
 	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
@@ -150,7 +153,6 @@ protected:
 	//計算関数
 	virtual float DefCalc(float a_DMG, float a_DEF,float a_penet)final;
 	virtual void HPRegeneCalc()final;
-	virtual float CrtDmgCalc(float a_DMG, float a_CrtDmg, float a_CrtRate)final;
 	virtual float MoveSpeedCalc(float a_speed, float a_MS)final;
 	virtual float AtkSpeedCalc()final;
 
