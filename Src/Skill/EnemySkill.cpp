@@ -108,3 +108,58 @@ void C_EnemySkill::StopAtWall()
 {
     Cancel();
 }
+
+
+void C_EnemyBackstepSkill::Init(const Settings& settings)
+{
+    m_settings = settings;
+    m_settings.triggerRange = std::isfinite(settings.triggerRange) ? std::max(0.0f, settings.triggerRange) : 160.0f;
+    m_settings.horizontalSpeed = std::isfinite(settings.horizontalSpeed)
+        ? std::max(0.0f, std::min(settings.horizontalSpeed, static_cast<float>(CHIP_RADIUS))) : 8.0f;
+    m_settings.jumpSpeed = std::isfinite(settings.jumpSpeed)
+        ? std::max(1.0f, std::min(settings.jumpSpeed, static_cast<float>(CHIP_RADIUS))) : 12.0f;
+    m_settings.windupFrames = std::max(0, settings.windupFrames);
+    m_settings.horizontalFrames = std::max(1, settings.horizontalFrames);
+    ResetEncounter();
+}
+
+void C_EnemyBackstepSkill::ResetEncounter()
+{
+    m_state = State::Ready; m_frames = 0; m_direction = 1; m_used = false;
+}
+
+void C_EnemyBackstepSkill::Cancel()
+{
+    m_state = m_used ? State::Spent : State::Ready;
+    m_frames = 0;
+}
+
+bool C_EnemyBackstepSkill::Update(const HitBase& owner, const HitBase* target,
+    bool engaged, bool grounded, float& horizontalMove, float& jumpSpeed)
+{
+    jumpSpeed = 0.0f;
+    if (!engaged || target == nullptr) { ResetEncounter(); return false; }
+    if (m_state == State::Spent) return false;
+    if (m_state == State::Ready)
+    {
+        const auto delta = target->GetPos() - owner.GetPos();
+        if (!grounded || delta.LengthSquared() > m_settings.triggerRange * m_settings.triggerRange) return false;
+        m_used = true;
+        m_direction = delta.x < 0.0f ? 1 : -1;
+        m_state = State::Windup; m_frames = m_settings.windupFrames;
+    }
+    if (m_state == State::Windup)
+    {
+        horizontalMove = 0.0f;
+        if (m_frames > 0) { --m_frames; return true; }
+        jumpSpeed = m_settings.jumpSpeed;
+        m_state = State::Jumping; m_frames = 0;
+    }
+    else if (grounded || m_frames >= 120)
+    {
+        m_state = State::Spent; return false;
+    }
+    horizontalMove = m_frames < m_settings.horizontalFrames ? m_direction * m_settings.horizontalSpeed : 0.0f;
+    ++m_frames;
+    return true;
+}

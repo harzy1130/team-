@@ -40,3 +40,32 @@ private:
     bool m_hit = false;
     bool m_damageActive = false;
 };
+
+
+// 戦闘開始後、初めて接近された時だけ使う後方跳躍。通常攻撃とは独立した技能。
+class C_EnemyBackstepSkill
+{
+public:
+    struct Settings
+    {
+        float triggerRange = 160.0f;
+        float horizontalSpeed = 8.0f;
+        float jumpSpeed = 12.0f;
+        int windupFrames = 6;
+        int horizontalFrames = 18;
+    };
+    void Init(const Settings& settings);
+    void ResetEncounter();
+    void Cancel();
+    bool Update(const HitBase& owner, const HitBase* target, bool engaged, bool grounded,
+        float& horizontalMove, float& jumpSpeed);
+    bool HasUsed() const { return m_used; }
+    bool IsActive() const { return m_state == State::Windup || m_state == State::Jumping; }
+private:
+    enum class State { Ready, Windup, Jumping, Spent };
+    Settings m_settings;
+    State m_state = State::Ready;
+    int m_frames = 0;
+    int m_direction = 1;
+    bool m_used = false;
+};
