@@ -7,6 +7,30 @@ const float BOTTOM_EDGE   = -SCREEN_HEIGHT / 2;
 const float RIGHT_EDGE    = SCREEN_WIDTH   / 2;
 const float LEFT_EDGE     = -SCREEN_WIDTH  / 2;
 
+//GameStateíËêî=================================
+const float SCENETRANS_TIME = 60;
+const float LOAD_TIME = 90;
+
+const enum GameState
+{
+	Title = 0,
+	Select = 1,
+	Game = 2,
+	Result = 3
+};
+
+struct S_RenderTarget
+{
+	float x;
+	float y;
+	float scaleX;
+	float scaleY;
+	float scale;
+	Math::Matrix mat;
+	Math::Matrix transMat;
+	Math::Matrix scaleMat;
+};
+
 //É}ÉbÉvíËêî====================================
 static const int  MAP_HEIGHT  = 12;
 static const int  MAP_WIDTH   = 64;
@@ -27,8 +51,8 @@ const enum MapChip
 {
 	dirt  = 1,
 	glass = 2,
-	s1    = 10,
-	s2    = 11,
+	gate1 = 10,
+	gate2 = 11,
 };
 
 const enum StageNum

@@ -41,8 +41,8 @@ void C_Map::Draw()
 			case MapChip::glass:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(PTEX_SIZE * 2, 0, PTEX_SIZE, PTEX_SIZE), 1.0f);
 				break;
-			case MapChip::s1:
-			case MapChip::s2:
+			case MapChip::gate1:
+			case MapChip::gate2:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(0, 0, PTEX_SIZE, PTEX_SIZE), 1.0f);
 				break;
 			default:
