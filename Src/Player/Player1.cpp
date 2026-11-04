@@ -39,6 +39,7 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_hitRange = PTEX_SIZE;
 	//èÛë‘àŸèÌ
 	m_effect.InitPlayer(this);
+	m_sword.Init(this, a_pHit, a_pCamera);
 }
 
 void C_Player1::Update()
@@ -78,7 +79,7 @@ void C_Player1::Update()
 		m_bJump = false;
 	}
 	MatrixUpdate();
-	
+	m_sword.Update();
 }
 
 void C_Player1::Draw()
@@ -92,4 +93,5 @@ void C_Player1::Draw()
 		m_pTex, Math::Rectangle(600*(int)m_moveAnimCount, 600*m_moveMode, 600, 600), 1.0f);
 	DrawHitBox();
 	//DrawAtk();
+	m_sword.Draw();
 }

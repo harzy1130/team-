@@ -110,14 +110,14 @@ void C_PlayerBase::HPRegeneCalc()
 }
 
 //クリティカル
-float C_PlayerBase::CrtDmgCalc(float a_DMG, float a_CrtDmg, float a_CrtRate)
+float C_PlayerBase::CrtDmgCalc()
 {
-	if (rand() % 100 + 1 <= a_CrtRate) {
-		return a_DMG * (a_CrtDmg / 100);
+	if (rand() % 100 + 1 <= m_CrtRate) {
+		return m_ATK * (m_CrtDmgP / 100);
 	}
 	else
 	{
-		return a_DMG;
+		return m_ATK;
 	}
 }
 
@@ -283,15 +283,4 @@ bool C_PlayerBase::TakeDamage(float rawDamage)
         m_skillMove = { 0.0f, 0.0f };
     }
     return true;
-}
-
-void C_PlayerBase::IfHitEnemy(EnemyBase* a_pEnemy)
-{
-	a_pEnemy->TakeDamage(20, m_pos.x);
-
-}
-
-void C_PlayerBase::IfHitBoss(C_BossBase* a_pBoss)
-{
-	a_pBoss->TakeDamage(20);
 }

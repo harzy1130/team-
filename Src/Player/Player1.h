@@ -1,6 +1,6 @@
 #pragma once
 #include"PlayerBase.h"
-
+#include"Sword.h"
 class C_Player1:public C_PlayerBase
 {
 public:
@@ -13,5 +13,5 @@ public:
 
 
 private:
-	
+	C_Sword m_sword;
 };
