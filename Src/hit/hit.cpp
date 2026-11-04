@@ -1,12 +1,17 @@
-#include"Hit.h"
+ï»¿#include"Hit.h"
 #include"Map/Map.h"
 #include"Pch.h"
+#include "Enemy/EnemyManager.h"
+#include "Boss/BossBase.h"
+#include "Player/PlayerBase.h"
+#include <cmath>
 
 void C_Hit::Init(C_Map* a_pMap, EnemyManager* a_pEnemyManager, C_BossBase* a_pBoss, C_PlayerBase* a_pPlayer)
 {
 	SetMapClass(a_pMap);
 	SetEnemyManager(a_pEnemyManager);
 	SetBossClass(a_pBoss);
+	SetPlayerClass(a_pPlayer);
 }
 
 void C_Hit::MapHitCheck(HitBase* a_pHitBase)
@@ -26,26 +31,26 @@ void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 	end_h = Clamp(endChip.second + 2, m_pMap->GetIdxMaxMin().second, 0);
 
 	a_pHitBase->ResetHitRect();
-	//ˆø”‚ÌƒLƒƒƒ‰ƒx[ƒX‚©‚çŒ»İ‚Æ–¢—ˆ‚Ì‹éŒ`‚ğæ“¾
+	//å¼•æ•°ã®ã‚­ãƒ£ãƒ©ãƒ™ãƒ¼ã‚¹ã‹ã‚‰ç¾åœ¨ã¨æœªæ¥ã®çŸ©å½¢ã‚’å–å¾—
 	RECT now_Rect = a_pHitBase->GetNowRect();
 	RECT fut_Rect = a_pHitBase->GetFutureRect();
 	for(int h = start_h;h <= end_h;h++)
 	{
 		for(int w = start_w;w <= end_w;w++)
 		{
-			//“–‚½‚è”»’è‚ª‚È‚¢ê‡‚ÍƒXƒLƒbƒv
+			//å½“ãŸã‚Šåˆ¤å®šãŒãªã„å ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
 			if (!m_pMap->GetCollisionFlg(h, w))continue;
-			//ƒ}ƒbƒvƒ`ƒbƒv‚Ì‹éŒ`‚ğ¶¬
+			//ãƒãƒƒãƒ—ãƒãƒƒãƒ—ã®çŸ©å½¢ã‚’ç”Ÿæˆ
 			RECT chip_Rect = CreateRectPos(CHIP_RADIUS,CHIP_RADIUS,m_pMap->GetPosition(h,w));
 
 			if (now_Rect.top > chip_Rect.bottom &&
 				now_Rect.bottom < chip_Rect.top) {
-				//‰E‚Ì”»’è
+				//å³ã®åˆ¤å®š
 				if (fut_Rect.right > chip_Rect.right &&
 					fut_Rect.left < chip_Rect.right) {
 					a_pHitBase->SetMapHitLeft(chip_Rect.right);
 				}
-				//¶‚Ì”»’è
+				//å·¦ã®åˆ¤å®š
 				else if (fut_Rect.right > chip_Rect.left &&
 					fut_Rect.left < chip_Rect.left) {
 					a_pHitBase->SetMapHitRight(chip_Rect.left);
@@ -53,12 +58,12 @@ void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 			}
 			else if (now_Rect.right > chip_Rect.left &&
 				now_Rect.left < chip_Rect.right) {
-				//ã‚Ì”»’è
+				//ä¸Šã®åˆ¤å®š
 				if (fut_Rect.top > chip_Rect.top &&
 					fut_Rect.bottom < chip_Rect.top) {
 					a_pHitBase->SetMapHitBottom(chip_Rect.top);
 				}
-				//‰º‚Ì”»’è
+				//ä¸‹ã®åˆ¤å®š
 				if (fut_Rect.top > chip_Rect.bottom &&
 					fut_Rect.bottom < chip_Rect.bottom) {
 					a_pHitBase->SetMapHitTop(chip_Rect.bottom);
@@ -76,7 +81,7 @@ bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
 	{
 		EnemyBase* enemy = m_pEnemyManager->GetEnemy(en);
 		if ( !enemy->GetAlive())continue;
-		//‚·‚×‚Ä‚Ì“–‚½‚è”»’è‚ğƒ`ƒFƒbƒN
+		//ã™ã¹ã¦ã®å½“ãŸã‚Šåˆ¤å®šã‚’ãƒã‚§ãƒƒã‚¯
 		bool isHit = CheckHitBox(a_pHitBase, enemy);
 		if (isHit)
 		{
@@ -91,7 +96,7 @@ bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
 bool C_Hit::BossHitCheck(HitBase* a_pHitBase)
 {
 	if (!m_pBoss->GetAlive())return false; 
-	//‚·‚×‚Ä‚Ì“–‚½‚è”»’è‚ğƒ`ƒFƒbƒN
+	//ã™ã¹ã¦ã®å½“ãŸã‚Šåˆ¤å®šã‚’ãƒã‚§ãƒƒã‚¯
 	bool isHit = CheckHitBox(a_pHitBase, m_pBoss);
 	if (isHit)
 	{
@@ -169,10 +174,10 @@ bool C_Hit::RectInPos(RECT a_rect, Math::Vector2 a_pos)
 
 bool C_Hit::CheckHitBox(HitBase* a_pHitBase, HitBase* a_pTarget)
 {
-	//‚·‚Å‚É“–‚½‚Á‚Ä‚¢‚½ê‡‚ÍƒXƒLƒbƒv
+	//ã™ã§ã«å½“ãŸã£ã¦ã„ãŸå ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
 	bool alreadyHit = a_pHitBase->GetAlreadyHit(a_pTarget);
 	if (a_pTarget == nullptr || alreadyHit)return false;
-	//“–‚½‚è”»’è”ÍˆÍŠO‚È‚çƒXƒLƒbƒviŒy‚­‚·‚é‚½‚ßj
+	//å½“ãŸã‚Šåˆ¤å®šç¯„å›²å¤–ãªã‚‰ã‚¹ã‚­ãƒƒãƒ—ï¼ˆè»½ãã™ã‚‹ãŸã‚ï¼‰
 	bool checkRange = CircleHit(a_pTarget->GetPos(), a_pTarget->GetHitRange(), a_pHitBase->GetPos(), a_pHitBase->GetHitRange());
 	if (!checkRange)return false;
 	bool isHit = false;
@@ -208,4 +213,19 @@ bool C_Hit::CheckHitBox(HitBase* a_pHitBase, HitBase* a_pTarget)
 		}
 	}
 	return false;
+}
+
+// ä¸–ç•Œåº§æ¨™ã§çŸ©å½¢åŒå£«ã®æ°´å¹³è·é›¢ãƒ»ä¸Šä¸‹ã®é‡ãªã‚Šãƒ»æŒ‡å®šæ–¹å‘ã‚’èª¿ã¹ã‚‹ã€‚
+// horizontalReach ã®å¢ƒç•Œã¯å«ã¿ã€ä¸Šä¸‹ã®è¾ºãŒè§¦ã‚Œã‚‹ã ã‘ã®å ´åˆã¯å‘½ä¸­ã—ãªã„ã€‚
+bool C_Hit::CheckAttackHit(const HitBase& attacker, const HitBase& target,
+    float horizontalReach, int facingDirection) const
+{
+    if (!std::isfinite(horizontalReach) || horizontalReach < 0.0f) return false;
+    const float horizontalGap = std::max(target.GetHitLeft() - attacker.GetHitRight(),
+        attacker.GetHitLeft() - target.GetHitRight());
+    if (!(horizontalGap <= horizontalReach) || !(attacker.GetHitTop() > target.GetHitBottom()
+        && attacker.GetHitBottom() < target.GetHitTop())) return false;
+    const float deltaX = target.GetPos().x - attacker.GetPos().x;
+    return !(facingDirection > 0 && deltaX < 0.0f)
+        && !(facingDirection < 0 && deltaX > 0.0f);
 }

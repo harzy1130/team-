@@ -1,8 +1,8 @@
-#pragma once
+ï»¿#pragma once
 #include"Constants/Constants.h"
-#include"Enemy/EnemyManager.h"
-#include"Boss/BossBase.h"
-#include"Player/PlayerBase.h"
+
+
+
 #include"HitBase.h"
 
 class C_Map;
@@ -14,27 +14,30 @@ class C_Hit
 public:
 	C_Hit() = default;
 	~C_Hit() = default;
-	// ‰Šú‰»ŠÖ”
+	// åˆæœŸåŒ–é–¢æ•°
 	void Init(C_Map* a_pMap, EnemyManager* a_pEnemyManager, C_BossBase* a_pBoss, C_PlayerBase* a_pPlayer);
 	void SetMapClass(C_Map* a_pMap) { m_pMap = a_pMap; }
 	void SetEnemyManager(EnemyManager* a_pEnemyManager) { m_pEnemyManager = a_pEnemyManager; }
 	void SetBossClass(C_BossBase* a_pBoss) { m_pBoss = a_pBoss; }
 	void SetPlayerClass(C_PlayerBase* a_pPlayer) { m_pPlayer = a_pPlayer; }
 
-	// ˆø”‚É“ü‚ê‚½HitBase‚ğ‚Âƒ|ƒCƒ“ƒ^‚ÉMap‚Ö‚Ì“–‚½‚è”»’è‚ğ‚½‚¹‚éB
+	// å¼•æ•°ã«å…¥ã‚ŒãŸHitBaseã‚’æŒã¤ãƒã‚¤ãƒ³ã‚¿ã«Mapã¸ã®å½“ãŸã‚Šåˆ¤å®šã‚’æŒãŸã›ã‚‹ã€‚
 	void MapHitCheck(HitBase* a_pHitBase);
-	// ˆø”‚É“ü‚ê‚½HitBase‚ğ‚Âƒ|ƒCƒ“ƒ^‚É“G‚Ö‚Ì“–‚½‚è”»’è‚ğ‚½‚¹‚éB
+	// å¼•æ•°ã«å…¥ã‚ŒãŸHitBaseã‚’æŒã¤ãƒã‚¤ãƒ³ã‚¿ã«æ•µã¸ã®å½“ãŸã‚Šåˆ¤å®šã‚’æŒãŸã›ã‚‹ã€‚
 	bool EnemyHitCheck(HitBase* a_pHitBase);
-	// ˆø”‚É“ü‚ê‚½HitBase‚ğ‚Âƒ|ƒCƒ“ƒ^‚Éƒ{ƒX‚Ö‚Ì“–‚½‚è”»’è‚ğ‚½‚¹‚éB
+	// å¼•æ•°ã«å…¥ã‚ŒãŸHitBaseã‚’æŒã¤ãƒã‚¤ãƒ³ã‚¿ã«ãƒœã‚¹ã¸ã®å½“ãŸã‚Šåˆ¤å®šã‚’æŒãŸã›ã‚‹ã€‚
 	bool BossHitCheck(HitBase* a_pHitBase);
-	// ˆø”‚É“ü‚ê‚½HitBase‚ğ‚Âƒ|ƒCƒ“ƒ^‚ÉƒvƒŒƒCƒ„[‚Ö‚Ì“–‚½‚è”»’è‚ğ‚½‚¹‚éB
+	// å¼•æ•°ã«å…¥ã‚ŒãŸHitBaseã‚’æŒã¤ãƒã‚¤ãƒ³ã‚¿ã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®å½“ãŸã‚Šåˆ¤å®šã‚’æŒãŸã›ã‚‹ã€‚
 	bool PlayerHitCheck(HitBase* a_pHitBase);
-	// ‰~‚Æ‰~‚Ì“–‚½‚è”»’è‚ğs‚¤
+	// å††ã¨å††ã®å½“ãŸã‚Šåˆ¤å®šã‚’è¡Œã†
 	bool CircleHit(Math::Vector2 a_pos1, float a_radius1,Math::Vector2 a_pos2, float a_radius2);
-	// ‰~‚Æ‹éŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤
+	// å††ã¨çŸ©å½¢ã®å½“ãŸã‚Šåˆ¤å®šã‚’è¡Œã†
 	bool RectCircleHit(Math::Vector2 a_rectPos, RECT a_rect, Math::Vector2 a_circlePos, float a_circleRadius);
-	// ‹éŒ`‚Æ‹éŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤B
+	// çŸ©å½¢ã¨çŸ©å½¢ã®å½“ãŸã‚Šåˆ¤å®šã‚’è¡Œã†ã€‚
 	bool RectHit(Math::Vector2 a_pos1, RECT a_rect1, Math::Vector2 a_pos2, RECT a_rect2);
+    // è·é›¢ãƒ»ä¸Šä¸‹ã®é‡ãªã‚Šãƒ»å‘ãã ã‘ã‚’èª¿ã¹ã€æ”»æ’ƒã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚„ãƒ€ãƒ¡ãƒ¼ã‚¸ã¯å‘¼ã³å‡ºã—å´ã§ç®¡ç†ã™ã‚‹ã€‚
+    bool CheckAttackHit(const HitBase& attacker, const HitBase& target,
+        float horizontalReach, int facingDirection = 0) const;
 private:
 	RECT CreateRectPos(float a_halfWidth, float a_halfHeight, Math::Vector2 a_pos);
 	bool RectInPos(RECT a_rect, Math::Vector2 a_pos);

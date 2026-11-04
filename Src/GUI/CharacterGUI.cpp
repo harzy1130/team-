@@ -1,88 +1,95 @@
-#include "Pch.h"
+ï»¿#include "Pch.h"
 #include "CharacterGUI.h"
 #include "Player/PlayerBase.h"
 #include "Enemy/EnemyManager.h"
 #include "GameStateManager/GameStateManager.h"
 #include "Map/Map.h"
 
-// Še getter ‚©‚çÅV‚Ì’l‚ğæ“¾‚µAƒvƒŒƒCƒ„[‚Æ“G‚Ìî•ñ‚ğ•À‚×‚Ä•\¦‚·‚éB
+// å„ getter ã‹ã‚‰æœ€æ–°ã®å€¤ã‚’å–å¾—ã—ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨æ•µã®æƒ…å ±ã‚’ä¸¦ã¹ã¦è¡¨ç¤ºã™ã‚‹ã€‚
 void CharacterGUI::Draw(C_PlayerBase& player, EnemyManager& enemies, C_GameStateManager& game, C_Map& map)
 {
     ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
     ImGui::SetNextWindowSize(ImVec2(550, 420), ImGuiSetCond_Once);
-    if (ImGui::Begin(u8"ƒLƒƒƒ‰ƒNƒ^[î•ñ"))
+    if (ImGui::Begin(u8"ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼æƒ…å ±"))
     {
         ImGui::Columns(2, "CharacterStats", true);
 
-        ImGui::TextUnformatted(u8"ƒvƒŒƒCƒ„[");
+        ImGui::TextUnformatted(u8"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼");
         ImGui::Separator();
         ImGui::Text(u8"HP: %.0f / %.0f", player.GetHP(), player.GetMAXHP());
-        ImGui::Text(u8"UŒ‚—Í (ATK): %.0f", player.GetATK());
-        ImGui::Text(u8"–hŒä—Í (DEF): %.0f", player.GetDEF());
-        ImGui::Text(u8"UŒ‚‘¬“x (AS): %.0f", player.GetAS());
-        // MS ‚ÍŠî–{‘¬“x‚Å‚Í‚È‚­AŠù‘¶‚Ì Getter ‚ª•Ô‚·•â³’lB
-        ImGui::Text(u8"ˆÚ“®‘¬“x•â³ (MS): %.1f %%", player.GetMS());
-        ImGui::Text(u8"ƒ‰ƒCƒtƒXƒeƒB[ƒ‹: %.1f", player.GetLifStl());
-        ImGui::Text(u8"ƒNƒŠƒeƒBƒJƒ‹—¦: %.1f %%", player.GetCrtRate());
-        ImGui::Text(u8"ƒNƒŠƒeƒBƒJƒ‹”{—¦: %.1f %%", player.GetCrtDmg());
+        ImGui::Text(u8"æ”»æ’ƒåŠ› (ATK): %.0f", player.GetATK());
+        ImGui::Text(u8"é˜²å¾¡åŠ› (DEF): %.0f", player.GetDEF());
+        ImGui::Text(u8"æ”»æ’ƒé€Ÿåº¦ (AS): %.0f", player.GetAS());
+        // MS ã¯åŸºæœ¬é€Ÿåº¦ã§ã¯ãªãã€æ—¢å­˜ã® Getter ãŒè¿”ã™è£œæ­£å€¤ã€‚
+        ImGui::Text(u8"ç§»å‹•é€Ÿåº¦è£œæ­£ (MS): %.1f %%", player.GetMS());
+        ImGui::Text(u8"ãƒ©ã‚¤ãƒ•ã‚¹ãƒ†ã‚£ãƒ¼ãƒ«: %.1f", player.GetLifStl());
+        ImGui::Text(u8"ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡: %.1f %%", player.GetCrtRate());
+        ImGui::Text(u8"ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«å€ç‡: %.1f %%", player.GetCrtDmg());
         ImGui::Spacing();
         const auto playerPos = player.GetPos();
         const auto playerMove = player.GetMove();
-        ImGui::Text(u8"À•W X: %.1f", playerPos.x);
-        ImGui::Text(u8"À•W Y: %.1f", playerPos.y);
-        ImGui::Text(u8"ˆÚ“®—Ê X: %.1f", playerMove.x);
-        ImGui::Text(u8"ˆÚ“®—Ê Y: %.1f", playerMove.y);
-        ImGui::Text(u8"ó‘Ô: %s", player.GetAFlg() ? u8"¶‘¶" : u8"–³Œø");
-        ImGui::Text(u8"ƒWƒƒƒ“ƒv’†: %s", player.GetJumpFlg() ? u8"‚Í‚¢" : u8"‚¢‚¢‚¦");
+        ImGui::Text(u8"åº§æ¨™ X: %.1f", playerPos.x);
+        ImGui::Text(u8"åº§æ¨™ Y: %.1f", playerPos.y);
+        ImGui::Text(u8"ç§»å‹•é‡ X: %.1f", playerMove.x);
+        ImGui::Text(u8"ç§»å‹•é‡ Y: %.1f", playerMove.y);
+        ImGui::Text(u8"çŠ¶æ…‹: %s", player.GetAFlg() ? u8"ç”Ÿå­˜" : u8"ç„¡åŠ¹");
+        ImGui::Text(u8"ã‚¸ãƒ£ãƒ³ãƒ—ä¸­: %s", player.GetJumpFlg() ? u8"ã¯ã„" : u8"ã„ã„ãˆ");
 
         ImGui::NextColumn();
-        ImGui::TextUnformatted(u8"“G‚Ìî•ñ");
+        ImGui::TextUnformatted(u8"æ•µã®æƒ…å ±");
         ImGui::Separator();
         const int count = static_cast<int>(enemies.GetCount());
-        ImGui::Text(u8"”z’u”: %d / ¶‘¶”: %d", count, static_cast<int>(enemies.GetAliveCount()));
+        ImGui::Text(u8"é…ç½®æ•°: %d / ç”Ÿå­˜æ•°: %d", count, static_cast<int>(enemies.GetAliveCount()));
         m_selectedEnemy = count > 0 ? std::max(0, std::min(m_selectedEnemy, count - 1)) : 0;
-        if (count > 1) ImGui::SliderInt(u8"•\¦‚·‚é“G", &m_selectedEnemy, 0, count - 1);
+        if (count > 1) ImGui::SliderInt(u8"è¡¨ç¤ºã™ã‚‹æ•µ", &m_selectedEnemy, 0, count - 1);
         enemies.SetDebugEnemy(static_cast<std::size_t>(m_selectedEnemy));
-        const Enemy1* enemy = enemies.GetEnemy1(static_cast<std::size_t>(m_selectedEnemy));
+        const EnemyBase* enemy = enemies.GetEnemy(static_cast<std::size_t>(m_selectedEnemy));
         if (enemy != nullptr)
         {
             ImGui::Text("HP: %d", enemy->GetHp());
-            ImGui::Text(u8"UŒ‚—Í (ATK): %d", enemy->GetAtk());
-            ImGui::Text(u8"„‰ñ‘¬“x: %.1f px/frame", enemy->GetMoveSpeed());
+            ImGui::Text(u8"æ”»æ’ƒåŠ› (ATK): %d", enemy->GetAtk());
+            ImGui::Text(u8"å·¡å›é€Ÿåº¦: %.1f px/frame", enemy->GetMoveSpeed());
             const auto enemyPos = enemy->GetPos();
-            ImGui::Text(u8"À•W X: %.1f", enemyPos.x);
-            ImGui::Text(u8"À•W Y: %.1f", enemyPos.y);
-            ImGui::Text(u8"‘«Œ³ Y: %.1f", enemy->GetHitBottom());
-            ImGui::Text(u8"ó‘Ô: %s", enemy->GetAlive() ? u8"¶‘¶" : u8"€–S");
-            ImGui::Text(u8"”íƒ_ƒ[ƒW’†: %s", enemy->IsHurt() ? u8"‚Í‚¢" : u8"‚¢‚¢‚¦");
-            ImGui::Text(u8"–³“GŠÔ’†: %s", enemy->IsInvincible() ? u8"‚Í‚¢" : u8"‚¢‚¢‚¦");
-            ImGui::Text(u8"ŠJ–‹ƒXƒLƒ‹g—pÏ‚İ: %s", enemy->HasUsedOpening() ? u8"‚Í‚¢" : u8"‚¢‚¢‚¦");
+            ImGui::Text(u8"åº§æ¨™ X: %.1f", enemyPos.x);
+            ImGui::Text(u8"åº§æ¨™ Y: %.1f", enemyPos.y);
+            ImGui::Text(u8"è¶³å…ƒ Y: %.1f", enemy->GetHitBottom());
+            ImGui::Text(u8"çŠ¶æ…‹: %s", enemy->GetAlive() ? u8"ç”Ÿå­˜" : u8"æ­»äº¡");
+            ImGui::Text(u8"è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸ä¸­: %s", enemy->IsHurt() ? u8"ã¯ã„" : u8"ã„ã„ãˆ");
+            ImGui::Text(u8"ç„¡æ•µæ™‚é–“ä¸­: %s", enemy->IsInvincible() ? u8"ã¯ã„" : u8"ã„ã„ãˆ");
+            if (const auto* scorpion = dynamic_cast<const Enemy2*>(enemy))
+            {
+                ImGui::TextUnformatted(u8"ç¨®é¡: è åº§ï¼ˆé è·é›¢ï¼‰");
+                ImGui::Text(u8"å¾Œæ–¹è·³èºä½¿ç”¨æ¸ˆã¿: %s", scorpion->HasUsedRetreat() ? u8"ã¯ã„" : u8"ã„ã„ãˆ");
+                ImGui::Text(u8"ç™ºå°„ä¸­ã®å¼¾: %d", static_cast<int>(scorpion->GetProjectileCount()));
+            }
+            else if (const auto* goat = dynamic_cast<const Enemy1*>(enemy))
+                ImGui::Text(u8"é–‹å¹•ã‚¹ã‚­ãƒ«ä½¿ç”¨æ¸ˆã¿: %s", goat->HasUsedOpening() ? u8"ã¯ã„" : u8"ã„ã„ãˆ");
             ImGui::Spacing();
-            ImGui::TextUnformatted(u8"H: ‘I‘ğ’†‚Ì“G‚É25ƒ_ƒ[ƒWiƒeƒXƒgj");
+            ImGui::TextUnformatted(u8"H: é¸æŠä¸­ã®æ•µã«25ãƒ€ãƒ¡ãƒ¼ã‚¸ï¼ˆãƒ†ã‚¹ãƒˆï¼‰");
         }
-        else ImGui::TextUnformatted(u8"‚±‚ÌƒXƒe[ƒW‚É‚Í“G‚ª”z’u‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
-        ImGui::TextUnformatted(u8"1 + E ‚ÅV‚½‚É“G‚ğ”z’uB");
+        else ImGui::TextUnformatted(u8"ã“ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã«ã¯æ•µãŒé…ç½®ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
+        ImGui::TextUnformatted(u8"1 + E ã§æ–°ãŸã«æ•µã‚’é…ç½®ã€‚");
 
         ImGui::Columns(1);
 
         ImGui::Columns(2, "", true);
         ImGui::Separator();
-        ImGui::TextUnformatted(u8"ƒQ[ƒ€‚Ìó‘Ô");
-        if (game.GetGameState() == GameState::Title)ImGui::Text(u8"ƒ^ƒCƒgƒ‹");
-        if (game.GetGameState() == GameState::Select)ImGui::Text(u8"ƒZƒŒƒNƒg");
-        if (game.GetGameState() == GameState::Game)ImGui::Text(u8"ƒQ[ƒ€");
+        ImGui::TextUnformatted(u8"ã‚²ãƒ¼ãƒ ã®çŠ¶æ…‹");
+        if (game.GetGameState() == GameState::Title)ImGui::Text(u8"ã‚¿ã‚¤ãƒˆãƒ«");
+        if (game.GetGameState() == GameState::Select)ImGui::Text(u8"ã‚»ãƒ¬ã‚¯ãƒˆ");
+        if (game.GetGameState() == GameState::Game)ImGui::Text(u8"ã‚²ãƒ¼ãƒ ");
 
         ImGui::Spacing();
         ImGui::Spacing();
-        ImGui::Text(u8"T: ƒ^ƒCƒgƒ‹\nR: ƒZƒŒƒNƒgƒXƒe[ƒW\n1: ƒeƒXƒgƒXƒe[ƒW ");
+        ImGui::Text(u8"T: ã‚¿ã‚¤ãƒˆãƒ«\nR: ã‚»ãƒ¬ã‚¯ãƒˆã‚¹ãƒ†ãƒ¼ã‚¸\n1: ãƒ†ã‚¹ãƒˆã‚¹ãƒ†ãƒ¼ã‚¸ ");
 
         ImGui::NextColumn();
-        ImGui::TextUnformatted(u8"Œ»İ‚ÌƒXƒe[ƒW");
-        if (map.GetStageNum() == StageNum::stage1)ImGui::Text(u8"ƒXƒe[ƒW‚P");
-        if (map.GetStageNum() == StageNum::stage2)ImGui::Text(u8"ƒXƒe[ƒW‚Q");
-        if (map.GetStageNum() == StageNum::stageSelect)ImGui::Text(u8"ƒZƒŒƒNƒgƒXƒe[ƒW");
-        if (map.GetStageNum() == StageNum::Test)ImGui::Text(u8"ƒeƒXƒgƒXƒe[ƒW");
+        ImGui::TextUnformatted(u8"ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸");
+        if (map.GetStageNum() == StageNum::stage1)ImGui::Text(u8"ã‚¹ãƒ†ãƒ¼ã‚¸ï¼‘");
+        if (map.GetStageNum() == StageNum::stage2)ImGui::Text(u8"ã‚¹ãƒ†ãƒ¼ã‚¸ï¼’");
+        if (map.GetStageNum() == StageNum::stageSelect)ImGui::Text(u8"ã‚»ãƒ¬ã‚¯ãƒˆã‚¹ãƒ†ãƒ¼ã‚¸");
+        if (map.GetStageNum() == StageNum::Test)ImGui::Text(u8"ãƒ†ã‚¹ãƒˆã‚¹ãƒ†ãƒ¼ã‚¸");
     }
-    // Begin ‚ª false ‚Ìê‡‚àA‘Î‰‚·‚é End ‚Í•K‚¸ŒÄ‚Ño‚·B
+    // Begin ãŒ false ã®å ´åˆã‚‚ã€å¯¾å¿œã™ã‚‹ End ã¯å¿…ãšå‘¼ã³å‡ºã™ã€‚
     ImGui::End();
 }
