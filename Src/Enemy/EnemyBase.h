@@ -1,26 +1,27 @@
-#pragma once
+ï»¿#pragma once
 #include "hit/HitBase.h"
+
 
 class C_Map;
 
-// ¶‰E‚É„‰ñ‚·‚é“GB‹¤’Ê‚Ì“–‚½‚è”»’èƒf[ƒ^‚Í HitBase ‚ğg—p‚·‚éB
+// å·¦å³ã«å·¡å›ã™ã‚‹æ•µã€‚å…±é€šã®å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ã¯ HitBase ã‚’ä½¿ç”¨ã™ã‚‹ã€‚
 class EnemyBase  : public HitBase
 {
 public:
 
     EnemyBase();
 
-    // speed ‚ÍŒÅ’èXV 1 ‰ñ‚ ‚½‚è‚ÌˆÚ“®—ÊiƒsƒNƒZƒ‹j‚ğ•\‚·B
-    // ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚½ê‡‚Í false ‚ğ•Ô‚·B
+    // speed ã¯å›ºå®šæ›´æ–° 1 å›ã‚ãŸã‚Šã®ç§»å‹•é‡ï¼ˆãƒ”ã‚¯ã‚»ãƒ«ï¼‰ã‚’è¡¨ã™ã€‚
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ãŸå ´åˆã¯ false ã‚’è¿”ã™ã€‚
     bool Init(C_Hit* a_pHit = nullptr, C_Camera* a_pCamera = nullptr, float x = 0.0f, float y = 0.0f,
         float leftX = -200.0f, float rightX = 200.0f,
         float speed = 2.0f, const char* texturePath = "Texture/Chara.png");
     void Update();
     void CalcMat();
-    void Draw();
-    void Release();
+    virtual void Draw();
+    virtual void Release();
 
-    // ¶‘¶’†‚Ìƒ^[ƒQƒbƒg‚ğİ’è‚·‚éBƒvƒŒƒCƒ„[‚ª€–S‚µ‚½ê‡‚Í nullptr ‚ğ“n‚·B
+    // ç”Ÿå­˜ä¸­ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¨­å®šã™ã‚‹ã€‚ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ­»äº¡ã—ãŸå ´åˆã¯ nullptr ã‚’æ¸¡ã™ã€‚
     void SetTarget(const HitBase* target) { m_target = target; }
     void SetVisionMap(C_Map* map) { m_visionMap = map; }
     void SetVision(float range, float fullAngleDegrees, float loseDistance);
@@ -28,10 +29,10 @@ public:
     bool IsChasing() const { return m_chasing; }
     void ResetAwareness() { m_target = nullptr; m_chasing = false; }
     void DrawVision();
-    // Œ»İ‚ÌƒXƒe[ƒW‚Ì’n–Êã‚ÖÄ”z’u‚µAˆÈ‘O‚Ì—‰º‘¬“x‚ğƒŠƒZƒbƒg‚·‚éB
+    // ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã®åœ°é¢ä¸Šã¸å†é…ç½®ã—ã€ä»¥å‰ã®è½ä¸‹é€Ÿåº¦ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã€‚
     bool PlaceOnMap(C_Map* map);
 
-    // €–S’†E–³“G’†Eƒ_ƒ[ƒW‚ª 0 ˆÈ‰º‚Ìê‡‚Í false ‚ğ•Ô‚·B
+    // æ­»äº¡ä¸­ãƒ»ç„¡æ•µä¸­ãƒ»ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒ 0 ä»¥ä¸‹ã®å ´åˆã¯ false ã‚’è¿”ã™ã€‚
     bool TakeDamage(int damage, float attackFromX);
     bool IsInvincible() const { return m_invincibleFrames > 0; }
     bool IsHurt() const { return m_hurtFrames > 0; }
@@ -48,14 +49,21 @@ public:
 
 
 protected:
-    // ŒÅ—Ls“®‚ÌˆÚ“®‚àA‹¤’Ê‚Ìd—ÍE’nŒ`Õ“Ëˆ—‚Å•â³‚·‚éB
-    // Šî’êƒNƒ‰ƒX©‘Ì‚É‚ÍUŒ‚ƒXƒLƒ‹‚ğ‚½‚¹‚È‚¢B
+    // è¡¨ç¤ºã ã‘ã‚’å…±é€šåŒ–ã—ã€ç¨®é¡ã”ã¨ã®ã‚³ãƒé¸æŠã¯æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã«ä»»ã›ã‚‹ã€‚
+    KdTexture& GetSpriteTexture() { return m_texture; }
+    void DrawSpriteFrame(const Math::Rectangle& source, int width, int height,
+        bool sourceFacesLeft, int bottomPadding);
+    // å›ºæœ‰è¡Œå‹•ã®ç§»å‹•ã‚‚ã€å…±é€šã®é‡åŠ›ãƒ»åœ°å½¢è¡çªå‡¦ç†ã§è£œæ­£ã™ã‚‹ã€‚
+    // åŸºåº•ã‚¯ãƒ©ã‚¹è‡ªä½“ã«ã¯æ”»æ’ƒã‚¹ã‚­ãƒ«ã‚’æŒãŸã›ãªã„ã€‚
     virtual bool GetActionMove(float& horizontalMove) { return false; }
+    // å›ºæœ‰æŠ€èƒ½ã®è·³èºã¨å°„ç·šç¢ºèªã ã‘ã‚’å…±é€šã®åœ°å½¢å‡¦ç†ã¸æ¥ç¶šã™ã‚‹ã€‚
+    void StartJump(float speed);
+    bool HasLineOfSight(const HitBase& target, float range) const;
     bool IsGrounded() const { return m_bHitRect.bottom; }
     void FaceDirection(int direction) { m_direction = direction < 0 ? -1 : 1; }
 
 private:
-    // d—Í‚Æ’nŒ`Õ“Ë‚ğˆ—‚µ‚ÄˆÚ“®‚ğˆê“x‚¾‚¯“K—p‚µA‰¡•ûŒü‚ÌÕ“ËŒ‹‰Ê‚ğ•Ô‚·B
+    // é‡åŠ›ã¨åœ°å½¢è¡çªã‚’å‡¦ç†ã—ã¦ç§»å‹•ã‚’ä¸€åº¦ã ã‘é©ç”¨ã—ã€æ¨ªæ–¹å‘ã®è¡çªçµæœã‚’è¿”ã™ã€‚
     bool MoveWithCollision(float horizontalMove);
     float TraceVision(float directionX, float directionY, float distance) const;
     bool CanSeeTarget() const;
@@ -63,7 +71,7 @@ private:
     C_Map* m_visionMap = nullptr;
     bool m_chasing = false;
     float m_visionRange = 320.0f;
-    float m_visionHalfAngle = 0.523598776f; // ‹–ì‚Ì‘SŠp‚Í 60 “x
+    float m_visionHalfAngle = 0.523598776f; // è¦–é‡ã®å…¨è§’ã¯ 60 åº¦
     float m_loseDistance = 560.0f;
     float m_chaseSpeed = 4.0f;
     KdTexture m_texture;
@@ -71,13 +79,13 @@ private:
     Math::Matrix m_mat;
     bool m_bAlive = false;
     float m_spawnX = 0.0f;
-    float m_spawnSearchY = 0.0f; // ‚±‚Ì‚‚³‚æ‚è‰º‚É‚ ‚é’n–Ê‚ğ’T‚·B
+    float m_spawnSearchY = 0.0f; // ã“ã®é«˜ã•ã‚ˆã‚Šä¸‹ã«ã‚ã‚‹åœ°é¢ã‚’æ¢ã™ã€‚
     float m_leftX = -200.0f;
     float m_rightX = 200.0f;
     int m_hp = 100;
     int m_atk = 10;
     float m_moveSpeed = 2.0f;
-    int m_direction = 1; // 1: ‰EŒü‚«A-1: ¶Œü‚«
+    int m_direction = 1; // 1: å³å‘ãã€-1: å·¦å‘ã
     int m_invincibleFrames = 0;
     int m_hurtFrames = 0;
     float m_knockbackX = 0.0f;
