@@ -14,11 +14,11 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_bJump = false;
 	//基本ステータス
 	m_Level = 1;
-	m_MAXHP = 100;
-	m_HP = m_MAXHP;
-	m_DEF = 50;
-	m_ATK = 80;
-	m_AS = 1.2;
+	m_MaxHp = 100;
+	m_Hp = m_MaxHp;
+	m_Def = 50;
+	m_Atk = 80;
+	m_AtkSpeed = 1.2;
 	//特殊ステータスd
 	m_LifStl = 0;
 	m_MSUP = 0;
@@ -68,6 +68,10 @@ void C_Player1::Update()
 	m_pHit->EnemyHitCheck(this);
 	m_pHit->BossHitCheck(this);
 
+	//経験値とステータス更新
+	ExpUpdate();
+	StatusUpdate();
+
 	//座標確定
 	m_pos += m_move;
 	m_AtkPos = { m_pos.x + (m_scale.x * 55),m_pos.y };
@@ -91,6 +95,5 @@ void C_Player1::Draw()
 	SHADER.m_spriteShader.DrawTex(
 		m_pTex, Math::Rectangle(600*(int)m_moveAnimCount, 600*m_moveMode, 600, 600), 1.0f);
 	DrawHitBox();
-	//DrawAtk();
 	m_sword.Draw();
 }

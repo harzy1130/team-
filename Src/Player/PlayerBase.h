@@ -38,11 +38,11 @@ public:
 	virtual bool GetJumpFlg()final { return m_bJump; }
 	virtual float GetScaleX()final { return m_scale.x; }
 	//基本ステータス
-	virtual float GetHP()final { return m_HP; }
-	virtual float GetMAXHP()final { return m_MAXHP; }
-	virtual float GetDEF()final { return m_DEF; }
-	virtual float GetATK()final { return m_ATK; }
-	virtual float GetAS()final { return m_AS; }
+	virtual float GetHP()final { return m_Hp; }
+	virtual float GetMAXHP()final { return m_MaxHp; }
+	virtual float GetDEF()final { return m_Def; }
+	virtual float GetATK()final { return m_Atk; }
+	virtual float GetAS()final { return m_AtkSpeed; }
 	//特殊ステータス
 	virtual float GetLifStl()final { return m_LifStl; }
 	virtual float GetMS()final { return m_MSUP; }
@@ -69,11 +69,11 @@ public:
 	virtual void SetJumpFlg(bool a_flg)final { m_bJump = a_flg; }
 
 	//基本ステータス
-	virtual void SetHP(float a_HP)final { m_HP = a_HP; }
-	virtual void SetMAXHP(float a_MAXHP)final { m_MAXHP = a_MAXHP; }
-	virtual void SetDEF(float a_DEF)final { m_DEF = a_DEF; }
-	virtual void SetATK(float a_ATK)final { m_ATK = a_ATK; }
-	virtual void SetAS(float a_AS)final { m_AS = a_AS; }
+	virtual void SetHP(float a_HP)final { m_Hp = a_HP; }
+	virtual void SetMAXHP(float a_MAXHP)final { m_MaxHp = a_MAXHP; }
+	virtual void SetDEF(float a_DEF)final { m_Def = a_DEF; }
+	virtual void SetATK(float a_ATK)final { m_Atk = a_ATK; }
+	virtual void SetAS(float a_AS)final { m_AtkSpeed = a_AS; }
 	//特殊ステータス
 	virtual void SetLifStl(float a_LS)final { m_LifStl = a_LS; }
 	virtual void SetMS(float a_MS)final { m_MSUP = a_MS; }
@@ -113,13 +113,27 @@ protected:
 	Math::Matrix m_rotMat;
 	float m_angle;
 
+	//ステータス
+	int m_Level=1;
+	int m_Exp = 0;
+	int m_NextLvExp = 100;
+	int m_ExpUp = 30;
+	int m_Hp;		//現在体力
+	int m_MaxHp;	//最大体力
+	float m_Def;	//防御力
+	float m_Atk;	//攻撃力
+	float m_AtkSpeed;//攻撃速度
+
 	//基礎ステータス
-	int m_Level;
-	float m_HP;		//現在体力
-	float m_MAXHP;	//最大体力
-	float m_DEF;	//防御力
-	float m_ATK;	//攻撃力
-	float m_AS;		//攻撃速度
+	int m_baseHp=100;
+	float m_baseAtk=30;
+	float m_baseDef=5;
+
+	//１レベルごとのステータス上昇値
+	int m_LevelUpHp = 10;
+	float m_LevelUpAtk = 4;
+	float m_LevelUpDef = 4;
+	float m_LevelUpAtkSpeedP = 0.03f;
 
 	//特殊ステータス
 	float m_LifStl;		//ライフスティール
@@ -167,12 +181,17 @@ protected:
 	//アニメーション
 	virtual void AnimationUpdate()final;
 
-
 	//攻撃
 	virtual void PlayerAtk();
 	virtual void InitAtk();
 	virtual void UpdateAtk();
 	virtual void DrawAtk();
+
+	//経験値処理
+	virtual void ExpUpdate()final;
+
+	//ステータス処理
+	virtual void StatusUpdate()final;
 
 	//スキル用
 	C_Skill m_skill;

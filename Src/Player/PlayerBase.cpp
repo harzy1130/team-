@@ -13,11 +13,11 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_speed = 10;
 	m_bJump = false;
 	//基本ステータス
-	m_MAXHP = 100;
-	m_HP = m_MAXHP;
-	m_DEF = 50;
-	m_ATK = 80;
-	m_AS = 1.3;
+	m_MaxHp = 100;
+	m_Hp = m_MaxHp;
+	m_Def = 50;
+	m_Atk = 80;
+	m_AtkSpeed = 1.3;
 	//特殊ステータスd
 	m_LifStl = 0;
 	m_MSUP = 0;
@@ -103,7 +103,7 @@ void C_PlayerBase::HPRegeneCalc()
 	}
 	if (m_HPRegeneCD > 0)return;
 
-	m_HP += m_HPRegene;
+	m_Hp += m_HPRegene;
 	m_HPRegeneCD = 60;
 	return;
 }
@@ -112,11 +112,11 @@ void C_PlayerBase::HPRegeneCalc()
 float C_PlayerBase::CrtDmgCalc()
 {
 	if (rand() % 100 + 1 <= m_CrtRate) {
-		return m_ATK * (m_CrtDmgP / 100);
+		return m_Atk * (m_CrtDmgP / 100);
 	}
 	else
 	{
-		return m_ATK;
+		return m_Atk;
 	}
 }
 
@@ -129,7 +129,7 @@ float C_PlayerBase::MoveSpeedCalc(float a_speed, float a_MS)
 //攻撃速度計算
 float C_PlayerBase::AtkSpeedCalc()
 {
-	return 60/(m_AS + (m_AS * m_IncreasedASP/100));
+	return 60/(m_AtkSpeed + (1 + m_LevelUpAtkSpeedP * (m_Level - 1))) + (m_AtkSpeed * m_IncreasedASP/100);
 }
 
 //キー操作
@@ -269,13 +269,34 @@ void C_PlayerBase::DrawAtk()
 
 }
 
+void C_PlayerBase::ExpUpdate()
+{
+	if (m_Exp >= m_NextLvExp+m_ExpUp*(m_Level-1))
+	{
+		m_Level++;
+		m_Exp -= m_NextLvExp;
+		//ステータス上昇
+		m_Hp = m_LevelUpHp;
+	}
+}
+
+void C_PlayerBase::StatusUpdate()
+{
+	//HPリジェネ
+	HPRegeneCalc();
+
+	m_MaxHp = m_baseHp + (m_Level - 1) * m_LevelUpHp;
+	m_Atk = m_baseAtk + (m_Level - 1) * m_LevelUpAtk;
+	m_Def = m_baseDef + (m_Level - 1) * m_LevelUpDef;
+}
+
 bool C_PlayerBase::TakeDamage(float rawDamage)
 {
-    if (!m_bAlive || m_HP <= 0.0f || m_damageInvincibleFrames > 0 || !std::isfinite(rawDamage) || !(rawDamage > 0.0f) || !std::isfinite(m_DEF)) return false;
-    const float damage = DefCalc(rawDamage, std::max(0.0f, m_DEF), 0.0f);
-    m_HP = std::max(0.0f, m_HP - damage);
+    if (!m_bAlive || m_Hp <= 0 || m_damageInvincibleFrames > 0 || !std::isfinite(rawDamage) || !(rawDamage > 0) || !std::isfinite(m_Def)) return false;
+    const float damage = DefCalc(rawDamage, std::max(0.0f, m_Def), 0.0f);
+    m_Hp = std::max(0, m_Hp - (int)damage);
     m_damageInvincibleFrames = 30;
-    if (m_HP == 0.0f)
+    if (m_Hp == 0)
     {
         m_bAlive = false;
         m_move = { 0.0f, 0.0f };
