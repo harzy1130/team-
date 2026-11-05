@@ -106,7 +106,7 @@ void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer)
 	m_size = 0.5;
 	m_animationWait = 8;
 	m_scale = {m_size, m_size };
-	if (LoadHitBox("Src/Boss/CapricornHitBox.csv"));
+	if (LoadHitBox("Capricorn"));
 	m_hp = 500;
 	m_atk = 10;
 	m_moveSpeed = 5.0f;

@@ -215,12 +215,12 @@ void HitBase::ApplyMove()
     m_pos += m_move;
     m_move = Math::Vector2(0.0f, 0.0f);
 }
-
+// ファイル名はHitBase.csvを除いて指定する。例：CapricornHitBox.csv -> "Capricorn"
 bool HitBase::LoadHitBox(const std::string& a_filePath)
 {
 	using namespace std;
 	//ifstream・・・ファイル入力を操作するクラス
-	ifstream ifs(a_filePath);
+    ifstream ifs("Src/Hit/HitBox/" + a_filePath + "HitBox.csv");
 	//開く
 	if (!ifs.is_open())
         return false;
