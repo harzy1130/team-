@@ -1,6 +1,7 @@
 #pragma once
 #include"GameStateManager/GameStateManager.h"
 #include "GUI/CharacterGUI.h"
+#include "Particle/ParticleManager.h"
 #include"Boss/Boss.h"
 #include"Enemy/EnemyManager.h"
 #include"Player/Player1.h"
@@ -21,6 +22,7 @@ private:
 	KdTexture m_blackTex;
 
 	C_GameStateManager m_game;
+	C_ParticleManager m_particle;
 	C_Player1 m_player;
 	C_Boss m_boss;
 	EnemyManager m_enemies;

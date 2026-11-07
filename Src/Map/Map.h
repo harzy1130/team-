@@ -26,6 +26,7 @@ public:
 
 	//first‚ª‰¡Asecond‚ªc
 	std::pair<int, int> GetIndex(Math::Vector2 a_pos);
+	std::pair<int, int> GetIndex(float x, float y);
 	std::pair<int, int> GetIdxMaxMin() { return std::make_pair(MAP_WIDTH - 1, MAP_HEIGHT - 1); }
 
 private:
