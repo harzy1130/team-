@@ -10,7 +10,8 @@ public:
 
 	void Init(C_Player1* player,C_Hit* a_pHit, C_Camera* a_pCamera);
 	void Update();
-	void Draw() { DrawHitBox(); }
+	void MatrixUpdate();
+	void Draw(KdTexture*a_pTex); 
 
 	//éQè∆ÉNÉâÉXset
 	void SetPlayer(C_Player1* player) { m_pPlayer = player; }
@@ -24,9 +25,13 @@ private:
 	Math::Vector2 m_gap;
 	bool m_bAtkHit = false;
 
+	Math::Matrix m_AtkMat;
+	Math::Matrix m_AtkTransMat;
+	Math::Matrix m_AtkScaleMat;
+
 	C_Player1* m_pPlayer = nullptr;
 	C_Camera* m_pCamera = nullptr;
 	C_Hit* m_pHit = nullptr;
-	
+
 };
 

@@ -14,7 +14,7 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_bJump = false;
 	//基本ステータス
 	m_Level = 1;
-	m_MaxHp = 100;
+	m_MaxHp = 1000;
 	m_Hp = m_MaxHp;
 	m_Def = 50;
 	m_Atk = 80;
@@ -87,13 +87,14 @@ void C_Player1::Update()
 
 void C_Player1::Draw()
 {
+	
 	if (!m_bAlive)return;
 	if (m_damageInvincibleFrames > 0 && (m_damageInvincibleFrames / 4) % 2 == 0) return;
 	//カメラ座標修正
-
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(
 		m_pTex, Math::Rectangle(600*(int)m_moveAnimCount, 600*m_moveMode, 600, 600), 1.0f);
+	//DrawAtk();
 	DrawHitBox();
-	m_sword.Draw();
+	m_sword.Draw(m_pAtkTex);
 }

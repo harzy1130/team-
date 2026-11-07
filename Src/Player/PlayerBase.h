@@ -155,7 +155,9 @@ protected:
 	float m_atkAnimCount;
 	bool m_bAtk;
 
-	
+	//防御用変数
+	bool m_bDef;
+
 	//参照するクラスのポインタ
 	C_Hit* m_pHit;
 	C_Camera* m_pCamera;
@@ -186,6 +188,10 @@ protected:
 	virtual void InitAtk();
 	virtual void UpdateAtk();
 	virtual void DrawAtk();
+
+	//防御
+	virtual void PlayerDef();
+	virtual	void UpdateDef();
 
 	//経験値処理
 	virtual void ExpUpdate()final;

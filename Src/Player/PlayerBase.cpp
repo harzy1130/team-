@@ -129,7 +129,7 @@ float C_PlayerBase::MoveSpeedCalc(float a_speed, float a_MS)
 //攻撃速度計算
 float C_PlayerBase::AtkSpeedCalc()
 {
-	return 60/(m_AtkSpeed + (1 + m_LevelUpAtkSpeedP * (m_Level - 1))) + (m_AtkSpeed * m_IncreasedASP/100);
+	return 60/(m_AtkSpeed + (m_AtkSpeed*m_LevelUpAtkSpeedP * (m_Level - 1))) + (m_AtkSpeed * m_IncreasedASP/100);
 }
 
 //キー操作
@@ -138,7 +138,7 @@ void C_PlayerBase::PlayerInput()
 	if (!m_bAlive)return;
 	if ((GetAsyncKeyState(VK_RIGHT) & 0x8000)||(GetAsyncKeyState('D') & 0x8000))
 	{
-		if (m_moveMode != E_MoveMode::attacking)
+		if (m_moveMode != E_MoveMode::attacking&&m_moveMode != E_MoveMode::defense)
 		{
 			m_move.x += m_moveSpeed;
 			m_moveMode = E_MoveMode::run;
@@ -148,7 +148,7 @@ void C_PlayerBase::PlayerInput()
 	}
 	if ((GetAsyncKeyState(VK_LEFT) & 0x8000) || (GetAsyncKeyState('A') & 0x8000))
 	{
-		if (m_moveMode != E_MoveMode::attacking)
+		if (m_moveMode != E_MoveMode::attacking&&m_moveMode != E_MoveMode::defense)
 		{
 			m_move.x -= m_moveSpeed;
 			m_moveMode = E_MoveMode::run;
@@ -165,11 +165,22 @@ void C_PlayerBase::PlayerInput()
 	if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
 		m_skill.SkillActivation(this);
 	}
-	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000&& m_AttackDelay==0)
+	{
+		// 左クリック時の処理
+		if (m_moveMode == E_MoveMode::defense)return;
 		PlayerAtk();
 		m_moveMode = E_MoveMode::attacking;
 	}
-	if(GetAsyncKeyState('L') & 0x8000) {
+	if (GetAsyncKeyState(VK_RBUTTON) & 0x8000)
+	{
+		// 右クリック時の処理
+		if (m_moveMode == E_MoveMode::attacking)return;
+		PlayerDef();
+		m_moveMode = E_MoveMode::defense;
+	}
+	if(GetAsyncKeyState('L') & 0x8000)
+	{
 		ResetAlreadyHit();
 	}
 }
@@ -208,7 +219,7 @@ void C_PlayerBase::AnimationUpdate()
 	{
 		m_moveAnimCount = m_atkAnimCount;
 	}
-	if (m_move.x == 0 && m_moveMode != E_MoveMode::attacking)
+	if (m_move.x == 0 && m_moveMode != E_MoveMode::attacking && m_moveMode != E_MoveMode::defense)
 	{
 		m_moveMode = E_MoveMode::stand;
 	}
@@ -219,7 +230,15 @@ void C_PlayerBase::AnimationUpdate()
 	if (m_moveAnimCount >= 8 && m_moveMode == E_MoveMode::run) m_moveAnimCount = 0;
 	if (m_moveAnimCount >= 3 && m_moveMode == E_MoveMode::stand) m_moveAnimCount = 0;
 	//if (m_moveAnimCount >= 4 && m_moveMode == E_MoveMode::attacking) m_moveAnimCount = 0;
-	if (m_moveAnimCount >= 4 && m_moveMode == E_MoveMode::defense) m_moveAnimCount = 0;
+	if (m_moveAnimCount >= 4 && m_moveMode == E_MoveMode::defense && !(GetAsyncKeyState(VK_RBUTTON) & 0x8000))
+	{
+		m_moveMode = E_MoveMode::stand;
+		m_moveAnimCount = 0;
+	}
+	else if (m_moveAnimCount >= 4 &&m_moveMode == E_MoveMode::defense)
+	{
+		m_moveAnimCount = 3.8;
+	}
 }
 
 //通常攻撃
@@ -250,6 +269,7 @@ void C_PlayerBase::UpdateAtk()
 		m_atkAnimCount = 0;
 		
 	}
+	if (!m_bAtk)return;
 	m_atkAnimCount = (4 - m_AttackDelay / AtkSpeedCalc() * 4) * 2.0f;
 	if (m_atkAnimCount >= 4)
 	{
@@ -262,11 +282,22 @@ void C_PlayerBase::UpdateAtk()
 
 void C_PlayerBase::DrawAtk()
 {
-	if (!m_bAlive)return;
+	if (!m_bAtk)return;
 	SHADER.m_spriteShader.SetMatrix(m_AtkMat);
 	SHADER.m_spriteShader.DrawTex(
-		m_pAtkTex, Math::Rectangle(64*(int)m_atkAnimCount, 0, 64, 64), 1.0f);
+		m_pAtkTex, Math::Rectangle(0, 0, 64, 64), 1.0f);
 
+}
+
+//防御処理
+void C_PlayerBase::PlayerDef()
+{
+	m_bDef = true;
+}
+
+void C_PlayerBase::UpdateDef()
+{
+	m_bDef = false;
 }
 
 void C_PlayerBase::ExpUpdate()
