@@ -11,6 +11,7 @@ void Scene::Draw2D()
 	{
 		m_map.Draw();
 		m_player.Draw();
+		m_particle.Draw();
 		if (inGame)
 		{
 			m_enemies.Draw();
@@ -31,6 +32,7 @@ void Scene::Update()
 		m_camera.Update();
 		m_map.Update();
 		m_player.Update();
+		m_particle.Update();
 		m_camera.SetTurget(m_player.GetPos());
 	}
 	m_enemies.Update(m_player.GetAFlg() ? &m_player : nullptr, inGame);
@@ -54,12 +56,14 @@ void Scene::Init()
 	m_player.SetTex(&m_player1Tex);
 	m_player.SetAtkTex(&m_playerAtkTex);
 	m_game.SetTexture(&m_blackTex, &m_backTex);
+	m_particle.SetTexture(&m_chipTex);
 	m_camera.Init();
 
 	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera, &m_cursor);
 	m_boss.Init(&m_hit, &m_camera,&m_player);
     m_hit.Init(&m_map, &m_enemies, &m_boss, &m_player);
+	m_particle.Init(&m_map, &m_player, &m_camera);
     if (!m_enemies.Init(&m_hit, &m_camera, &m_map))
         OutputDebugStringA("Enemy manager initialization failed.\n");
 	

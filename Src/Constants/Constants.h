@@ -49,8 +49,9 @@ struct S_ChipData
 
 const enum MapChip
 {
-	dirt  = 1,
+	dirt = 1,
 	glass = 2,
+	stone = 3,
 	gate1 = 10,
 	gate2 = 11,
 };
@@ -106,3 +107,22 @@ struct S_RectObjects {
 //カメラ移動定数==============================
 
 static const float CAMERA_SPEED = 0.1f;
+
+//パーティクル定数============================
+
+struct S_ParticleObjects
+{
+	Math::Vector2 pos;
+	Math::Vector2 move;
+	Math::Vector2 draw;
+	Math::Vector2 scale;
+	Math::Color	  color;
+	Math::Matrix  mat;
+	Math::Matrix  sMat;
+	Math::Matrix  rMat;
+	Math::Matrix  tMat;
+	float		  size;
+	float		  m_lifeSpan;
+	float		  m_alpha;
+	int			  data;
+};

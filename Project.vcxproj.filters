@@ -79,6 +79,9 @@
     <Filter Include="Src\Effect">
       <UniqueIdentifier>{b62e6a21-75f1-40cf-97f1-079f86a47c1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Particle">
+      <UniqueIdentifier>{127778c1-daa6-47e1-8276-2395e438c971}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -237,6 +240,9 @@
     <ClInclude Include="Src\Player\Sword.h">
       <Filter>Src\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Particle\ParticleManager.h">
+      <Filter>Src\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -352,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="Src\Player\Sword.cpp">
       <Filter>Src\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Particle\ParticleManager.cpp">
+      <Filter>Src\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
