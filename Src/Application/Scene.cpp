@@ -18,6 +18,7 @@ void Scene::Draw2D()
 			m_enemies.DrawVision();
 			m_boss.Draw();
 		}
+		m_ui.Draw();
 	}
 	m_game.SceneTransDraw();
 }
@@ -42,22 +43,26 @@ void Scene::Update()
 
 void Scene::Init()
 {
-	m_game.Init(&m_map, &m_player);
 
-	m_backTex.Load("Texture/back1.png");
-	m_chipTex.Load("Texture/MapChip.png");
-	m_bossTex.Load("Texture/Capricorn.png");
-	m_playerTex.Load("Texture/Chara.png");
-	m_player1Tex.Load("Texture/Player1.png");
-	m_playerAtkTex.Load("Texture/atk1.png");
-	m_blackTex.Load("Texture/black.png");
+	m_game.Init(&m_map, &m_player);
+	std::string path = "Texture/";
+	m_backTex.Load(path + "back1.png");
+	m_chipTex.Load(path + "MapChip.png");
+	m_bossTex.Load(path + "Capricorn.png");
+	m_playerTex.Load(path + "Chara.png");
+	m_player1Tex.Load(path + "Player1.png");
+	m_playerAtkTex.Load(path + "atk1.png");
+	m_blackTex.Load(path + "black.png");
+	m_skillIconTex.Load(path + "SkillIcon.png");
 	m_map.SetTexture(&m_chipTex);
 	m_boss.SetTexture(&m_bossTex);
 	m_player.SetTex(&m_player1Tex);
 	m_player.SetAtkTex(&m_playerAtkTex);
+	m_player.SetSkillIconTex(&m_skillIconTex);
 	m_game.SetTexture(&m_blackTex, &m_backTex);
 	m_particle.SetTexture(&m_chipTex);
 	m_camera.Init();
+	m_ui.Init(&m_player);
 
 	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera, &m_cursor);
@@ -79,6 +84,8 @@ void Scene::Release()
 	m_playerAtkTex.Release();
 	m_enemies.Release();
 	m_blackTex.Release();
+	m_skillIconTex.Release();
+	m_ui.Release();
 }
 
 void Scene::ImGuiUpdate()

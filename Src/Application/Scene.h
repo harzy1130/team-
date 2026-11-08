@@ -9,6 +9,7 @@
 #include"Camera/Camera.h"
 #include"hit/hit.h"
 #include"Cursor/Cursor.h"
+#include"UI/UIManager.h"
 
 class Scene
 {
@@ -20,6 +21,7 @@ private:
 	KdTexture m_chipTex;
 	KdTexture m_backTex;
 	KdTexture m_blackTex;
+	KdTexture m_skillIconTex;
 
 	C_GameStateManager m_game;
 	C_ParticleManager m_particle;
@@ -31,6 +33,7 @@ private:
 	C_Hit m_hit;
     CharacterGUI m_gui;
 	C_Cursor m_cursor;
+	C_UIManager m_ui;
 
 public:
 

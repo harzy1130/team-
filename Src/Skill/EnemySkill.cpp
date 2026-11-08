@@ -1,11 +1,11 @@
-ï»¿#include "Pch.h"
+#include "Pch.h"
 #include "EnemySkill.h"
 #include <cmath>
 
 void C_EnemySkill::Init(const DashSettings& settings)
 {
     m_settings = settings;
-    // æ—¢å­˜ã®åœ°å½¢è¡çªã§è£œæ­£ã§ãã‚‹ã‚ˆã†ã€çªé€²ã®ç§»å‹•é‡ã‚’ãƒãƒƒãƒ—ãƒãƒƒãƒ—åŠåˆ†ä»¥ä¸‹ã«åˆ¶é™ã™ã‚‹ã€‚
+    // Šù‘¶‚Ì’nŒ`Õ“Ë‚Å•â³‚Å‚«‚é‚æ‚¤A“Ëi‚ÌˆÚ“®—Ê‚ğƒ}ƒbƒvƒ`ƒbƒv”¼•ªˆÈ‰º‚É§ŒÀ‚·‚éB
     m_settings.speed = std::max(0.0f, std::min(settings.speed, static_cast<float>(CHIP_RADIUS)));
     m_settings.windupFrames = std::max(0, settings.windupFrames);
     m_settings.dashFrames = std::max(1, settings.dashFrames);
@@ -73,8 +73,8 @@ bool C_EnemySkill::Update(const HitBase& owner, const HitBase* target,
 
 namespace
 {
-    // åœ°å½¢è¡çªã§è£œæ­£ã•ã‚ŒãŸå®Ÿéš›ã®ç§»å‹•çµŒè·¯ã‚’ä½¿ã„ã€ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ã®æ¥è§¦ã‚’åˆ¤å®šã™ã‚‹ã€‚
-    // è£œæ­£å‰ã®ç§»å‹•é‡ã§ã¯åˆ¤å®šã›ãšã€å£ã®å‘ã“ã†ã«ã„ã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¸ã®å‘½ä¸­ã‚’é˜²ãã€‚
+    // ’nŒ`Õ“Ë‚Å•â³‚³‚ê‚½ÀÛ‚ÌˆÚ“®Œo˜H‚ğg‚¢Aƒ^[ƒQƒbƒg‚Æ‚ÌÚG‚ğ”»’è‚·‚éB
+    // •â³‘O‚ÌˆÚ“®—Ê‚Å‚Í”»’è‚¹‚¸A•Ç‚ÌŒü‚±‚¤‚É‚¢‚éƒ^[ƒQƒbƒg‚Ö‚Ì–½’†‚ğ–h‚®B
     bool SweepAxis(float startMin, float startMax, float targetMin, float targetMax,
         float movement, float& entry, float& exit)
     {

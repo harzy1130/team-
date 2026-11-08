@@ -104,3 +104,7 @@ int GetPlusMinus(float a_value);
 float GetDist(Math::Vector2 a_posA, Math::Vector2 a_posB);
 //二つの引数からRECTを作る。a_halfWidth,a_halfHeightは中心からの半幅、半高さ
 RECT CreateRect(long a_halfWidth, long a_halfHeight);
+//画像のサイズを自動で取得し、RECTを作る。a_pTexはnullptrでないこと
+Math::Rectangle CreateRectFromTex(KdTexture* a_pTex, RECT& a_rect = RECT());
+//画像のポインタから自動で描画する。単純な描画の時に使う予定。
+void DrawTexFromTex(KdTexture* a_pTex, Math::Vector2 a_pos = { 0,0 }, Math::Vector2 a_scale = { 1,1 }, float a_angle = 0.0f, Math::Color a_color = { 1,1,1,1 });

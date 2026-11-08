@@ -14,7 +14,7 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_bJump = false;
 	//基本ステータス
 	m_Level = 1;
-	m_MaxHp = 1000;
+	m_MaxHp = 100;
 	m_Hp = m_MaxHp;
 	m_Def = 50;
 	m_Atk = 80;

@@ -51,6 +51,12 @@ public:
 	virtual float GetSkillHaste()final { return m_SkillHaste; }
 	//攻撃関係
 	virtual bool GetAtkFlg()final { return m_bAtk; }
+	//スキル関係
+	virtual float GetSkillCD()final { return m_skill.getSkillCD(); }
+	virtual float GetSkillCDMax()final { return m_skill.getSkillCDMax(); }
+	virtual float GetSkillCalcCD()final { return m_skill.GetSkillCalcCD(this); }
+	virtual KdTexture* GetSkillIconTex()final { return m_pSkillIconTex; }
+
 
 	//セッター
 	//生存
@@ -58,6 +64,8 @@ public:
 	//画像
 	virtual void SetTex(KdTexture* a_tex)final { m_pTex = a_tex; }
 	virtual void SetAtkTex(KdTexture* a_tex)final { m_pAtkTex = a_tex; }
+	virtual void SetSkillTex(KdTexture* a_tex)final { m_pSkillTex = a_tex; }
+	virtual void SetSkillIconTex(KdTexture* a_tex)final { m_pSkillIconTex = a_tex; }
 
 	//移動
 	virtual void SetPosX(float a_posX)final { m_pos.x = a_posX; }
@@ -200,6 +208,8 @@ protected:
 	virtual void StatusUpdate()final;
 
 	//スキル用
+	KdTexture* m_pSkillTex;
+	KdTexture* m_pSkillIconTex;
 	C_Skill m_skill;
 
 	//状態異常用
