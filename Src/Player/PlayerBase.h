@@ -52,8 +52,8 @@ public:
 	//UŒ‚ŠÖŒW
 	virtual bool GetAtkFlg()final { return m_bAtk; }
 	//ƒXƒLƒ‹ŠÖŒW
-	virtual float GetSkillCD()final { return m_skill.getSkillCD(); }
-	virtual float GetSkillCDMax()final { return m_skill.getSkillCDMax(); }
+	virtual float GetSkillCD()final { return m_skill.GetSkillCD(); }
+	virtual float GetSkillCDMax()final { return m_skill.GetSkillCDMax(); }
 	virtual float GetSkillCalcCD()final { return m_skill.GetSkillCalcCD(this); }
 	virtual KdTexture* GetSkillIconTex()final { return m_pSkillIconTex; }
 
