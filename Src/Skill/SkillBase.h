@@ -22,14 +22,14 @@ public:
 	virtual void SkillActivation(C_PlayerBase*a_pPlayer );
 
 	//ゲッター
-	virtual bool getbSkillMotion() { return m_bSkillMotion; }
-	virtual float getSkillCD() { return m_skillCD; }
-	virtual float getSkillCDMax() { return m_skillCDMax; }
+	virtual bool GetbSkillMotion() { return m_bSkillMotion; }
+	virtual float GetSkillCD() { return m_skillCD; }
+	virtual float GetSkillCDMax() { return m_skillCDMax; }
 	virtual float GetSkillCalcCD(C_PlayerBase* a_pPlayer) { return SkillHasteCalc(m_skillCDMax, a_pPlayer); }
 
 	//セッター
 	virtual void SetIconTexture(KdTexture* a_pTex) { m_pIconTexture = a_pTex; }
-	virtual void setTexture(KdTexture* a_pTex) { m_pTexture = a_pTex; }
+	virtual void SetTexture(KdTexture* a_pTex) { m_pTexture = a_pTex; }
 protected:
 
 	//スキル管理
