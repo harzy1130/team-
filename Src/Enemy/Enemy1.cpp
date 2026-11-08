@@ -1,4 +1,4 @@
-ï»¿#include "Pch.h"
+#include "Pch.h"
 #include "Enemy1.h"
 #include "Hit/Hit.h"
 #include "Map/Map.h"
@@ -24,7 +24,7 @@ namespace
         std::vector<unsigned char> rgba;
     };
 
-    // é€æ˜ãªç”Ÿæˆãƒã‚¤ã‚ºã‚’é™¤å»ã—ã€å„ã‚³ãƒã®æœ¬ä½“ã ã‘ã‚’æŠ½å‡ºã™ã‚‹ã€‚
+    // “§–¾‚È¶¬ƒmƒCƒY‚ğœ‹‚µAŠeƒRƒ}‚Ì–{‘Ì‚¾‚¯‚ğ’Šo‚·‚éB
     bool ReadSpriteFrames(const wchar_t* path, std::vector<SpritePixels>& frames)
     {
         DirectX::ScratchImage original, converted;
@@ -55,7 +55,7 @@ namespace
                     mask[y * width + x] = image->pixels[(originY + y) * image->rowPitch
                         + (originX + x) * 4 + 3] >= 128 ? 1 : 0;
 
-            // æœ€å¤§ã®é€£çµé ˜åŸŸã‚’æ®‹ã—ã€èƒŒæ™¯ã«æµ®ã„ãŸç‚¹ã‚’æç”»ã—ãªã„ã€‚
+            // Å‘å‚Ì˜AŒ‹—Ìˆæ‚ğc‚µA”wŒi‚É•‚‚¢‚½“_‚ğ•`‰æ‚µ‚È‚¢B
             std::vector<int> largest, pending;
             for (int start = 0; start < width * height; ++start)
             {
@@ -87,7 +87,7 @@ namespace
         return true;
     }
 
-    // æ­©è¡Œã¨çªé€²ã®å…¨ã‚³ãƒã‚’åŒã˜å€ç‡ãƒ»è¶³å…ƒã§é…ç½®ã—ã€æœ€è¿‘å‚ã§ç¸®å°ã™ã‚‹ã€‚
+    // •às‚Æ“Ëi‚Ì‘SƒRƒ}‚ğ“¯‚¶”{—¦E‘«Œ³‚Å”z’u‚µAÅ‹ß–T‚Åk¬‚·‚éB
     bool BuildEnemy1Atlas(std::vector<unsigned char>& pixels)
     {
         std::vector<SpritePixels> frames;
@@ -123,7 +123,7 @@ namespace
         return true;
     }
 
-    // CPU å´ã®å®Œæˆæ¸ˆã¿ã‚¢ãƒˆãƒ©ã‚¹ã‚’å…±æœ‰ã—ã€å€‹ä½“ã®è§£æ”¾ã§ã¯ç ´æ£„ã—ãªã„ã€‚
+    // CPU ‘¤‚ÌŠ®¬Ï‚İƒAƒgƒ‰ƒX‚ğ‹¤—L‚µAŒÂ‘Ì‚Ì‰ğ•ú‚Å‚Í”jŠü‚µ‚È‚¢B
     const std::vector<unsigned char>& CachedEnemy1Atlas()
     {
         static std::vector<unsigned char> cached;
@@ -152,7 +152,7 @@ bool Enemy1::PreloadSprites()
 }
 
 
-// ç¨®é¡ã”ã¨ã®æ—¢å®šå€¤ã‚’ä½¿ã†åˆæœŸåŒ–ã€‚é…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’æ¸¡ã™å ´åˆã¯ä¸‹ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰ã‚’ä½¿ã†ã€‚
+// í—Ş‚²‚Æ‚ÌŠù’è’l‚ğg‚¤‰Šú‰»B”z’uƒf[ƒ^‚ğ“n‚·ê‡‚Í‰º‚ÌƒI[ƒo[ƒ[ƒh‚ğg‚¤B
 bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map)
 {
     return Init(a_pHit, a_pCamera, map, SpawnSettings{});
@@ -166,9 +166,9 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map, const SpawnSet
         OutputDebugStringA("Enemy1 initialization texture load failed: Texture/Chara.png\n");
         return false;
     }
-    // å…ƒç”»åƒã‚„ã‚¢ãƒˆãƒ©ã‚¹ã®å¤§ãã•ã«é–¢ä¿‚ãªãã€æ—¢å­˜ã® 64x64 ã®å½“ãŸã‚Šåˆ¤å®šã‚’ä¿ã¤ã€‚
+    // Œ³‰æ‘œ‚âƒAƒgƒ‰ƒX‚Ì‘å‚«‚³‚ÉŠÖŒW‚È‚­AŠù‘¶‚Ì 64x64 ‚Ì“–‚½‚è”»’è‚ğ•Û‚ÂB
     SetRect(PTEX_RADIUS, PTEX_RADIUS);
-    // ãƒãƒ¼ãƒ ç‰ˆã®è¤‡åˆå½“ãŸã‚Šåˆ¤å®šã«ã‚‚ã€æ—¢å­˜ã® 64x64 ã®æœ¬ä½“ã‚’ç™»éŒ²ã™ã‚‹ã€‚
+    // ƒ`[ƒ€”Å‚Ì•¡‡“–‚½‚è”»’è‚É‚àAŠù‘¶‚Ì 64x64 ‚Ì–{‘Ì‚ğ“o˜^‚·‚éB
     NewRectObjects({ 0.0f, 0.0f }, GetRect());
     m_hitRange = std::sqrt(2.0f) * PTEX_RADIUS;
     ResetHitRect();
@@ -202,7 +202,7 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map, const SpawnSet
     return true;
 }
 
-// ã‚²ãƒ¼ãƒ ç”»é¢ãŒé¸æŠã•ã‚Œã¦ã„ã‚‹é–“ã€H ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸç¬é–“ã«è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ†ã‚¹ãƒˆã—ã€æ•µã®å…±é€šæ›´æ–°ã‚’å‘¼ã³å‡ºã™ã€‚
+// ƒQ[ƒ€‰æ–Ê‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚éŠÔAH ƒL[‚ğ‰Ÿ‚µ‚½uŠÔ‚É”íƒ_ƒ[ƒW‚ğƒeƒXƒg‚µA“G‚Ì‹¤’ÊXV‚ğŒÄ‚Ño‚·B
 void Enemy1::Update()
 {
     const bool focused = GetActiveWindow() != nullptr
@@ -234,7 +234,7 @@ void Enemy1::Update()
             if (std::abs(GetPos().x - previousPos.x) + 0.01f < m_openingSkill.GetSpeed())
                 m_openingSkill.StopAtWall();
         }
-        // ä¸€åº¦ã®é€šå¸¸æ”»æ’ƒã§ã¯ä¸€åº¦ã ã‘å‘½ä¸­ã‚’èª¿ã¹ã‚‹ã€‚é›¢è„±ãƒ»è·³èºãƒ»èƒŒå¾Œã¸ã®å›é¿ãŒå¯èƒ½ã€‚
+        // ˆê“x‚Ì’ÊíUŒ‚‚Å‚Íˆê“x‚¾‚¯–½’†‚ğ’²‚×‚éB—£’EE’µ–ôE”wŒã‚Ö‚Ì‰ñ”ğ‚ª‰Â”\B
         if (m_normalHitPending && m_pHit != nullptr
             && m_pHit->CheckAttackHit(*this, *m_player, NormalReach, m_normalDirection))
             m_player->TakeDamage(static_cast<float>(GetAtk()));
@@ -256,7 +256,7 @@ void Enemy1::Update(C_PlayerBase* target, bool active)
         return;
     }
 
-    // é€šå¸¸ã®å…¥å ´ãƒ»å†å…¥å ´ãƒ»GUI ã‹ã‚‰ã®ç›´æ¥ã‚¹ãƒ†ãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆã«å¯¾å¿œã™ã‚‹ã€‚
+    // ’Êí‚Ì“üêEÄ“üêEGUI ‚©‚ç‚Ì’¼ÚƒXƒe[ƒWØ‚è‘Ö‚¦‚É‘Î‰‚·‚éB
     if (m_map != nullptr && (!m_wasActive || m_stage != m_map->GetStageNum()))
     {
         if (!PlaceOnMap(m_map))
@@ -271,7 +271,7 @@ void Enemy1::Update(C_PlayerBase* target, bool active)
 }
 bool Enemy1::GetActionMove(float& horizontalMove)
 {
-    // é–‹å¹•ã®çªé€²ã‚’å„ªå…ˆã—ã€ãã®å¾Œã¯è¿‘è·é›¢ã®é€šå¸¸æ”»æ’ƒã¸åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚
+    // ŠJ–‹‚Ì“Ëi‚ğ—Dæ‚µA‚»‚ÌŒã‚Í‹ß‹——£‚Ì’ÊíUŒ‚‚ÖØ‚è‘Ö‚¦‚éB
     if (m_openingSkill.Update(*this, m_player, IsChasing(), IsGrounded(), horizontalMove))
     {
         CancelNormalAttack();

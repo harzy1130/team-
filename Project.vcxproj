@@ -198,6 +198,8 @@
     <ClInclude Include="src\System\KdSystem.h" />
     <ClInclude Include="src\System\Utility\KdUtility.h" />
     <ClInclude Include="src\System\Window\KdGameWindow.h" />
+    <ClInclude Include="Src\UI\PlayerUI.h" />
+    <ClInclude Include="Src\UI\UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Library\imgui\imgui.cpp" />
@@ -242,6 +244,8 @@
     <ClCompile Include="Src\System\Shader\SpriteShader\KdSpriteShader.cpp" />
     <ClCompile Include="Src\System\Shader\StandardShader\KdStandardShader.cpp" />
     <ClCompile Include="src\System\Window\KdGameWindow.cpp" />
+    <ClCompile Include="Src\UI\PlayerUI.cpp" />
+    <ClCompile Include="Src\UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="説明.txt" />

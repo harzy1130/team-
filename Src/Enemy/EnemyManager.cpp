@@ -1,4 +1,4 @@
-ï»¿#include "Pch.h"
+#include "Pch.h"
 #include "EnemyManager.h"
 #include "Map/Map.h"
 #include <algorithm>
@@ -14,7 +14,7 @@ bool EnemyManager::Init(C_Hit* hit, C_Camera* camera, C_Map* map, const char* sp
     m_map = map;
     m_spawnFile = spawnFile != nullptr ? spawnFile : "";
     if (m_hit == nullptr || m_camera == nullptr || m_map == nullptr || m_spawnFile.empty()) return false;
-    // åˆå›žã®ã‚¹ãƒ†ãƒ¼ã‚¸æ›´æ–°ã‚’æ­¢ã‚ãªã„ã‚ˆã†ã€ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºå‰ã«ç”»åƒã‚’æº–å‚™ã™ã‚‹ã€‚
+    // ‰‰ñ‚ÌƒXƒe[ƒWXV‚ðŽ~‚ß‚È‚¢‚æ‚¤Aƒ^ƒCƒgƒ‹•\Ž¦‘O‚É‰æ‘œ‚ð€”õ‚·‚éB
     if (!Enemy1::PreloadSprites() || !Enemy2::PreloadSprites())
     {
         OutputDebugStringA("Enemy sprite preload failed.\n");
@@ -25,7 +25,7 @@ bool EnemyManager::Init(C_Hit* hit, C_Camera* camera, C_Map* map, const char* sp
 
 void EnemyManager::Update(C_PlayerBase* player, bool active)
 {
-    // ä¸¡ã‚­ãƒ¼ã®æŠ¼ä¸‹çŠ¶æ…‹ã‚’ç¢ºèªã—ã€çµ„ã¿åˆã‚ã›ãŒæˆç«‹ã—ãŸçž¬é–“ã ã‘å¬å–šã™ã‚‹ã€‚
+    // —¼ƒL[‚Ì‰Ÿ‰ºó‘Ô‚ðŠm”F‚µA‘g‚Ý‡‚í‚¹‚ª¬—§‚µ‚½uŠÔ‚¾‚¯¢Š«‚·‚éB
     const bool spawnDown = (GetAsyncKeyState('E') & 0x8000) != 0
         && (GetAsyncKeyState('1') & 0x8000) != 0;
     const bool spawnPressed = spawnDown && !m_debugSpawnWasDown;
@@ -43,7 +43,7 @@ void EnemyManager::Update(C_PlayerBase* player, bool active)
         m_stage = m_map->GetStageNum();
         m_wasActive = true;
     }
-    // ã‚¹ãƒ†ãƒ¼ã‚¸èª­ã¿è¾¼ã¿ã¨å‚ç…§å…ˆã®ç¢ºèªã‚’çµ‚ãˆã¦ã‹ã‚‰ç”Ÿæˆã™ã‚‹ã€‚
+    // ƒXƒe[ƒW“Ç‚Ýž‚Ý‚ÆŽQÆæ‚ÌŠm”F‚ðI‚¦‚Ä‚©‚ç¶¬‚·‚éB
     if (spawnPressed)
     {
         const auto pos = m_camera->GetPos();
@@ -60,7 +60,7 @@ void EnemyManager::Update(C_PlayerBase* player, bool active)
         enemy->SetDamageTestEnabled(enemy.get() == debugEnemy);
         enemy->Update(player, true);
     }
-    //å…ˆã«ç®¡ç†é…åˆ—ã®è¦ç´ ã‚’å‰Šé™¤
+    //æ‚ÉŠÇ—”z—ñ‚Ì—v‘f‚ðíœ
     m_pAllEnemies.erase(std::remove_if(m_pAllEnemies.begin(), m_pAllEnemies.end(),
         [](const EnemyBase* pEB) {
             if (pEB->GetAlive())return false;

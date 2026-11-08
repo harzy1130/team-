@@ -13,12 +13,12 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_speed = 10;
 	m_bJump = false;
 	//基本ステータス
-	m_MaxHp = 100;
-	m_Hp = m_MaxHp;
+	//m_MaxHp = 100;
+	//m_Hp = m_MaxHp;
 	m_Def = 50;
 	m_Atk = 80;
 	m_AtkSpeed = 1.3;
-	//特殊ステータスd
+	//特殊ステータス
 	m_LifStl = 0;
 	m_MSUP = 0;
 	m_HPRegene = 0;
@@ -28,6 +28,7 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_IncreasedASP = 0;
 	//通常攻撃
 	InitAtk();
+	m_skill.SetIconTexture(m_pSkillIconTex);
 	m_skill.Init();
 	SetHitClass(a_pHit);
 	SetCameraClass(a_pCamera);

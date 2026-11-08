@@ -82,6 +82,9 @@
     <Filter Include="Src\Particle">
       <UniqueIdentifier>{127778c1-daa6-47e1-8276-2395e438c971}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\UI">
+      <UniqueIdentifier>{81bb71d7-f7b7-4f67-a3f8-52533c812535}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -243,6 +246,12 @@
     <ClInclude Include="Src\Particle\ParticleManager.h">
       <Filter>Src\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="Src\UI\PlayerUI.h">
+      <Filter>Src\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\UI\UIManager.h">
+      <Filter>Src\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -361,6 +370,12 @@
     </ClCompile>
     <ClCompile Include="Src\Particle\ParticleManager.cpp">
       <Filter>Src\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\UI\PlayerUI.cpp">
+      <Filter>Src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\UI\UIManager.cpp">
+      <Filter>Src\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
