@@ -85,6 +85,9 @@
     <Filter Include="Src\UI">
       <UniqueIdentifier>{81bb71d7-f7b7-4f67-a3f8-52533c812535}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Player\Gear">
+      <UniqueIdentifier>{05b3b4cf-15a2-4ab2-9beb-a2479489a0b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -252,6 +255,15 @@
     <ClInclude Include="Src\UI\UIManager.h">
       <Filter>Src\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Player\Gear\GearBase.h">
+      <Filter>Src\Player\Gear</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Player\Gear\Gear1.h">
+      <Filter>Src\Player\Gear</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Player\Gear\Gear2.h">
+      <Filter>Src\Player\Gear</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -376,6 +388,15 @@
     </ClCompile>
     <ClCompile Include="Src\UI\UIManager.cpp">
       <Filter>Src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Player\Gear\GearBase.cpp">
+      <Filter>Src\Player\Gear</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Player\Gear\Gear1.cpp">
+      <Filter>Src\Player\Gear</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Player\Gear\Gear2.cpp">
+      <Filter>Src\Player\Gear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

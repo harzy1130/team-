@@ -4,6 +4,10 @@
 
 void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 {
+	m_pGearA = std::make_unique<C_Gear1>();
+	m_pGearA->Init(this);
+	m_pGearB = std::make_unique<C_Gear2>();
+	m_pGearB->Init(this);
 	//移動
 	m_bAlive = true;
 	m_pos = { 0,0 };
@@ -14,19 +18,21 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	m_bJump = false;
 	//基本ステータス
 	m_Level = 1;
-	m_MaxHp = 100;
-	m_Hp = m_MaxHp;
-	m_Def = 50;
-	m_Atk = 80;
-	m_AtkSpeed = 1.2;
-	//特殊ステータスd
-	m_LifStl = 0;
-	m_MSUP = 0;
-	m_HPRegene = 0;
-	m_CrtDmgP = 150;
-	m_CrtRate = 0;
-	m_SkillHaste = 50;
-	m_IncreasedASP = 0;
+	m_playerStatus.maxHp = 100;
+	m_playerStatus.def = 50;
+	m_playerStatus.atk = 80;
+	m_atkSpeed = 1.2;
+	//特殊ステータス
+	m_playerStatus.lifStl = 0;
+	m_playerStatus.msUP = 0;
+	m_playerStatus.hpRegene = 0;
+	m_playerStatus.crtDmgP = 150;
+	m_playerStatus.crtRate = 0;
+	m_playerStatus.skillHaste = 50;
+	m_playerStatus.increasedASP = 0;
+	CalcGearStatus();
+	m_status = m_playerStatus + m_gearStatus;
+	m_Hp = m_status.maxHp;
 	//通常攻撃
 	InitAtk();
 	m_skill.Init();
@@ -49,6 +55,7 @@ void C_Player1::Update()
 	m_move.y -= GRAVITY;
 
 	m_skill.Update();
+	GearUpdate();
 	PlayerInput();
 	UpdateAtk();
 	AnimationUpdate();

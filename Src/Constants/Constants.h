@@ -70,6 +70,50 @@ const float      JUMP_POWER = 20.0f;
 static const int PTEX_SIZE  = 64;
 static const int PTEX_RADIUS= PTEX_SIZE / 2;
 
+struct S_Status
+{
+	//通常ステータス
+	int maxHp;
+	float def;
+	float atk;
+	//特殊ステータス
+	float lifStl;		//ライフスティール
+	float msUP;		//移動速度
+	float hpRegene;	//ライフリジェネ
+	float crtDmgP;	//クリティカルダメージ
+	float crtRate;	//クリティカル率
+	float skillHaste;	//スキルヘイスト
+	float increasedASP;//増加攻撃速度
+	S_Status operator+(const S_Status& rhs) const
+	{
+		return {
+			maxHp + rhs.maxHp,
+			def + rhs.def,
+			atk + rhs.atk,
+			lifStl + rhs.lifStl,
+			msUP + rhs.msUP,
+			hpRegene + rhs.hpRegene,
+			crtDmgP + rhs.crtDmgP,
+			crtRate + rhs.crtRate,
+			skillHaste + rhs.skillHaste,
+			increasedASP + rhs.increasedASP
+		};
+	}
+	S_Status operator+=(const S_Status& rhs)
+	{
+		maxHp += rhs.maxHp;
+		def += rhs.def;
+		atk += rhs.atk;
+		lifStl += rhs.lifStl;
+		msUP += rhs.msUP;
+		hpRegene += rhs.hpRegene;
+		crtDmgP += rhs.crtDmgP;
+		crtRate += rhs.crtRate;
+		skillHaste += rhs.skillHaste;
+		increasedASP += rhs.increasedASP;
+		return *this;
+	}
+};
 //ボス定数======================================
 
 
