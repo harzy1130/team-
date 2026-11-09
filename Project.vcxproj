@@ -170,6 +170,9 @@
     <ClInclude Include="Src\Enemy\Enemy1.h" />
     <ClInclude Include="Src\Enemy\Enemy2.h" />
     <ClInclude Include="Src\Particle\ParticleManager.h" />
+    <ClInclude Include="Src\Player\Gear\Gear1.h" />
+    <ClInclude Include="Src\Player\Gear\Gear2.h" />
+    <ClInclude Include="Src\Player\Gear\GearBase.h" />
     <ClInclude Include="Src\Player\Sword.h" />
     <ClInclude Include="Src\projectile\enemyprojectile.h" />
     <ClInclude Include="Src\Enemy\EnemyBase.h" />
@@ -218,6 +221,9 @@
     <ClCompile Include="Src\Enemy\Enemy1.cpp" />
     <ClCompile Include="Src\Enemy\Enemy2.cpp" />
     <ClCompile Include="Src\Particle\ParticleManager.cpp" />
+    <ClCompile Include="Src\Player\Gear\Gear1.cpp" />
+    <ClCompile Include="Src\Player\Gear\Gear2.cpp" />
+    <ClCompile Include="Src\Player\Gear\GearBase.cpp" />
     <ClCompile Include="Src\Player\Sword.cpp" />
     <ClCompile Include="Src\projectile\enemyprojectile.cpp" />
     <ClCompile Include="Src\Enemy\EnemyBase.cpp" />

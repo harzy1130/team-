@@ -14,6 +14,7 @@ public:
 
 	void DrawPlayerHpGauge();
 	void DrawPlayerSkill();
+	void DrawPlayerGear();
 
 	void Release();
 private:
@@ -30,9 +31,10 @@ private:
 	KdTexture m_playerSkillCDTex;
 	KdTexture* m_pPlayerSkillIconTex;
 	//======================================================
+	 
 	//”š•Ï”
-	Math::Vector2 m_playerHpGaugePos{-500.0f, -300.0f};
-
+	Math::Vector2 m_hpGaugePos{-500.0f, -300.0f};
+	Math::Vector2 m_skillGaugePos{  0, -275 };
 
 	C_PlayerBase* m_pPlayer;
 	

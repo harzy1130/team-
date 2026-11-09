@@ -15,17 +15,19 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	//基本ステータス
 	//m_MaxHp = 100;
 	//m_Hp = m_MaxHp;
-	m_Def = 50;
-	m_Atk = 80;
-	m_AtkSpeed = 1.3;
+	m_playerStatus.def = 50;
+	m_playerStatus.atk = 80;
+	m_atkSpeed = 1.3;
 	//特殊ステータス
-	m_LifStl = 0;
-	m_MSUP = 0;
-	m_HPRegene = 0;
-	m_CrtDmgP = 150;
-	m_CrtRate = 0;
-	m_SkillHaste=50;
-	m_IncreasedASP = 0;
+	m_playerStatus.lifStl = 0;
+	m_playerStatus.msUP = 0;
+	m_playerStatus.hpRegene = 0;
+	m_playerStatus.crtDmgP = 150;
+	m_playerStatus.crtRate = 0;
+	m_playerStatus.skillHaste=50;
+	m_playerStatus.increasedASP = 0;
+	m_status = { 0,0,0,0,0,0,0,0 };
+	m_gearStatus = { 0,0,0,0,0,0,0,0 };
 	//通常攻撃
 	InitAtk();
 	m_skill.SetIconTexture(m_pSkillIconTex);
@@ -46,6 +48,7 @@ void C_PlayerBase::Update()
 	m_move.y -= GRAVITY;
 
 	m_skill.Update();
+	GearUpdate();
 	PlayerInput();
 	UpdateAtk();
 	m_effect.UpdatePlayer(this);
@@ -88,6 +91,27 @@ void C_PlayerBase::Draw()
 	DrawAtk();
 }
 
+void C_PlayerBase::GearUpdate()
+{
+	m_gearStatus = { 0,0,0,0,0,0,0,0 };
+
+	if (m_pGearA == nullptr) goto EndA;
+	if(m_pGearA->PassiveTiming()) m_pGearA->OncePassiveGear();
+	if(GetAsyncKeyState('Q') & 0x8000)m_pGearA->OnceActiveGear();
+	m_pGearA->WhileActiveGear();
+	m_pGearA->WhilePassiveGear();
+	m_pGearA->UpdateCD();
+EndA:;
+
+	if(m_pGearB == nullptr) goto EndB;
+	if(m_pGearB->PassiveTiming()) m_pGearB->OncePassiveGear();
+	if (GetAsyncKeyState('E') & 0x8000)m_pGearB->OnceActiveGear();
+	m_pGearB->WhileActiveGear();
+	m_pGearB->WhilePassiveGear();
+	m_pGearB->UpdateCD();
+EndB:;
+}
+
 //防御力計算
 float C_PlayerBase::DefCalc(float a_DMG, float a_DEF, float a_penet)
 {
@@ -104,7 +128,12 @@ void C_PlayerBase::HPRegeneCalc()
 	}
 	if (m_HPRegeneCD > 0)return;
 
-	m_Hp += m_HPRegene;
+	m_hpRegeneBuffer += m_status.hpRegene;
+	if(m_hpRegeneBuffer >= 1.0f)
+	{
+		Heal((int)m_hpRegeneBuffer);
+		m_hpRegeneBuffer -= (int)m_hpRegeneBuffer;
+	}
 	m_HPRegeneCD = 60;
 	return;
 }
@@ -112,12 +141,12 @@ void C_PlayerBase::HPRegeneCalc()
 //クリティカル
 float C_PlayerBase::CrtDmgCalc()
 {
-	if (rand() % 100 + 1 <= m_CrtRate) {
-		return m_Atk * (m_CrtDmgP / 100);
+	if (rand() % 100 + 1 <= m_status.crtRate) {
+		return m_status.atk * (m_status.crtDmgP / 100);
 	}
 	else
 	{
-		return m_Atk;
+		return m_status.atk;
 	}
 }
 
@@ -130,7 +159,7 @@ float C_PlayerBase::MoveSpeedCalc(float a_speed, float a_MS)
 //攻撃速度計算
 float C_PlayerBase::AtkSpeedCalc()
 {
-	return 60/(m_AtkSpeed + (m_AtkSpeed*m_LevelUpAtkSpeedP * (m_Level - 1))) + (m_AtkSpeed * m_IncreasedASP/100);
+	return 60/(m_atkSpeed + (m_atkSpeed*m_LevelUpAtkSpeedP * (m_Level - 1))) + (m_atkSpeed * m_status.increasedASP/100);
 }
 
 //キー操作
@@ -179,10 +208,6 @@ void C_PlayerBase::PlayerInput()
 		if (m_moveMode == E_MoveMode::attacking)return;
 		PlayerDef();
 		m_moveMode = E_MoveMode::defense;
-	}
-	if(GetAsyncKeyState('L') & 0x8000)
-	{
-		ResetAlreadyHit();
 	}
 }
 
@@ -314,18 +339,31 @@ void C_PlayerBase::ExpUpdate()
 
 void C_PlayerBase::StatusUpdate()
 {
+	CalcGearStatus();
+	m_status = m_playerStatus + m_gearStatus;
 	//HPリジェネ
 	HPRegeneCalc();
 
-	m_MaxHp = m_baseHp + (m_Level - 1) * m_LevelUpHp;
-	m_Atk = m_baseAtk + (m_Level - 1) * m_LevelUpAtk;
-	m_Def = m_baseDef + (m_Level - 1) * m_LevelUpDef;
+	m_playerStatus.maxHp = m_baseHp + (m_Level - 1) * m_LevelUpHp;
+	m_playerStatus.atk = m_baseAtk + (m_Level - 1) * m_LevelUpAtk;
+	m_playerStatus.def = m_baseDef + (m_Level - 1) * m_LevelUpDef;
+}
+
+void C_PlayerBase::CalcGearStatus()
+{
+	m_gearStatus = { 0,0,0,0,0,0,0,0 };
+	if (m_pGearA == nullptr) goto EndA;
+	m_gearStatus += m_pGearA->GetGearStatus();
+EndA:;
+	if (m_pGearB == nullptr) goto EndB;
+	m_gearStatus += m_pGearB->GetGearStatus();
+EndB:;
 }
 
 bool C_PlayerBase::TakeDamage(float rawDamage)
 {
-    if (!m_bAlive || m_Hp <= 0 || m_damageInvincibleFrames > 0 || !std::isfinite(rawDamage) || !(rawDamage > 0) || !std::isfinite(m_Def)) return false;
-    const float damage = DefCalc(rawDamage, std::max(0.0f, m_Def), 0.0f);
+    if (!m_bAlive || m_Hp <= 0 || m_damageInvincibleFrames > 0 || !std::isfinite(rawDamage) || !(rawDamage > 0) || !std::isfinite(m_status.def)) return false;
+    const float damage = DefCalc(rawDamage, std::max(0.0f, m_status.def), 0.0f);
     m_Hp = std::max(0, m_Hp - (int)damage);
     m_damageInvincibleFrames = 30;
     if (m_Hp == 0)
@@ -335,4 +373,15 @@ bool C_PlayerBase::TakeDamage(float rawDamage)
         m_skillMove = { 0.0f, 0.0f };
     }
     return true;
+}
+
+bool C_PlayerBase::Heal(float a_heal)
+{
+	if (!m_bAlive || m_Hp <= 0 || !std::isfinite(a_heal) || !(a_heal > 0)) return false;
+	m_Hp = std::min(m_status.maxHp, m_Hp + (int)a_heal);
+	if(m_Hp == m_status.maxHp)
+	{
+		return true;
+	}
+	return false;
 }

@@ -5,6 +5,8 @@
 #include"Hit/HitBase.h"
 #include"Hit/Hit.h"
 #include"Effect/effect.h"
+#include "Gear/Gear1.h"
+#include "Gear/Gear2.h"
 
 enum E_MoveMode
 {
@@ -14,6 +16,7 @@ enum E_MoveMode
 	defense = 3,
 };
 
+class C_GearBase;
 class C_Cursor;
 class C_PlayerBase : public HitBase
 {
@@ -24,12 +27,13 @@ public:
 	virtual void Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor*a_pCursor);
 	virtual void Update();
 	virtual void Draw();
+	virtual void GearUpdate();
 
     // 被ダメージの共通処理。防御力・無敵時間・HP 減少・死亡を処理する。
     bool TakeDamage(float rawDamage);
     bool IsDamageInvincible() const { return m_damageInvincibleFrames > 0; }
-	// 敵と当たった時に行う処理を記述する場所
-	//dd
+	// 外部からも呼び出す固定アクション
+	bool Heal(float a_heal);
 	//ゲッター
 	//生存
 	virtual bool GetAFlg()final { return m_bAlive; }
@@ -37,18 +41,19 @@ public:
 	virtual Math::Vector2 GetSkillMove()final { return m_skillMove; }
 	virtual bool GetJumpFlg()final { return m_bJump; }
 	virtual float GetScaleX()final { return m_scale.x; }
+	virtual S_HitRect GetHitRect()final { return m_bHitRect; }
 	//基本ステータス
 	virtual float GetHP()final { return m_Hp; }
-	virtual float GetMAXHP()final { return m_MaxHp; }
-	virtual float GetDEF()final { return m_Def; }
-	virtual float GetATK()final { return m_Atk; }
-	virtual float GetAS()final { return m_AtkSpeed; }
+	virtual float GetMAXHP()final { return m_status.maxHp; }
+	virtual float GetDEF()final { return m_status.def; }
+	virtual float GetATK()final { return m_status.atk; }
+	virtual float GetAS()final { return m_atkSpeed; }
 	//特殊ステータス
-	virtual float GetLifStl()final { return m_LifStl; }
-	virtual float GetMS()final { return m_MSUP; }
-	virtual float GetCrtDmg()final { return m_CrtDmgP; }
-	virtual float GetCrtRate()final { return m_CrtRate; }
-	virtual float GetSkillHaste()final { return m_SkillHaste; }
+	virtual float GetLifStl()final { return m_status.lifStl; }
+	virtual float GetMS()final { return m_status.msUP; }
+	virtual float GetCrtDmg()final { return m_status.crtDmgP; }
+	virtual float GetCrtRate()final { return m_status.crtRate; }
+	virtual float GetSkillHaste()final { return m_status.skillHaste; }
 	//攻撃関係
 	virtual bool GetAtkFlg()final { return m_bAtk; }
 	//スキル関係
@@ -56,7 +61,9 @@ public:
 	virtual float GetSkillCDMax()final { return m_skill.GetSkillCDMax(); }
 	virtual float GetSkillCalcCD()final { return m_skill.GetSkillCalcCD(this); }
 	virtual KdTexture* GetSkillIconTex()final { return m_pSkillIconTex; }
-
+	//gear関係
+	virtual const C_GearBase* GetGearA()final { return m_pGearA.get(); }
+	virtual const C_GearBase* GetGearB()final { return m_pGearB.get(); }
 
 	//セッター
 	//生存
@@ -78,16 +85,16 @@ public:
 
 	//基本ステータス
 	virtual void SetHP(float a_HP)final { m_Hp = a_HP; }
-	virtual void SetMAXHP(float a_MAXHP)final { m_MaxHp = a_MAXHP; }
-	virtual void SetDEF(float a_DEF)final { m_Def = a_DEF; }
-	virtual void SetATK(float a_ATK)final { m_Atk = a_ATK; }
-	virtual void SetAS(float a_AS)final { m_AtkSpeed = a_AS; }
+	virtual void SetMAXHP(float a_MAXHP)final { m_status.maxHp = a_MAXHP; }
+	virtual void SetDEF(float a_DEF)final { m_status.def = a_DEF; }
+	virtual void SetATK(float a_ATK)final { m_status.atk = a_ATK; }
+	virtual void SetAS(float a_AS)final { m_atkSpeed = a_AS; }
 	//特殊ステータス
-	virtual void SetLifStl(float a_LS)final { m_LifStl = a_LS; }
-	virtual void SetMS(float a_MS)final { m_MSUP = a_MS; }
-	virtual void SetHPRegene(float a_HPR)final { m_HPRegene = a_HPR; }
-	virtual void SetCrtDmg(float a_CD)final { m_CrtDmgP = a_CD; }
-	virtual void SetCrtRate(float a_CR)final { m_CrtRate = a_CR; }
+	virtual void SetLifStl(float a_LS)final { m_status.lifStl = a_LS; }
+	virtual void SetMS(float a_MS)final { m_status.msUP = a_MS; }
+	virtual void SetHPRegene(float a_HPR)final { m_status.hpRegene = a_HPR; }
+	virtual void SetCrtDmg(float a_CD)final { m_status.crtDmgP = a_CD; }
+	virtual void SetCrtRate(float a_CR)final { m_status.crtRate = a_CR; }
 	//計算関数
 	virtual float CrtDmgCalc()final;
 	//参照する外部クラス
@@ -127,12 +134,12 @@ protected:
 	int m_NextLvExp = 100;
 	int m_ExpUp = 30;
 	int m_Hp;		//現在体力
-	int m_MaxHp;	//最大体力
-	float m_Def;	//防御力
-	float m_Atk;	//攻撃力
-	float m_AtkSpeed;//攻撃速度
+	float m_atkSpeed;//攻撃速度
+	S_Status m_playerStatus;
+	S_Status m_gearStatus;
+	S_Status m_status;
 
-	//基礎ステータス
+	//基礎ステータス(1レベル時のステータス)
 	int m_baseHp=100;
 	float m_baseAtk=30;
 	float m_baseDef=5;
@@ -144,13 +151,6 @@ protected:
 	float m_LevelUpAtkSpeedP = 0.03f;
 
 	//特殊ステータス
-	float m_LifStl;		//ライフスティール
-	float m_MSUP;		//移動速度
-	float m_HPRegene;	//ライフリジェネ
-	float m_CrtDmgP;	//クリティカルダメージ
-	float m_CrtRate;	//クリティカル率
-	float m_SkillHaste;	//スキルヘイスト
-	float m_IncreasedASP;//増加攻撃速度
 
 	//通常攻撃
 	KdTexture* m_pAtkTex;
@@ -175,12 +175,15 @@ protected:
 	float m_HPRegeneCD=0;
 	float m_AttackDelay;
 
+	//回復等のバッファ
+	float m_hpRegeneBuffer = 0;
+
 	//計算関数
 	virtual float DefCalc(float a_DMG, float a_DEF,float a_penet)final;
 	virtual void HPRegeneCalc()final;
 	virtual float MoveSpeedCalc(float a_speed, float a_MS)final;
 	virtual float AtkSpeedCalc()final;
-
+	
 	//操作
 	virtual void PlayerInput();
 
@@ -206,12 +209,16 @@ protected:
 
 	//ステータス処理
 	virtual void StatusUpdate()final;
+	virtual void CalcGearStatus()final;
 
 	//スキル用
 	KdTexture* m_pSkillTex;
 	KdTexture* m_pSkillIconTex;
 	C_Skill m_skill;
 
+	//装備用
+	std::unique_ptr<C_GearBase> m_pGearA;
+	std::unique_ptr<C_GearBase> m_pGearB;
 	//状態異常用
 	C_Effect m_effect;
 };
