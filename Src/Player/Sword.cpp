@@ -2,13 +2,15 @@
 #include "Player1.h"
 #include"Boss/BossBase.h"
 #include"Enemy/EnemyBase.h"
+#include"UI/UIManager.h"
 
-void C_Sword::Init(C_Player1* a_player, C_Hit* a_pHit, C_Camera* a_pCamera)
+void C_Sword::Init(C_Player1* a_player, C_Hit* a_pHit, C_Camera* a_pCamera, C_UIManager* a_pUIManager)
 {
 	m_gap = { 50,0 };
 	SetPlayer(a_player);
 	SetHitClass(a_pHit);
 	SetCamera(a_pCamera);
+	SetUIManagerClass(a_pUIManager);
 	m_hitRange = 60;
 }
 
@@ -61,10 +63,22 @@ void C_Sword::Draw(KdTexture* a_pTex)
 
 void C_Sword::IfHitBoss(C_BossBase* a_pBoss)
 {
-	a_pBoss->TakeDamage((int)m_pPlayer->CrtDmgCalc());
+	//クリティカルかどうか判定
+	bool isCritical = m_pPlayer->isCritical();
+
+	//UIが飛ぶ方向を判定
+	bool direction=a_pBoss->GetPos().x > m_pPlayer->GetPos().x;
+
+	a_pBoss->TakeDamage((int)m_pPlayer->DmageCalc(isCritical));
+	m_pUIManager->CreateDamageUI((int)m_pPlayer->DmageCalc(isCritical),(a_pBoss->GetPos()+m_pPlayer->GetPos())*0.5f, direction, isCritical);
 }
 
 void C_Sword::IfHitEnemy(EnemyBase* a_pEnemy)
 {
-	a_pEnemy->TakeDamage((int)m_pPlayer->CrtDmgCalc(), m_pPlayer->GetPos().x);
+	bool isCritical = m_pPlayer->isCritical();
+	//UIが飛ぶ方向を判定
+	bool direction=a_pEnemy->GetPos().x > m_pPlayer->GetPos().x;
+
+	a_pEnemy->TakeDamage((int)m_pPlayer->DmageCalc(isCritical), m_pPlayer->GetPos().x);
+	m_pUIManager->CreateDamageUI((int)m_pPlayer->DmageCalc(isCritical), (a_pEnemy->GetPos() + m_pPlayer->GetPos()) * 0.5f, direction, isCritical);
 }

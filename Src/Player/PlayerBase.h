@@ -16,6 +16,7 @@ enum E_MoveMode
 	defense = 3,
 };
 
+class C_UIManager;
 class C_GearBase;
 class C_Cursor;
 class C_PlayerBase : public HitBase
@@ -24,7 +25,7 @@ public:
 	C_PlayerBase() {};
 	~C_PlayerBase() {};
 
-	virtual void Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor*a_pCursor);
+	virtual void Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor*a_pCursor, C_UIManager* a_pUIManager);
 	virtual void Update();
 	virtual void Draw();
 	virtual void GearUpdate();
@@ -95,14 +96,17 @@ public:
 	virtual void SetHPRegene(float a_HPR)final { m_status.hpRegene = a_HPR; }
 	virtual void SetCrtDmg(float a_CD)final { m_status.crtDmgP = a_CD; }
 	virtual void SetCrtRate(float a_CR)final { m_status.crtRate = a_CR; }
-	//計算関数
+	//計算関数(クリティカル、攻撃関係)
+	virtual bool isCritical()final;
 	virtual float CrtDmgCalc()final;
+	virtual float DmageCalc(bool a_isCritical)final;
+	//スキルのクールタイム計算
 	virtual float CalcSkillHaste(float a_CDMax)final { return a_CDMax * (100.0f / (100.0f + m_status.skillHaste)); }
 	//参照する外部クラス
 	virtual void SetHitClass(C_Hit* a_pHit) final { m_pHit = a_pHit; }
 	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
 	virtual void SetCursorClass(C_Cursor* a_pCursor)final { m_pCursor = a_pCursor; }
-
+	virtual void SetUIManagerClass(C_UIManager* a_pUIManager)final { m_pUIManager = a_pUIManager; }
 
 protected:
     int m_damageInvincibleFrames = 0;
@@ -171,6 +175,7 @@ protected:
 	C_Hit* m_pHit;
 	C_Camera* m_pCamera;
 	C_Cursor* m_pCursor;
+	C_UIManager* m_pUIManager;
 
 	//タイマー変数
 	float m_HPRegeneCD=0;
