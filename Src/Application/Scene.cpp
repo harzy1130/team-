@@ -33,6 +33,7 @@ void Scene::Update()
 		m_camera.Update();
 		m_map.Update();
 		m_player.Update();
+		m_ui.Update();
 		m_particle.Update();
 		m_camera.SetTurget(m_player.GetPos());
 	}
@@ -62,10 +63,10 @@ void Scene::Init()
 	m_game.SetTexture(&m_blackTex, &m_backTex);
 	m_particle.SetTexture(&m_chipTex);
 	m_camera.Init();
-	m_ui.Init(&m_player);
+	m_ui.Init(&m_player, &m_camera);
 
 	m_map.Init(&m_camera);
-	m_player.Init(&m_hit,&m_camera, &m_cursor);
+	m_player.Init(&m_hit,&m_camera, &m_cursor, &m_ui);
 	m_boss.Init(&m_hit, &m_camera,&m_player);
     m_hit.Init(&m_map, &m_enemies, &m_boss, &m_player);
 	m_particle.Init(&m_map, &m_player, &m_camera);

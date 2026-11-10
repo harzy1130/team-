@@ -2,7 +2,7 @@
 #include"Cursor/Cursor.h"
 #include <cmath>
 
-void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
+void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor, C_UIManager* a_pUIManager)
 {
 	//移動
 	m_bAlive = true;
@@ -138,6 +138,18 @@ void C_PlayerBase::HPRegeneCalc()
 	return;
 }
 
+//クリティカルかどうか判定
+bool C_PlayerBase::isCritical()
+{
+	if (rand() % 100 + 1 <= m_status.crtRate) {
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 //クリティカル
 float C_PlayerBase::CrtDmgCalc()
 {
@@ -148,6 +160,16 @@ float C_PlayerBase::CrtDmgCalc()
 	{
 		return m_status.atk;
 	}
+}
+
+//攻撃ダメージ計算
+float C_PlayerBase::DmageCalc(bool a_isCritical)
+{
+	if (a_isCritical)
+	{
+		return m_status.atk* (m_status.crtDmgP / 100);
+	}
+	return m_status.atk;;
 }
 
 //スピード加速
