@@ -2,7 +2,7 @@
 #include"Cursor/Cursor.h"
 #include <cmath>
 
-void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
+void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_UIManager* a_pUIManager)
 {
 	m_pGearA = std::make_unique<C_Gear1>();
 	m_pGearA->Init(this);
@@ -36,15 +36,18 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)
 	//通常攻撃
 	InitAtk();
 	m_skill.Init();
+	//参照するクラスのポインタ
 	SetHitClass(a_pHit);
 	SetCameraClass(a_pCamera);
+	SetCursorClass(a_pCursor);
+	SetUIManagerClass(a_pUIManager);
 	SetRect(PTEX_RADIUS, 60);
 	SetRadius(PTEX_RADIUS);
 	NewRectObjects({ 0, 0 }, { -16, 48,16,-60});
 	m_hitRange = PTEX_SIZE;
 	//状態異常
 	m_effect.InitPlayer(this);
-	m_sword.Init(this, a_pHit, a_pCamera);
+	m_sword.Init(this, a_pHit, a_pCamera, a_pUIManager);
 }
 
 void C_Player1::Update()

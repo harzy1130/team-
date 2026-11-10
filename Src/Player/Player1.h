@@ -7,7 +7,7 @@ public:
 	C_Player1() {};
 	~C_Player1(){};
 
-	void Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor)override;
+	void Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor, C_UIManager* a_pUIManager)override;
 	void Update()override;
 	void Draw()override;
 
