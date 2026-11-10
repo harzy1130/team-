@@ -24,7 +24,8 @@ void C_PlayerUI::Draw()
 {
 	DrawPlayerHpGauge();
 	DrawPlayerSkill();
-	DrawPlayerGear();
+	DrawPlayerGear(m_pPlayer->GetGearA(), { -100, -275 });
+	DrawPlayerGear(m_pPlayer->GetGearB(), { 100, -275 });
 }
 
 void C_PlayerUI::DrawPlayerHpGauge()
@@ -73,18 +74,24 @@ void C_PlayerUI::DrawPlayerSkill()
 	DrawTexFromTex(&m_playerSkillFrameTex, m_skillGaugePos);
 }
 
-void C_PlayerUI::DrawPlayerGear()
+void C_PlayerUI::DrawPlayerGear(C_GearBase* a_pGear,Math::Vector2 a_pos)
 {
-	auto gearA = m_pPlayer->GetGearA();
-	DrawTexFromTex(&m_playerSkillBaseTex,{-100, -275});
-	DrawTexFromTex(gearA->GetGearIconTex(), { -100, -275 });
-	DrawTexFromTex(&m_playerSkillFrameTex,{-100, -275});
+	float gearUIRatio = a_pGear->GetActiveCD() / a_pGear->GetCalcActiveCDMax();
+	;Math::Color CDColor;
+	if (a_pGear->GetPassiveOnly()) CDColor = !a_pGear->GetWhilePassive() ? Math::Color{ 0.4, 0.4, 0.4, 1.0f } : Math::Color{ 1.0, 1.0, 1.0, 1.0f };
+	else CDColor = gearUIRatio > 0 || a_pGear->GetWhileActive() ? Math::Color{ 0.4, 0.4, 0.4, 1.0f } : Math::Color{ 1.0f, 1.0f, 1.0f, 1.0f };
 
-
-	auto gearB = m_pPlayer->GetGearB();
-	DrawTexFromTex(&m_playerSkillBaseTex, { 100, -275 });
-	DrawTexFromTex(gearB->GetGearIconTex(), { 100, -275 });
-	DrawTexFromTex(&m_playerSkillFrameTex, { 100, -275 });
+	DrawTexFromTex(&m_playerSkillBaseTex,a_pos);
+	DrawTexFromTex(a_pGear->GetGearIconTex(), a_pos, { 1.0f, 1.0f }, 0.0f, CDColor);
+	Math::Rectangle cdRect = CreateRectFromTex(&m_playerSkillCDTex);
+	Math::Matrix mat, sMat, rMat, tMat;
+	sMat = Math::Matrix::CreateScale(1, 1, 1);
+	rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(180.0f));
+	tMat = Math::Matrix::CreateTranslation(a_pos.x, a_pos.y - (cdRect.height * (1 - gearUIRatio) / 2.0f), 0);
+	mat = sMat * rMat * tMat;
+	SHADER.m_spriteShader.SetMatrix(mat);
+	SHADER.m_spriteShader.DrawTex(&m_playerSkillCDTex, 0, 0, &Math::Rectangle(0, 0, cdRect.width, cdRect.height * gearUIRatio), &Math::Color(1.0f, 1.0f, 1.0f, 0.4f));
+	DrawTexFromTex(&m_playerSkillFrameTex,a_pos);
 }
 
 void C_PlayerUI::Release()

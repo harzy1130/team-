@@ -62,8 +62,8 @@ public:
 	virtual float GetSkillCalcCD()final { return m_skill.GetSkillCalcCD(this); }
 	virtual KdTexture* GetSkillIconTex()final { return m_pSkillIconTex; }
 	//gear関係
-	virtual const C_GearBase* GetGearA()final { return m_pGearA.get(); }
-	virtual const C_GearBase* GetGearB()final { return m_pGearB.get(); }
+	virtual C_GearBase* GetGearA()const final { return const_cast<C_GearBase*>(m_pGearA.get()); }
+	virtual C_GearBase* GetGearB()const final { return const_cast<C_GearBase*>(m_pGearB.get()); }
 
 	//セッター
 	//生存
@@ -97,6 +97,7 @@ public:
 	virtual void SetCrtRate(float a_CR)final { m_status.crtRate = a_CR; }
 	//計算関数
 	virtual float CrtDmgCalc()final;
+	virtual float CalcSkillHaste(float a_CDMax)final { return a_CDMax * (100.0f / (100.0f + m_status.skillHaste)); }
 	//参照する外部クラス
 	virtual void SetHitClass(C_Hit* a_pHit) final { m_pHit = a_pHit; }
 	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }

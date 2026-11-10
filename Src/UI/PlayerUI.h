@@ -2,7 +2,6 @@
 #include"Pch.h"
 #include"Player/PlayerBase.h"
 
-class C_PlayerBase;
 class C_PlayerUI
 {
 public:
@@ -14,7 +13,7 @@ public:
 
 	void DrawPlayerHpGauge();
 	void DrawPlayerSkill();
-	void DrawPlayerGear();
+	void DrawPlayerGear(C_GearBase* a_pGear, Math::Vector2 a_pos);
 
 	void Release();
 private:

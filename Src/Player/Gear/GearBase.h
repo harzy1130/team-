@@ -23,14 +23,27 @@ public:
 	virtual void EndActiveGear();
 
 	virtual bool PassiveTiming();
+
 	virtual void OncePassiveGear();
 	virtual void WhilePassiveGear();
 	virtual void EndPassiveGear();
 
 	virtual void UpdateCD();
 
-	virtual float ActiveCD()final { return m_activeCD; }
-	virtual float ActiveCDMax()final { return m_activeCDMax; }
+//ゲッター
+	//アクティブ
+	virtual float GetActiveCD()final { return m_activeCD; }
+	virtual float GetActiveCDMax()final { return m_activeCDMax; }
+	virtual float GetCalcActiveCDMax()final;
+	virtual bool GetWhileActive()final { return m_bWhileActive; }
+	//パッシブ
+	virtual float GetPassiveCD()final { return m_passiveCD; }
+	virtual float GetPassiveCDMax()final { return m_passiveCDMax; }
+	virtual float GetCalcPassiveCDMax()final;
+	virtual bool GetWhilePassive()final { return m_bWhilePassive; }
+
+	virtual bool GetPassiveOnly()final { return m_bPassiveOnly; }
+
 	virtual S_Status GetGearStatus()final { return m_status; }
 	//呼び出し側での書き換えを防ぐため、constにキャストする必要がある
 	//const関数で返すと、呼び出し元でconstを付ける必要があるため、constを外して返す
@@ -39,20 +52,25 @@ protected:
 	//装備が持つ増加ステータス
 	S_Status m_status;
 
-	//クールダウンなど
+//クールダウンなど
+	//アクティブ用
 	float m_activeCD;
 	float m_activeCDMax;
 	float m_activeTimer;
 	float m_activeTimerMax;
-	bool m_bGearActive;
-	bool m_bHaveActiveCD;
-
+	bool m_bWhileActive;			//アクティブの効果が発動中かどうか
+	bool m_bHaveActiveCD = true;
+	bool m_bWaitActiveTimer = false;	//アクティブの効果が終了してから、アクティブのクールダウンを開始する場合にTrueにする
+	//パッシブ用
 	float m_passiveCD;
 	float m_passiveCDMax;
 	float m_passiveTimer;
 	float m_passiveTimerMax;
-	bool m_bGearPassive;
-	bool m_bHavePassiveCD;
+	bool m_bWhilePassive;			//パッシブの効果が発動中かどうか
+	bool m_bHavePassiveCD = true;	
+	bool m_bWaitPassiveTimer = false;	//パッシブの効果が終了してから、パッシブのクールダウンを開始する場合にTrueにする
+	//装備効果がパッシブのみの場合にTrueにして、アクティブのクールダウンを無効化する
+	bool m_bPassiveOnly = false;
 	//装備アイコン
 	KdTexture m_gearIconTex;
 	//プレイヤーを参照するためのポインタ

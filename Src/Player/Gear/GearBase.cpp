@@ -6,19 +6,19 @@ void C_GearBase::Init(C_PlayerBase* a_pPlayer)
 {
 	m_status = { 0,0,0,0,0,0,0,0 };
 	m_pPlayer = a_pPlayer;
-	m_activeCDMax = 300;
+	m_activeCDMax = 0;
 	m_activeCD = 0;
-	m_activeTimerMax = 300;
+	m_activeTimerMax = 0;
 	m_activeTimer = 0;
-	m_bGearActive = false;
-	m_bHaveActiveCD	 = true;
+	m_bHaveActiveCD = true;
+	m_bWhileActive = false;
 
 	m_passiveCDMax = 0;
 	m_passiveCD = 0;
 	m_passiveTimerMax = 0;
 	m_passiveTimer = 0;
-	m_bGearPassive = false;
 	m_bHavePassiveCD = true;
+	m_bWhilePassive = false;
 }
 
 void C_GearBase::Draw()
@@ -28,10 +28,14 @@ void C_GearBase::Draw()
 
 void C_GearBase::OnceActiveGear()
 {
-	if(m_bGearActive || m_activeCD > 0)return;
-	m_bGearActive = true;
-	m_activeCD = m_activeCDMax;
+	if (m_bPassiveOnly)return;
+	if (m_bWhileActive || m_activeCD > 0)return;
+	m_bWhileActive = true;
 	m_activeTimer = m_activeTimerMax;
+	if (!m_bWaitActiveTimer) 
+	{
+		m_activeCD = m_pPlayer->CalcSkillHaste(m_activeCDMax);
+	}
 }
 
 void C_GearBase::WhileActiveGear()
@@ -46,12 +50,17 @@ void C_GearBase::WhileActiveGear()
 
 void C_GearBase::EndActiveGear()
 {
-	m_bGearActive = false;
+	if (!m_bWhileActive)return;
+	m_bWhileActive = false;
+	if (m_bWaitActiveTimer)
+	{
+		m_activeCD = m_pPlayer->CalcSkillHaste(m_activeCDMax);
+	}
 }
 
 bool C_GearBase::PassiveTiming()
 {
-	if (m_bGearPassive || m_passiveCD > 0)
+	if (m_bWhilePassive || m_passiveCD > 0)
 	{
 		return true;
 	}
@@ -60,9 +69,12 @@ bool C_GearBase::PassiveTiming()
 
 void C_GearBase::OncePassiveGear()
 {
-	m_bGearPassive = true;
-	m_passiveCD = m_passiveCDMax;
+	m_bWhilePassive = true;
 	m_passiveTimer = m_passiveTimerMax;
+	if(!m_bWaitPassiveTimer)
+	{
+		m_passiveCD = m_pPlayer->CalcSkillHaste(m_passiveCDMax);
+	}
 }
 
 void C_GearBase::WhilePassiveGear()
@@ -77,7 +89,12 @@ void C_GearBase::WhilePassiveGear()
 
 void C_GearBase::EndPassiveGear()
 {
-	m_bGearPassive = false;
+	if (!m_bWhilePassive)return;
+	m_bWhilePassive = false;
+	if(m_bWaitPassiveTimer)
+	{
+		m_passiveCD = m_pPlayer->CalcSkillHaste(m_passiveCDMax);
+	}
 }
 
 
@@ -98,5 +115,15 @@ ActiveCDSkip:;
 		m_passiveCD = 0;
 	}
 PassiveCDSkip:;
+}
+
+float C_GearBase::GetCalcActiveCDMax()
+{
+	return m_pPlayer->CalcSkillHaste(m_activeCDMax);	
+}
+
+float C_GearBase::GetCalcPassiveCDMax()
+{
+	return m_pPlayer->CalcSkillHaste(m_passiveCDMax); 
 }
 
