@@ -12,9 +12,8 @@ public:
 	void OncePassiveGear()override;
 	void WhilePassiveGear()override;
 	void EndPassiveGear()override;
-
 public:
 	const float m_hpRegeneStatus = 0.5f;
-	const float m_heal = 5;
+	const float m_heal = 3;
 	const float m_defBonus = 20;
 };
