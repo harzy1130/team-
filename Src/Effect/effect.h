@@ -1,17 +1,19 @@
 #pragma once
 class C_PlayerBase;
 class EnemyBase;
+class C_UIManager;
 class C_Effect
 {
 public:
 	C_Effect() {};
 	~C_Effect() {};
 
-	void InitPlayer(C_PlayerBase* a_pPlayer);
-	void InitEnemy(EnemyBase* a_pEnemy);
-	void UpdatePlayer(C_PlayerBase* a_pPlayer);
-	void UpdateEnemy(EnemyBase* a_pEnemy);
+	void InitPlayer(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager);
+	void InitEnemy(EnemyBase* a_pEnemy, C_UIManager* a_pUIManager);
+	void UpdatePlayer();
+	void UpdateEnemy();
 	void Draw();
+	void EffectTest();
 
 	bool GetPoison(){ return m_bPoison; }
 	bool GetCombustion(){ return m_bCombustion; }
@@ -62,5 +64,10 @@ private:
 
 	bool m_bDefDown;	//防御力低下
 	float m_defDownTime;
+
+	//参照クラスのポインタ
+	C_PlayerBase* m_pPlayer;
+	EnemyBase* m_pEnemy;
+	C_UIManager* m_pUIManager;
 
 };
