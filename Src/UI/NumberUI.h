@@ -12,22 +12,24 @@ public:
 	void Update();
 	void Draw();
 	void Release();
-	void Move();
+	void MoveDamage();
+	void MoveEffectDamage();
 
 	//数字の生成
-	void Generate(int a_number, Math::Vector2 a_pos,Math::Vector2 a_moveSpeed, float a_size,float a_angle, Math::Color a_color, float a_lifespan,bool a_movingDirectionX);
+	void Generate(int a_number, Math::Vector2 a_pos,Math::Vector2 a_moveSpeed, Math::Vector2 a_size,float a_angle, Math::Color a_color, Math::Color a_frameColor, float a_lifespan,bool a_movingDirectionX);
 	
 	//ゲッター
 	Math::Vector2 GetPos() { return m_pos; }
 	Math::Vector2 GetDrawPos() { return m_drawPos; }
 	float GetAngle() { return m_angle; }
 	bool GetDrawFlg() { return m_drawFlg; }
+	float GetAlpha() { return m_alpha; }
 
 	//セッター
 	void SetPos(Math::Vector2 a_pos) { m_pos = a_pos; }
 	void SetAngle(float a_angle) { m_angle = a_angle; }
-	void SetTexture(KdTexture* a_pTex) { m_pTexture = a_pTex; }
-
+	void SetNumberTexture(KdTexture* a_pNumberTex) { m_pNumberTex = a_pNumberTex; }
+	void SetFrameTexture(KdTexture* a_pFrameTex) { m_pFrameTex = a_pFrameTex; }
 
 private:
 	
@@ -54,10 +56,13 @@ private:
 	Math::Vector2 m_moveSpeed;
 	bool m_movingDirectionX;//移動方向(x)true:+方向　,false:ー方向
 	float m_moveAngle;//sinカーブ用
-	float m_size;//数字の大きさ
+	Math::Vector2 m_size;//数字の大きさ
 	Math::Color m_color;//数字の色
+	Math::Color m_frameColor;//数字の枠の色
 	float m_lifespan;//有効期間
 	float m_lifespanTimer;//有効期間のタイマー
+	float m_alpha;//透明度
+	float m_alphaSpeed;//透明度の変化速度
 	static const int m_numbersTexWidth = 28;	//数字のテクスチャの幅
 
 	//画像用変数
@@ -70,7 +75,8 @@ private:
 	Math::Matrix m_transMat;
 	Math::Matrix m_scaleMat;
 	Math::Matrix m_rotMat;
-	KdTexture* m_pTexture;
+	KdTexture* m_pNumberTex;
+	KdTexture* m_pFrameTex;
 	float m_angle;
 
 	//参照クラスポインタ
