@@ -1,4 +1,4 @@
-#include "Pch.h"
+ï»¿#include "Pch.h"
 #include "EnemyManager.h"
 #include "Map/Map.h"
 #include <algorithm>
@@ -14,10 +14,18 @@ bool EnemyManager::Init(C_Hit* hit, C_Camera* camera, C_Map* map, const char* sp
     m_map = map;
     m_spawnFile = spawnFile != nullptr ? spawnFile : "";
     if (m_hit == nullptr || m_camera == nullptr || m_map == nullptr || m_spawnFile.empty()) return false;
-    // ‰‰ñ‚ÌƒXƒe[ƒWXV‚ðŽ~‚ß‚È‚¢‚æ‚¤Aƒ^ƒCƒgƒ‹•\Ž¦‘O‚É‰æ‘œ‚ð€”õ‚·‚éB
+    // åˆå›žã®ã‚¹ãƒ†ãƒ¼ã‚¸æ›´æ–°ã‚’æ­¢ã‚ãªã„ã‚ˆã†ã€ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºå‰ã«ç”»åƒã‚’æº–å‚™ã™ã‚‹ã€‚
     if (!Enemy1::PreloadSprites() || !Enemy2::PreloadSprites())
     {
         OutputDebugStringA("Enemy sprite preload failed.\n");
+        return false;
+    }
+    if (!m_questionIcon.Load("Src/Enemy/Texture/EnemyState_Question.png")
+        || !m_alertIcon.Load("Src/Enemy/Texture/EnemyState_Alert.png")
+        || !m_attackIcon.Load("Src/Enemy/Texture/EnemyState_Attack.png"))
+    {
+        OutputDebugStringA("Enemy state icon load failed.\n");
+        Release();
         return false;
     }
     return true;
@@ -25,7 +33,7 @@ bool EnemyManager::Init(C_Hit* hit, C_Camera* camera, C_Map* map, const char* sp
 
 void EnemyManager::Update(C_PlayerBase* player, bool active)
 {
-    // —¼ƒL[‚Ì‰Ÿ‰ºó‘Ô‚ðŠm”F‚µA‘g‚Ý‡‚í‚¹‚ª¬—§‚µ‚½uŠÔ‚¾‚¯¢Š«‚·‚éB
+    // ä¸¡ã‚­ãƒ¼ã®æŠ¼ä¸‹çŠ¶æ…‹ã‚’ç¢ºèªã—ã€çµ„ã¿åˆã‚ã›ãŒæˆç«‹ã—ãŸçž¬é–“ã ã‘å¬å–šã™ã‚‹ã€‚
     const bool spawnDown = (GetAsyncKeyState('E') & 0x8000) != 0
         && (GetAsyncKeyState('1') & 0x8000) != 0;
     const bool spawnPressed = spawnDown && !m_debugSpawnWasDown;
@@ -43,7 +51,7 @@ void EnemyManager::Update(C_PlayerBase* player, bool active)
         m_stage = m_map->GetStageNum();
         m_wasActive = true;
     }
-    // ƒXƒe[ƒW“Ç‚Ýž‚Ý‚ÆŽQÆæ‚ÌŠm”F‚ðI‚¦‚Ä‚©‚ç¶¬‚·‚éB
+    // ã‚¹ãƒ†ãƒ¼ã‚¸èª­ã¿è¾¼ã¿ã¨å‚ç…§å…ˆã®ç¢ºèªã‚’çµ‚ãˆã¦ã‹ã‚‰ç”Ÿæˆã™ã‚‹ã€‚
     if (spawnPressed)
     {
         const auto pos = m_camera->GetPos();
@@ -60,7 +68,7 @@ void EnemyManager::Update(C_PlayerBase* player, bool active)
         enemy->SetDamageTestEnabled(enemy.get() == debugEnemy);
         enemy->Update(player, true);
     }
-    //æ‚ÉŠÇ—”z—ñ‚Ì—v‘f‚ðíœ
+    //å…ˆã«ç®¡ç†é…åˆ—ã®è¦ç´ ã‚’å‰Šé™¤
     m_pAllEnemies.erase(std::remove_if(m_pAllEnemies.begin(), m_pAllEnemies.end(),
         [](const EnemyBase* pEB) {
             if (pEB->GetAlive())return false;
@@ -159,12 +167,41 @@ bool EnemyManager::SpawnEnemy1(float a_x, float a_y)
 
 void EnemyManager::DrawVision()
 {
+    if (!m_showVision) return;
     for (auto* enemy : m_pAllEnemies) enemy->DrawVision();
 }
 
 void EnemyManager::Draw()
 {
     for (const auto& allenemy : m_pAllEnemies)allenemy->Draw();
+    DrawStatusIndicators();
+}
+
+void EnemyManager::DrawStatusIndicators()
+{
+    const auto camera = m_camera != nullptr ? m_camera->GetPos() : Math::Vector2(0.0f, 0.0f);
+    const Math::Color color(1.0f, 1.0f, 1.0f, 1.0f);
+    for (const auto* enemy : m_pAllEnemies)
+    {
+        KdTexture* icon = nullptr;
+        int size = 32;
+        switch (enemy->GetAwarenessState())
+        {
+        case EnemyBase::AwarenessState::Suspicious: icon = &m_questionIcon; break;
+        case EnemyBase::AwarenessState::Alert: icon = &m_alertIcon; break;
+        case EnemyBase::AwarenessState::Attack: icon = &m_attackIcon; size = 40; break;
+        default: continue;
+        }
+        const auto& info = icon->GetInfo();
+        if (info.Width == 0 || info.Height == 0) continue;
+        // æ•µã®å‘ãã§åè»¢ã›ãšã€ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã®å³ä¸Šã‹ã‚‰ã‚«ãƒ¡ãƒ©ä½ç½®ã‚’ä¸€åº¦ã ã‘å¼•ãã€‚
+        SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(
+            enemy->GetHitRight() + 8.0f - camera.x,
+            enemy->GetHitTop() + 24.0f - camera.y, 0.0f));
+        const Math::Rectangle source(0, 0, static_cast<int>(info.Width), static_cast<int>(info.Height));
+        SHADER.m_spriteShader.DrawTex(icon, 0, 0, size, size, &source, &color, {0.5f, 0.5f});
+    }
+    SHADER.m_spriteShader.SetMatrix(Math::Matrix::Identity);
 }
 
 std::size_t EnemyManager::GetAliveCount() const
@@ -219,6 +256,10 @@ void EnemyManager::Release()
     m_wasActive = false;
     m_spawnFile.clear();
     m_debugSpawnWasDown = false;
+    m_showVision = false;
+    m_questionIcon.Release();
+    m_alertIcon.Release();
+    m_attackIcon.Release();
 }
 
 Enemy2* EnemyManager::GetEnemy2(std::size_t index)

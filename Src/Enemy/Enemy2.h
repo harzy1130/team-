@@ -39,6 +39,10 @@ public:
     bool HasUsedRetreat() const { return m_retreat.HasUsed(); }
     bool IsRetreating() const { return m_retreat.IsActive(); }
     bool IsShooting() const { return m_shotState != ShotState::Ready; }
+    bool IsAttackWarningActive() const override
+    {
+        return m_shotState == ShotState::Windup || m_shotState == ShotState::Release;
+    }
     std::size_t GetProjectileCount() const { return m_projectiles.size(); }
 
 protected:

@@ -1,11 +1,11 @@
-#include "Pch.h"
+ï»¿#include "Pch.h"
 #include "EnemyBase.h"
 #include "Map/Map.h"
 #include <cmath>
 #include "hit/hit.h"
 #include "Constants/Constants.h"
 
-// “G‚ÌÀ•WE•`‰æs—ñE¶‘¶ó‘Ô‚ğ‰Šú‰»‚·‚éB
+// æ•µã®åº§æ¨™ãƒ»æç”»è¡Œåˆ—ãƒ»ç”Ÿå­˜çŠ¶æ…‹ã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚
 EnemyBase::EnemyBase()
 {
     m_pos = Math::Vector2(0.0f, 0.0f);
@@ -13,7 +13,7 @@ EnemyBase::EnemyBase()
     m_bAlive = false;
 }
 
-// ‰ŠúˆÊ’uE„‰ñ”ÍˆÍE‘¬“x‚ğİ’è‚µA‰æ‘œ‚Æ“–‚½‚è”»’è‚ğ‰Šú‰»‚·‚éB‰æ‘œ‚Ì“Ç‚İ‚İ¸”s‚Í false ‚ğ•Ô‚·B
+// åˆæœŸä½ç½®ãƒ»å·¡å›ç¯„å›²ãƒ»é€Ÿåº¦ã‚’è¨­å®šã—ã€ç”»åƒã¨å½“ãŸã‚Šåˆ¤å®šã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚ç”»åƒã®èª­ã¿è¾¼ã¿å¤±æ•—æ™‚ã¯ false ã‚’è¿”ã™ã€‚
 bool EnemyBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, float x, float y, float leftX, float rightX,
     float speed, const char* texturePath)
 {
@@ -40,7 +40,7 @@ bool EnemyBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, float x, float y, float
     return true;
 }
 
-// ¶‰E‚Ì„‰ñ”ÍˆÍ‚ğİ’è‚µAŒ»İ‚Ì X À•W‚ğ‚»‚Ì”ÍˆÍ“à‚Éû‚ß‚éB
+// å·¦å³ã®å·¡å›ç¯„å›²ã‚’è¨­å®šã—ã€ç¾åœ¨ã® X åº§æ¨™ã‚’ãã®ç¯„å›²å†…ã«åã‚ã‚‹ã€‚
 void EnemyBase::SetPatrolRange(float leftX, float rightX)
 {
     m_leftX = std::min(leftX, rightX);
@@ -48,7 +48,7 @@ void EnemyBase::SetPatrolRange(float leftX, float rightX)
     m_pos.x = std::max(m_leftX, std::min(m_pos.x, m_rightX));
 }
 
-// HP ‚ğ 0 ˆÈã‚Éİ’è‚·‚éBHP ‚ª 0 ‚É‚È‚Á‚½ê‡‚Í€–Só‘Ô‚É‚µ‚ÄˆÚ“®‚ğ’â~‚·‚éB
+// HP ã‚’ 0 ä»¥ä¸Šã«è¨­å®šã™ã‚‹ã€‚HP ãŒ 0 ã«ãªã£ãŸå ´åˆã¯æ­»äº¡çŠ¶æ…‹ã«ã—ã¦ç§»å‹•ã‚’åœæ­¢ã™ã‚‹ã€‚
 void EnemyBase::SetHp(int hp)
 {
     m_hp = std::max(0, hp);
@@ -60,7 +60,7 @@ void EnemyBase::SetHp(int hp)
     }
 }
 
-// —LŒø‚ÈUŒ‚‚ğó‚¯‚½‚Æ‚«‚É HP ‚ğŒ¸‚ç‚µA€–S‚Ü‚½‚ÍUŒ‚Œ³‚Æ”½‘Î•ûŒü‚Ö‚ÌƒmƒbƒNƒoƒbƒN‚ğˆ—‚·‚éB
+// æœ‰åŠ¹ãªæ”»æ’ƒã‚’å—ã‘ãŸã¨ãã« HP ã‚’æ¸›ã‚‰ã—ã€æ­»äº¡ã¾ãŸã¯æ”»æ’ƒå…ƒã¨åå¯¾æ–¹å‘ã¸ã®ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã‚’å‡¦ç†ã™ã‚‹ã€‚
 bool EnemyBase::TakeDamage(int damage, float attackFromX)
 {
     if (!m_bAlive || m_invincibleFrames > 0 || damage <= 0) return false;
@@ -74,19 +74,19 @@ bool EnemyBase::TakeDamage(int damage, float attackFromX)
     return true;
 }
 
-// UŒ‚—Í‚ğ 0 ˆÈã‚Ì’l‚Éİ’è‚·‚éB
+// æ”»æ’ƒåŠ›ã‚’ 0 ä»¥ä¸Šã®å€¤ã«è¨­å®šã™ã‚‹ã€‚
 void EnemyBase::SetAtk(int atk)
 {
     m_atk = std::max(0, atk);
 }
 
-// 1 ƒtƒŒ[ƒ€“–‚½‚è‚Ì„‰ñ‘¬“x‚ğ 0 ˆÈã‚Ì’l‚Éİ’è‚·‚éB
+// 1 ãƒ•ãƒ¬ãƒ¼ãƒ å½“ãŸã‚Šã®å·¡å›é€Ÿåº¦ã‚’ 0 ä»¥ä¸Šã®å€¤ã«è¨­å®šã™ã‚‹ã€‚
 void EnemyBase::SetMoveSpeed(float speed)
 {
     m_moveSpeed = std::max(0.0f, speed);
 }
 
-// –³“GŠÔ‚Æ”íƒ_ƒ[ƒWó‘Ô‚ğXV‚µAƒmƒbƒNƒoƒbƒN‚Ü‚½‚Í¶‰E‚Ì„‰ñˆÚ“®‚ğs‚¤B
+// ç„¡æ•µæ™‚é–“ã¨è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸çŠ¶æ…‹ã‚’æ›´æ–°ã—ã€ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã¾ãŸã¯å·¦å³ã®å·¡å›ç§»å‹•ã‚’è¡Œã†ã€‚
 void EnemyBase::Update()
 {
     if (!m_bAlive) return;
@@ -110,12 +110,12 @@ void EnemyBase::Update()
     }
     else if (GetActionMove(moveX))
     {
-        // ŒÅ—Ls“®‚Í X •ûŒü‚ÌˆÚ“®—Ê‚¾‚¯‚ğw’è‚µAÀ•W‚Ö‚Ì“K—p‚Í MoveWithCollision ‚Åˆê“x‚¾‚¯s‚¤B
+        // å›ºæœ‰è¡Œå‹•ã¯ X æ–¹å‘ã®ç§»å‹•é‡ã ã‘ã‚’æŒ‡å®šã—ã€åº§æ¨™ã¸ã®é©ç”¨ã¯ MoveWithCollision ã§ä¸€åº¦ã ã‘è¡Œã†ã€‚
     }
     else if (m_chasing)
     {
         const float dx = m_target->GetPos().x - m_pos.x;
-        // ƒ^[ƒQƒbƒg‚Ì X À•W‚Å~‚ßA’Ê‚è‰ß‚¬‚Ä–ˆƒtƒŒ[ƒ€Œü‚«‚ª”½“]‚·‚é‚Ì‚ğ–h‚®B
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã® X åº§æ¨™ã§æ­¢ã‚ã€é€šã‚Šéãã¦æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‘ããŒåè»¢ã™ã‚‹ã®ã‚’é˜²ãã€‚
         if (std::abs(dx) > 1.0f)
         {
             m_direction = dx > 0.0f ? 1 : -1;
@@ -124,7 +124,7 @@ void EnemyBase::Update()
     }
     else if (m_pos.x < m_leftX || m_pos.x > m_rightX)
     {
-        // ƒ^[ƒQƒbƒg‚ğŒ©¸‚Á‚½Œã‚ÍA„‰ñ”ÍˆÍ‚Ü‚Å•à‚¢‚Ä–ß‚éB
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¦‹å¤±ã£ãŸå¾Œã¯ã€å·¡å›ç¯„å›²ã¾ã§æ­©ã„ã¦æˆ»ã‚‹ã€‚
         const float goal = m_pos.x < m_leftX ? m_leftX : m_rightX;
         m_direction = goal > m_pos.x ? 1 : -1;
         moveX = static_cast<float>(m_direction) * std::min(m_moveSpeed, std::abs(goal - m_pos.x));
@@ -152,14 +152,14 @@ void EnemyBase::Update()
 
 bool EnemyBase::MoveWithCollision(float horizontalMove)
 {
-    // —‰º‘¬“x‚ğ§ŒÀ‚µA1 ƒtƒŒ[ƒ€‚Åƒ}ƒbƒvƒ`ƒbƒv‚ğ”ò‚Ñ‰z‚¦‚É‚­‚­‚·‚éB
+    // è½ä¸‹é€Ÿåº¦ã‚’åˆ¶é™ã—ã€1 ãƒ•ãƒ¬ãƒ¼ãƒ ã§ãƒãƒƒãƒ—ãƒãƒƒãƒ—ã‚’é£›ã³è¶Šãˆã«ããã™ã‚‹ã€‚
     const float maxFallSpeed = static_cast<float>(CHIP_RADIUS) * 0.5f;
     m_velocityY = std::max(m_velocityY - GRAVITY, -maxFallSpeed);
     SetMove(horizontalMove, m_velocityY);
     ResetHitRect();
     if (m_pHit != nullptr) m_pHit->MapHitCheck(this);
 
-    // ApplyMove ‚ªˆÚ“®—Ê‚ğÁ‚·‘O‚ÉA—’nE“VˆäÕ“Ë‚Å•â³‚³‚ê‚½‘¬“x‚ğ•Û‘¶‚·‚éB
+    // ApplyMove ãŒç§»å‹•é‡ã‚’æ¶ˆã™å‰ã«ã€è½åœ°ãƒ»å¤©äº•è¡çªã§è£œæ­£ã•ã‚ŒãŸé€Ÿåº¦ã‚’ä¿å­˜ã™ã‚‹ã€‚
     const auto correctedMove = GetMove();
     m_velocityY = correctedMove.y;
     const bool wall = horizontalMove != 0.0f && correctedMove.x == 0.0f;
@@ -167,24 +167,24 @@ bool EnemyBase::MoveWithCollision(float horizontalMove)
     return wall;
 }
 
-// ˆÚ“®•ûŒü‚É‰‚¶‚½¶‰E”½“]‚ÆAŒ»İˆÊ’u‚Ö‚Ì•½sˆÚ“®‚ğ•`‰æs—ñ‚É”½‰f‚·‚éB
+// ç§»å‹•æ–¹å‘ã«å¿œã˜ãŸå·¦å³åè»¢ã¨ã€ç¾åœ¨ä½ç½®ã¸ã®å¹³è¡Œç§»å‹•ã‚’æç”»è¡Œåˆ—ã«åæ˜ ã™ã‚‹ã€‚
 void EnemyBase::CalcMat()
 {
     m_draw = m_pCamera ? m_pos - m_pCamera->GetPos() : m_pos;
-    // ¶Œü‚«‚Ìê‡‚Í Y ²‚ğ’†S‚É 180 “x‰ñ“]‚µA‰æ‘œ‚ğ¶‰E”½“]‚·‚éB
+    // å·¦å‘ãã®å ´åˆã¯ Y è»¸ã‚’ä¸­å¿ƒã« 180 åº¦å›è»¢ã—ã€ç”»åƒã‚’å·¦å³åè»¢ã™ã‚‹ã€‚
     const float angle = (m_direction < 0) ? DirectX::XM_PI : 0.0f;
     m_mat = Math::Matrix::CreateRotationY(angle)
         * Math::Matrix::CreateTranslation(m_draw.x, m_draw.y, 0.0f);
 }
 
-// ¶‘¶’†‚Ì“G‚ğ•`‰æ‚·‚éB–³“GŠÔ’†‚Í•\¦‚ğØ‚è‘Ö‚¦‚Ä“_–Å‚³‚¹‚éB
+// ç”Ÿå­˜ä¸­ã®æ•µã‚’æç”»ã™ã‚‹ã€‚ç„¡æ•µæ™‚é–“ä¸­ã¯è¡¨ç¤ºã‚’åˆ‡ã‚Šæ›¿ãˆã¦ç‚¹æ»…ã•ã›ã‚‹ã€‚
 void EnemyBase::Draw()
 {
     if (!m_bAlive) return;
     if (m_invincibleFrames > 0 && (m_invincibleFrames / 4) % 2 == 0) return;
 
-    //// UpdateŒã‚ÉSetPos‚ªŒÄ‚Î‚ê‚½ê‡‚É”õ‚¦‚ÄA•`‰æs—ñ‚ğÄŒvZ‚·‚éB
-    // ƒJƒƒ‰ƒXƒNƒ[ƒ‹‚Ì‚½‚ß‚¢‚Á‚½‚ñƒRƒƒ“ƒgƒAƒEƒg‚µ‚Ü‚µ‚½i‹g“cj
+    //// Updateå¾Œã«SetPosãŒå‘¼ã°ã‚ŒãŸå ´åˆã«å‚™ãˆã¦ã€æç”»è¡Œåˆ—ã‚’å†è¨ˆç®—ã™ã‚‹ã€‚
+    // ã‚«ãƒ¡ãƒ©ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã®ãŸã‚ã„ã£ãŸã‚“ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆã—ã¾ã—ãŸï¼ˆå‰ç”°ï¼‰
     CalcMat();
     const auto& info = m_texture.GetInfo();
     SHADER.m_spriteShader.SetMatrix(m_mat);
@@ -213,7 +213,7 @@ void EnemyBase::Release()
     m_pHit = nullptr;
 }
 
-// ”­Œ©‹——£‚Æ’ÇÕ‰ğœ‹——£‚ğ•ª‚¯Aó‘Ô‚ª’ZŠÔ‚ÅØ‚è‘Ö‚í‚è‘±‚¯‚é‚Ì‚ğ–h‚®B
+// ç™ºè¦‹è·é›¢ã¨è¿½è·¡è§£é™¤è·é›¢ã‚’åˆ†ã‘ã€çŠ¶æ…‹ãŒçŸ­æ™‚é–“ã§åˆ‡ã‚Šæ›¿ã‚ã‚Šç¶šã‘ã‚‹ã®ã‚’é˜²ãã€‚
 void EnemyBase::SetVision(float range, float fullAngleDegrees, float loseDistance)
 {
     m_visionRange = std::max(1.0f, range);
@@ -221,8 +221,8 @@ void EnemyBase::SetVision(float range, float fullAngleDegrees, float loseDistanc
     m_loseDistance = std::max(m_visionRange + 1.0f, loseDistance);
 }
 
-// ƒ`ƒbƒv‚Ì’†SÀ•W‚Í X: LEFT_EDGE + —ñ * CHIP_SIZEAY: TOP_EDGE - s * CHIP_SIZEB
-// GetCollisionFlg ‚Í•‰‚Ì“Yš‚ğŠm”F‚µ‚È‚¢‚½‚ßA‚±‚±‚Å”ÍˆÍ‚ğƒ`ƒFƒbƒN‚·‚éB
+// ãƒãƒƒãƒ—ã®ä¸­å¿ƒåº§æ¨™ã¯ X: LEFT_EDGE + åˆ— * CHIP_SIZEã€Y: TOP_EDGE - è¡Œ * CHIP_SIZEã€‚
+// GetCollisionFlg ã¯è² ã®æ·»å­—ã‚’ç¢ºèªã—ãªã„ãŸã‚ã€ã“ã“ã§ç¯„å›²ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã€‚
 float EnemyBase::TraceVision(float directionX, float directionY, float distance) const
 {
     if (m_visionMap == nullptr) return distance;
@@ -242,6 +242,14 @@ float EnemyBase::TraceVision(float directionX, float directionY, float distance)
     return distance;
 }
 
+EnemyBase::AwarenessState EnemyBase::GetAwarenessState() const
+{
+    if (!m_bAlive || !m_chasing || m_target == nullptr) return AwarenessState::None;
+    if (!IsHurt() && IsAttackWarningActive()) return AwarenessState::Attack;
+    // è¦–ç·šãŒåˆ‡ã‚Œã¦ã‚‚è¿½è·¡ä¸­ãªã‚‰ç–‘å•ç¬¦ã€ç›®è¦–ã§ãã¦ã„ã‚Œã°æ„Ÿå˜†ç¬¦ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
+    return CanSeeTarget() ? AwarenessState::Alert : AwarenessState::Suspicious;
+}
+
 bool EnemyBase::CanSeeTarget() const
 {
     if (m_target == nullptr) return false;
@@ -253,7 +261,7 @@ bool EnemyBase::CanSeeTarget() const
     return TraceVision(delta.x / distance, delta.y / distance, distance) >= distance;
 }
 
-// ŒŸ’m‚Æ“¯‚¶•Ç‚ÅÕ‚ç‚ê‚éîŒ`‚Ì‹–ì‚ğA—¼ƒLƒƒƒ‰ƒNƒ^[‚æ‚è‰œ‚É•`‰æ‚·‚éB
+// æ¤œçŸ¥ã¨åŒã˜å£ã§é®ã‚‰ã‚Œã‚‹æ‰‡å½¢ã®è¦–é‡ã‚’ã€ä¸¡ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚ˆã‚Šå¥¥ã«æç”»ã™ã‚‹ã€‚
 void EnemyBase::DrawVision()
 {
     if (!m_bAlive) return;
@@ -295,7 +303,7 @@ void EnemyBase::DrawVision()
 bool EnemyBase::PlaceOnMap(C_Map* map)
 {
     if (map == nullptr) return false;
-    // ƒ`ƒbƒv‚Ì’†SÀ•W‚ğŠî€‚ÉA’†S‚Ì 1 ƒ}ƒX‚¾‚¯‚Å‚È‚­‘«Œ³‚Ì•‘S‘Ì‚ğ’²‚×‚éB
+    // ãƒãƒƒãƒ—ã®ä¸­å¿ƒåº§æ¨™ã‚’åŸºæº–ã«ã€ä¸­å¿ƒã® 1 ãƒã‚¹ã ã‘ã§ãªãè¶³å…ƒã®å¹…å…¨ä½“ã‚’èª¿ã¹ã‚‹ã€‚
     const int firstCol = static_cast<int>(std::floor(
         (m_spawnX + m_rect.left - LEFT_EDGE + CHIP_RADIUS + 0.01f) / CHIP_SIZE));
     const int lastCol = static_cast<int>(std::floor(
@@ -304,14 +312,14 @@ bool EnemyBase::PlaceOnMap(C_Map* map)
     for (int row = 0; row < MAP_HEIGHT; ++row)
     {
         const float floorTop = TOP_EDGE - row * CHIP_SIZE + CHIP_RADIUS;
-        // w’è‚µ‚½‚‚³‚æ‚èã‚Ì‘«ê‚ğ‘I‚Î‚¸A‘½’i’nŒ`‚Ì”z’u‚É‚à‘Î‰‚·‚éB
+        // æŒ‡å®šã—ãŸé«˜ã•ã‚ˆã‚Šä¸Šã®è¶³å ´ã‚’é¸ã°ãšã€å¤šæ®µåœ°å½¢ã®é…ç½®ã«ã‚‚å¯¾å¿œã™ã‚‹ã€‚
         if (floorTop > m_spawnSearchY + m_rect.bottom) continue;
         bool ground = false;
         for (int col = firstCol; col <= lastCol; ++col)
             if (map->GetCollisionFlg(row, col)) ground = true;
         if (!ground) continue;
 
-        // ŠJn‚Ì’Z‚¢—‰º‚Íc‚µAÀÛ‚Ì’n–Ê‚æ‚èã‚©‚çoŒ»‚³‚¹‚éB
+        // é–‹å§‹æ™‚ã®çŸ­ã„è½ä¸‹ã¯æ®‹ã—ã€å®Ÿéš›ã®åœ°é¢ã‚ˆã‚Šä¸Šã‹ã‚‰å‡ºç¾ã•ã›ã‚‹ã€‚
         SetPos(m_spawnX, floorTop - static_cast<float>(m_rect.bottom) + CHIP_SIZE);
         ResetAwareness();
         m_direction = 1;
@@ -326,7 +334,7 @@ bool EnemyBase::PlaceOnMap(C_Map* map)
     }
     return false;
 }
-// “–‚½‚è”»’è‚Ì‘«Œ³‚ÖƒRƒ}‚ğ”z’u‚µAŒ³‰æ‘œ‚ÌŒü‚«‚É‰‚¶‚Ä¶‰E‚ğ”½“]‚·‚éB
+// å½“ãŸã‚Šåˆ¤å®šã®è¶³å…ƒã¸ã‚³ãƒã‚’é…ç½®ã—ã€å…ƒç”»åƒã®å‘ãã«å¿œã˜ã¦å·¦å³ã‚’åè»¢ã™ã‚‹ã€‚
 void EnemyBase::DrawSpriteFrame(const Math::Rectangle& source, int width, int height,
     bool sourceFacesLeft, int bottomPadding)
 {

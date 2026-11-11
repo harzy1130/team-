@@ -1,4 +1,4 @@
-#include "Pch.h"
+ï»¿#include "Pch.h"
 #include "Enemy1.h"
 #include "Hit/Hit.h"
 #include "Map/Map.h"
@@ -16,6 +16,10 @@ namespace
     constexpr int NormalRecoveryFrames = 14;
     constexpr int NormalCooldownFrames = 30;
     constexpr float NormalReach = 12.0f;
+    // è·é›¢ã¯ä¸¡è€…ã®å½“ãŸã‚Šåˆ¤å®šã®ç«¯ã‹ã‚‰æ¸¬ã‚Šã€å¾Œé€€æ™‚é–“ã«ä¸Šé™ã‚’è¨­ã‘ã‚‹ã€‚
+    constexpr float RetreatGap = 96.0f;
+    constexpr float RetreatSpeed = 3.5f;
+    constexpr int RetreatMaxFrames = 36;
 
     struct SpritePixels
     {
@@ -24,7 +28,7 @@ namespace
         std::vector<unsigned char> rgba;
     };
 
-    // “§–¾‚È¶¬ƒmƒCƒY‚ğœ‹‚µAŠeƒRƒ}‚Ì–{‘Ì‚¾‚¯‚ğ’Šo‚·‚éB
+    // é€æ˜ãªç”Ÿæˆãƒã‚¤ã‚ºã‚’é™¤å»ã—ã€å„ã‚³ãƒã®æœ¬ä½“ã ã‘ã‚’æŠ½å‡ºã™ã‚‹ã€‚
     bool ReadSpriteFrames(const wchar_t* path, std::vector<SpritePixels>& frames)
     {
         DirectX::ScratchImage original, converted;
@@ -55,7 +59,7 @@ namespace
                     mask[y * width + x] = image->pixels[(originY + y) * image->rowPitch
                         + (originX + x) * 4 + 3] >= 128 ? 1 : 0;
 
-            // Å‘å‚Ì˜AŒ‹—Ìˆæ‚ğc‚µA”wŒi‚É•‚‚¢‚½“_‚ğ•`‰æ‚µ‚È‚¢B
+            // æœ€å¤§ã®é€£çµé ˜åŸŸã‚’æ®‹ã—ã€èƒŒæ™¯ã«æµ®ã„ãŸç‚¹ã‚’æç”»ã—ãªã„ã€‚
             std::vector<int> largest, pending;
             for (int start = 0; start < width * height; ++start)
             {
@@ -87,7 +91,7 @@ namespace
         return true;
     }
 
-    // •às‚Æ“Ëi‚Ì‘SƒRƒ}‚ğ“¯‚¶”{—¦E‘«Œ³‚Å”z’u‚µAÅ‹ß–T‚Åk¬‚·‚éB
+    // æ­©è¡Œã¨çªé€²ã®å…¨ã‚³ãƒã‚’åŒã˜å€ç‡ãƒ»è¶³å…ƒã§é…ç½®ã—ã€æœ€è¿‘å‚ã§ç¸®å°ã™ã‚‹ã€‚
     bool BuildEnemy1Atlas(std::vector<unsigned char>& pixels)
     {
         std::vector<SpritePixels> frames;
@@ -123,7 +127,7 @@ namespace
         return true;
     }
 
-    // CPU ‘¤‚ÌŠ®¬Ï‚İƒAƒgƒ‰ƒX‚ğ‹¤—L‚µAŒÂ‘Ì‚Ì‰ğ•ú‚Å‚Í”jŠü‚µ‚È‚¢B
+    // CPU å´ã®å®Œæˆæ¸ˆã¿ã‚¢ãƒˆãƒ©ã‚¹ã‚’å…±æœ‰ã—ã€å€‹ä½“ã®è§£æ”¾ã§ã¯ç ´æ£„ã—ãªã„ã€‚
     const std::vector<unsigned char>& CachedEnemy1Atlas()
     {
         static std::vector<unsigned char> cached;
@@ -152,7 +156,7 @@ bool Enemy1::PreloadSprites()
 }
 
 
-// í—Ş‚²‚Æ‚ÌŠù’è’l‚ğg‚¤‰Šú‰»B”z’uƒf[ƒ^‚ğ“n‚·ê‡‚Í‰º‚ÌƒI[ƒo[ƒ[ƒh‚ğg‚¤B
+// ç¨®é¡ã”ã¨ã®æ—¢å®šå€¤ã‚’ä½¿ã†åˆæœŸåŒ–ã€‚é…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’æ¸¡ã™å ´åˆã¯ä¸‹ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰ã‚’ä½¿ã†ã€‚
 bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map)
 {
     return Init(a_pHit, a_pCamera, map, SpawnSettings{});
@@ -166,9 +170,9 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map, const SpawnSet
         OutputDebugStringA("Enemy1 initialization texture load failed: Texture/Chara.png\n");
         return false;
     }
-    // Œ³‰æ‘œ‚âƒAƒgƒ‰ƒX‚Ì‘å‚«‚³‚ÉŠÖŒW‚È‚­AŠù‘¶‚Ì 64x64 ‚Ì“–‚½‚è”»’è‚ğ•Û‚ÂB
+    // å…ƒç”»åƒã‚„ã‚¢ãƒˆãƒ©ã‚¹ã®å¤§ãã•ã«é–¢ä¿‚ãªãã€æ—¢å­˜ã® 64x64 ã®å½“ãŸã‚Šåˆ¤å®šã‚’ä¿ã¤ã€‚
     SetRect(PTEX_RADIUS, PTEX_RADIUS);
-    // ƒ`[ƒ€”Å‚Ì•¡‡“–‚½‚è”»’è‚É‚àAŠù‘¶‚Ì 64x64 ‚Ì–{‘Ì‚ğ“o˜^‚·‚éB
+    // ãƒãƒ¼ãƒ ç‰ˆã®è¤‡åˆå½“ãŸã‚Šåˆ¤å®šã«ã‚‚ã€æ—¢å­˜ã® 64x64 ã®æœ¬ä½“ã‚’ç™»éŒ²ã™ã‚‹ã€‚
     NewRectObjects({ 0.0f, 0.0f }, GetRect());
     m_hitRange = std::sqrt(2.0f) * PTEX_RADIUS;
     ResetHitRect();
@@ -202,7 +206,7 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map, const SpawnSet
     return true;
 }
 
-// ƒQ[ƒ€‰æ–Ê‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚éŠÔAH ƒL[‚ğ‰Ÿ‚µ‚½uŠÔ‚É”íƒ_ƒ[ƒW‚ğƒeƒXƒg‚µA“G‚Ì‹¤’ÊXV‚ğŒÄ‚Ño‚·B
+// ã‚²ãƒ¼ãƒ ç”»é¢ãŒé¸æŠã•ã‚Œã¦ã„ã‚‹é–“ã€H ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸç¬é–“ã«è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ†ã‚¹ãƒˆã—ã€æ•µã®å…±é€šæ›´æ–°ã‚’å‘¼ã³å‡ºã™ã€‚
 void Enemy1::Update()
 {
     const bool focused = GetActiveWindow() != nullptr
@@ -214,16 +218,21 @@ void Enemy1::Update()
     if (GetAlive() && m_normalCooldown > 0) --m_normalCooldown;
     if (!GetAlive() || IsHurt())
     {
+        const bool interrupted = m_openingSkill.IsWindingUp() || m_openingSkill.IsDashing()
+            || m_normalState != NormalState::Ready;
         m_openingSkill.Cancel();
         CancelNormalAttack();
+        if (GetAlive() && interrupted) BeginRetreat();
     }
     const auto previousPos = GetPos();
+    const bool wasGrounded = IsGrounded();
     EnemyBase::Update();
 
     if (!IsChasing() || m_player == nullptr || !m_player->GetAFlg())
     {
         m_openingSkill.ResetEncounter();
         CancelNormalAttack();
+        ResetCombatSpacing();
     }
     else if (GetAlive() && !IsHurt())
     {
@@ -232,13 +241,21 @@ void Enemy1::Update()
             if (m_openingSkill.TryHit(*this, previousPos, *m_player))
                 m_player->TakeDamage(GetAtk() * m_openingSkill.GetDamageMultiplier());
             if (std::abs(GetPos().x - previousPos.x) + 0.01f < m_openingSkill.GetSpeed())
+            {
                 m_openingSkill.StopAtWall();
+                BeginRetreat();
+            }
         }
-        // ˆê“x‚Ì’ÊíUŒ‚‚Å‚Íˆê“x‚¾‚¯–½’†‚ğ’²‚×‚éB—£’EE’µ–ôE”wŒã‚Ö‚Ì‰ñ”ğ‚ª‰Â”\B
+        // ä¸€åº¦ã®é€šå¸¸æ”»æ’ƒã§ã¯ä¸€åº¦ã ã‘å‘½ä¸­ã‚’èª¿ã¹ã‚‹ã€‚é›¢è„±ãƒ»è·³èºãƒ»èƒŒå¾Œã¸ã®å›é¿ãŒå¯èƒ½ã€‚
         if (m_normalHitPending && m_pHit != nullptr
             && m_pHit->CheckAttackHit(*this, *m_player, NormalReach, m_normalDirection))
             m_player->TakeDamage(static_cast<float>(GetAtk()));
     }
+    // å¾Œé€€å…ˆãŒå£ãªã‚‰è¿½è·¡ã¸æˆ»ã•ãšã€ãã®å ´ã§æ¬¡ã®æ”»æ’ƒã‚’å¾…ã¤ã€‚
+    if (m_spacingState == SpacingState::Retreat && m_retreatFrames > 0
+        && wasGrounded && IsGrounded()
+        && std::abs(GetPos().x - previousPos.x) < 0.01f)
+        m_spacingState = SpacingState::Wait;
     m_normalHitPending = false;
     UpdateAnimation(previousPos);
 }
@@ -252,16 +269,19 @@ void Enemy1::Update(C_PlayerBase* target, bool active)
         ResetAwareness();
         m_openingSkill.ResetEncounter();
         CancelNormalAttack();
+        ResetCombatSpacing();
         m_player = nullptr;
         return;
     }
 
-    // ’Êí‚Ì“üêEÄ“üêEGUI ‚©‚ç‚Ì’¼ÚƒXƒe[ƒWØ‚è‘Ö‚¦‚É‘Î‰‚·‚éB
+    // é€šå¸¸ã®å…¥å ´ãƒ»å†å…¥å ´ãƒ»GUI ã‹ã‚‰ã®ç›´æ¥ã‚¹ãƒ†ãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆã«å¯¾å¿œã™ã‚‹ã€‚
     if (m_map != nullptr && (!m_wasActive || m_stage != m_map->GetStageNum()))
     {
         if (!PlaceOnMap(m_map))
             OutputDebugStringA("Enemy spawn failed: no ground below spawn column.\n");
         m_openingSkill.ResetEncounter();
+        CancelNormalAttack();
+        ResetCombatSpacing();
         m_stage = m_map->GetStageNum();
     }
     m_wasActive = true;
@@ -271,7 +291,8 @@ void Enemy1::Update(C_PlayerBase* target, bool active)
 }
 bool Enemy1::GetActionMove(float& horizontalMove)
 {
-    // ŠJ–‹‚Ì“Ëi‚ğ—Dæ‚µA‚»‚ÌŒã‚Í‹ß‹——£‚Ì’ÊíUŒ‚‚ÖØ‚è‘Ö‚¦‚éB
+    const bool openingWasActive = m_openingSkill.IsWindingUp() || m_openingSkill.IsDashing();
+    // é–‹å¹•ã®çªé€²ã¯ä¸€åº¦ã ã‘è¡Œã„ã€çµ‚äº†å¾Œã¯é€šå¸¸æ”»æ’ƒã¨åŒã˜è·é›¢èª¿æ•´ã¸ç§»ã‚‹ã€‚
     if (m_openingSkill.Update(*this, m_player, IsChasing(), IsGrounded(), horizontalMove))
     {
         CancelNormalAttack();
@@ -281,11 +302,20 @@ bool Enemy1::GetActionMove(float& horizontalMove)
     if (m_player == nullptr || !m_player->GetAFlg() || !IsChasing())
     {
         CancelNormalAttack();
+        ResetCombatSpacing();
         return false;
     }
+    if (openingWasActive) BeginRetreat();
     if (m_normalState == NormalState::Ready)
     {
-        if (m_normalCooldown > 0 || !IsGrounded() || !InNormalAttackRange()) return false;
+        if (UpdateSpacingMove(horizontalMove)) return true;
+        // ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ä¸­ã¯åŸºåº•ã®è¿½è·¡ç§»å‹•ã¸æˆ»ã•ãªã„ã€‚
+        if (m_normalCooldown > 0)
+        {
+            horizontalMove = 0.0f;
+            return true;
+        }
+        if (!IsGrounded() || !InNormalAttackRange()) return false;
         m_normalDirection = m_player->GetPos().x < GetPos().x ? -1 : 1;
         FaceDirection(m_normalDirection);
         m_normalState = NormalState::Windup;
@@ -308,10 +338,64 @@ bool Enemy1::GetActionMove(float& horizontalMove)
         else
         {
             m_normalState = NormalState::Ready;
-            m_normalCooldown = NormalCooldownFrames;
+            BeginRetreat();
         }
     }
     return true;
+}
+
+void Enemy1::BeginRetreat()
+{
+    m_spacingState = SpacingState::Retreat;
+    m_retreatFrames = 0;
+    const float dx = m_player != nullptr ? m_player->GetPos().x - GetPos().x : 0.0f;
+    m_retreatDirection = std::abs(dx) > 0.01f ? (dx > 0.0f ? -1 : 1) : -m_normalDirection;
+    m_normalCooldown = std::max(m_normalCooldown, NormalCooldownFrames);
+}
+
+void Enemy1::ResetCombatSpacing()
+{
+    m_spacingState = SpacingState::Approach;
+    m_retreatFrames = 0;
+    m_retreatDirection = -1;
+    m_normalCooldown = 0;
+}
+
+bool Enemy1::UpdateSpacingMove(float& horizontalMove)
+{
+    if (m_spacingState == SpacingState::Approach) return false;
+    horizontalMove = 0.0f;
+    const float dx = m_player->GetPos().x - GetPos().x;
+    if (std::abs(dx) > 0.01f) FaceDirection(dx > 0.0f ? 1 : -1);
+    if (m_spacingState == SpacingState::Retreat)
+    {
+        const float gap = std::max(m_player->GetHitLeft() - GetHitRight(),
+            GetHitLeft() - m_player->GetHitRight());
+        if (++m_retreatFrames > RetreatMaxFrames || gap >= RetreatGap)
+            m_spacingState = SpacingState::Wait;
+        else if (IsGrounded())
+        {
+            const float step = m_retreatDirection * std::min(RetreatSpeed, RetreatGap - gap);
+            // å´–éš›ã‚„å£ã§è·é›¢ã‚’å–ã‚Œãªã„å ´åˆã‚‚ã€å¾Œé€€ã‚’å»¶ã€…ã¨ç¹°ã‚Šè¿”ã•ãªã„ã€‚
+            if (HasRetreatGround(step)) horizontalMove = step;
+            else m_spacingState = SpacingState::Wait;
+        }
+        return true;
+    }
+    if (m_normalCooldown > 0) return true;
+    m_spacingState = SpacingState::Approach;
+    return false;
+}
+
+bool Enemy1::HasRetreatGround(float horizontalMove) const
+{
+    if (m_map == nullptr) return true;
+    const float x = (horizontalMove < 0.0f ? GetHitLeft() : GetHitRight()) + horizontalMove;
+    const float y = GetHitBottom() - 1.0f;
+    const int col = static_cast<int>(std::floor((x - LEFT_EDGE + CHIP_RADIUS) / CHIP_SIZE));
+    const int row = static_cast<int>(std::floor((TOP_EDGE - y + CHIP_RADIUS) / CHIP_SIZE));
+    return col >= 0 && col < MAP_WIDTH && row >= 0 && row < MAP_HEIGHT
+        && m_map->GetCollisionFlg(row, col);
 }
 
 bool Enemy1::InNormalAttackRange() const
@@ -367,6 +451,7 @@ void Enemy1::Release()
     m_openingSkill.ResetEncounter();
     m_normalState = NormalState::Ready;
     m_normalFrames = 0; m_normalCooldown = 0; m_normalHitPending = false;
+    ResetCombatSpacing();
     m_spriteFrame = 0; m_animationTicks = 0; m_visualRecovery = 0;
     m_wasVisualAction = false; m_wasVisualWindup = false;
     m_player = nullptr; m_map = nullptr; m_wasActive = false; m_stage = -1;
