@@ -28,6 +28,13 @@ public:
     void Draw() override;
     void Release() override;
     bool IsNormalAttacking() const { return m_normalState != NormalState::Ready; }
+    bool IsAttackWarningActive() const override
+    {
+        return m_openingSkill.IsWindingUp() || m_openingSkill.IsDashing()
+            || m_normalState == NormalState::Windup || m_normalState == NormalState::Strike;
+    }
+    bool IsRetreating() const { return m_spacingState == SpacingState::Retreat; }
+    bool IsWaitingToAttack() const { return m_spacingState == SpacingState::Wait; }
     // Scene から有効状態とターゲットを受け取り、ステージ状態はこのクラスで管理する。
     void Update(C_PlayerBase* target, bool active);
     bool HasUsedOpening() const { return m_openingSkill.HasUsedOpening(); }
@@ -39,6 +46,15 @@ protected:
 
 private:
     enum class NormalState { Ready, Windup, Strike, Recovery };
+    // 攻撃後に距離を取り、再攻撃が可能になるまでは追跡を止める。
+    enum class SpacingState { Approach, Retreat, Wait };
+    void BeginRetreat();
+    void ResetCombatSpacing();
+    bool UpdateSpacingMove(float& horizontalMove);
+    bool HasRetreatGround(float horizontalMove) const;
+    SpacingState m_spacingState = SpacingState::Approach;
+    int m_retreatFrames = 0;
+    int m_retreatDirection = -1;
     bool InNormalAttackRange() const;
     void CancelNormalAttack();
     void UpdateAnimation(const Math::Vector2& previousPos);

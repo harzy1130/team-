@@ -10,6 +10,10 @@ class EnemyBase  : public HitBase
 public:
 
     EnemyBase();
+    enum class AwarenessState { None, Suspicious, Alert, Attack };
+    // 描画用の状態だけを返し、索敵や攻撃のタイミングは変更しない。
+    AwarenessState GetAwarenessState() const;
+    virtual bool IsAttackWarningActive() const { return false; }
 
     // speed は固定更新 1 回あたりの移動量（ピクセル）を表す。
     // テクスチャの読み込みに失敗した場合は false を返す。
