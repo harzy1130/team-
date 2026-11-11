@@ -37,7 +37,7 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,
 	SetRect(PTEX_RADIUS, PTEX_RADIUS);
 	SetRadius(PTEX_RADIUS);
 	//ó‘ÔˆÙí
-	m_effect.InitPlayer(this);
+	m_effect.InitPlayer(this, a_pUIManager);
 }
 
 void C_PlayerBase::Update()
@@ -51,7 +51,7 @@ void C_PlayerBase::Update()
 	GearUpdate();
 	PlayerInput();
 	UpdateAtk();
-	m_effect.UpdatePlayer(this);
+	m_effect.UpdatePlayer();
 	if (m_pCursor->GetMousePos().x > 0) {
 		m_scale = { 1,1 };
 	}

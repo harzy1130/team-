@@ -46,7 +46,7 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_U
 	NewRectObjects({ 0, 0 }, { -16, 48,16,-60});
 	m_hitRange = PTEX_SIZE;
 	//ó‘ÔˆÙí
-	m_effect.InitPlayer(this);
+	m_effect.InitPlayer(this, a_pUIManager);
 	m_sword.Init(this, a_pHit, a_pCamera, a_pUIManager);
 }
 
@@ -62,7 +62,7 @@ void C_Player1::Update()
 	PlayerInput();
 	UpdateAtk();
 	AnimationUpdate();
-	m_effect.UpdatePlayer(this);
+	m_effect.UpdatePlayer();
 	//if (m_pCursor->GetMousePos().x > 0) {
 	//	m_scaleX = 1;
 	//}
