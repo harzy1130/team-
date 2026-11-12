@@ -1,5 +1,6 @@
 #pragma once
 #include"Pch.h"
+#include"Constants/Constants.h"
 #include"Player/PlayerBase.h"
 
 class C_PlayerUI
@@ -28,6 +29,8 @@ private:
 	KdTexture m_playerSkillFrameTex;
 	KdTexture m_playerSkillBaseTex;
 	KdTexture m_playerSkillCDTex;
+	KdTexture m_playerSkillGaugeTex;
+	KdTexture m_renderTex;
 	KdTexture* m_pPlayerSkillIconTex;
 	//======================================================
 	 
@@ -36,5 +39,4 @@ private:
 	Math::Vector2 m_skillGaugePos{  0, -275 };
 
 	C_PlayerBase* m_pPlayer;
-	
 };

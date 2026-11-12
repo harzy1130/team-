@@ -35,13 +35,21 @@ public:
 	virtual float GetActiveCD()final { return m_activeCD; }
 	virtual float GetActiveCDMax()final { return m_activeCDMax; }
 	virtual float GetCalcActiveCDMax()final;
+	virtual float GetActiveTimer()final { return m_activeTimer; }
+	virtual float GetActiveTimerMax()final { return m_activeTimerMax; }
 	virtual bool GetWhileActive()final { return m_bWhileActive; }
+	virtual bool GetHaveActiveCD()final { return m_bHaveActiveCD; }
+	virtual bool GetWaitActiveTimer()final { return m_bWaitActiveTimer; }
+	
 	//パッシブ
 	virtual float GetPassiveCD()final { return m_passiveCD; }
 	virtual float GetPassiveCDMax()final { return m_passiveCDMax; }
 	virtual float GetCalcPassiveCDMax()final;
+	virtual float GetPassiveTimer()final { return m_passiveTimer; }
+	virtual float GetPassiveTimerMax()final { return m_passiveTimerMax; }
 	virtual bool GetWhilePassive()final { return m_bWhilePassive; }
-
+	virtual bool GetHavePassiveCD()final { return m_bHavePassiveCD; }
+	virtual bool GetWaitPassiveTimer()final { return m_bWaitPassiveTimer; }
 	virtual bool GetPassiveOnly()final { return m_bPassiveOnly; }
 
 	virtual S_Status GetGearStatus()final { return m_status; }
