@@ -15,5 +15,5 @@ public:
 public:
 	const float m_hpRegeneStatus = 0.5f;
 	const float m_heal = 3;
-	const float m_defBonus = 20;
+	const float m_defBonus = 50;
 };

@@ -220,7 +220,7 @@ bool HitBase::LoadHitBox(const std::string& a_filePath)
 {
 	using namespace std;
 	//ifstream・・・ファイル入力を操作するクラス
-    ifstream ifs("Src/Hit/HitBox/" + a_filePath + "HitBox.csv");
+    ifstream ifs("Src/Hit/HitBox/" + a_filePath + ".hbx");
 	//開く
 	if (!ifs.is_open())
         return false;

@@ -201,6 +201,9 @@
     <ClInclude Include="src\System\KdSystem.h" />
     <ClInclude Include="src\System\Utility\KdUtility.h" />
     <ClInclude Include="src\System\Window\KdGameWindow.h" />
+    <ClInclude Include="Src\UI\DamageUI.h" />
+    <ClInclude Include="Src\UI\EffectDmgUI.h" />
+    <ClInclude Include="Src\UI\NumberUI.h" />
     <ClInclude Include="Src\UI\PlayerUI.h" />
     <ClInclude Include="Src\UI\UIManager.h" />
   </ItemGroup>
@@ -250,6 +253,9 @@
     <ClCompile Include="Src\System\Shader\SpriteShader\KdSpriteShader.cpp" />
     <ClCompile Include="Src\System\Shader\StandardShader\KdStandardShader.cpp" />
     <ClCompile Include="src\System\Window\KdGameWindow.cpp" />
+    <ClCompile Include="Src\UI\DamageUI.cpp" />
+    <ClCompile Include="Src\UI\EffectDmgUI.cpp" />
+    <ClCompile Include="Src\UI\NumberUI.cpp" />
     <ClCompile Include="Src\UI\PlayerUI.cpp" />
     <ClCompile Include="Src\UI\UIManager.cpp" />
   </ItemGroup>

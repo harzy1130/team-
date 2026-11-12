@@ -29,7 +29,7 @@ void C_GearBase::Draw()
 void C_GearBase::OnceActiveGear()
 {
 	if (m_bPassiveOnly)return;
-	if (m_bWhileActive || m_activeCD > 0)return;
+	if (m_activeCD > 0)return;
 	m_bWhileActive = true;
 	m_activeTimer = m_activeTimerMax;
 	if (!m_bWaitActiveTimer) 

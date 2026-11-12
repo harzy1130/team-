@@ -264,6 +264,15 @@
     <ClInclude Include="Src\Player\Gear\Gear2.h">
       <Filter>Src\Player\Gear</Filter>
     </ClInclude>
+    <ClInclude Include="Src\UI\DamageUI.h">
+      <Filter>Src\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\UI\NumberUI.h">
+      <Filter>Src\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\UI\EffectDmgUI.h">
+      <Filter>Src\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -397,6 +406,15 @@
     </ClCompile>
     <ClCompile Include="Src\Player\Gear\Gear2.cpp">
       <Filter>Src\Player\Gear</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\UI\DamageUI.cpp">
+      <Filter>Src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\UI\NumberUI.cpp">
+      <Filter>Src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\UI\EffectDmgUI.cpp">
+      <Filter>Src\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

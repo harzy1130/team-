@@ -170,3 +170,8 @@ struct S_ParticleObjects
 	float		  m_alpha;
 	int			  data;
 };
+
+//UIópíËêî====================================
+
+static const Math::Color VALID_COLOR = Math::Color{ 1.0, 1.0, 1.0, 1.0f };
+static const Math::Color INVALID_COLOR = Math::Color{ 0.4, 0.4, 0.4, 1.0f };
