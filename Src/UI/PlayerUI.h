@@ -2,7 +2,7 @@
 #include"Pch.h"
 #include"Constants/Constants.h"
 #include"Player/PlayerBase.h"
-
+using namespace std;
 class C_PlayerUI
 {
 public:
@@ -33,10 +33,12 @@ private:
 	KdTexture m_renderTex;
 	KdTexture* m_pPlayerSkillIconTex;
 	//======================================================
-	 
-	//”š•Ï”
-	Math::Vector2 m_hpGaugePos{-500.0f, -300.0f};
-	Math::Vector2 m_skillGaugePos{  0, -275 };
 
+	//”š•Ï”
+	Math::Vector2 m_hpGaugePos{ -500.0f, -300.0f };
+	Math::Vector2 m_skillGaugePos{ 0, -275 };
+
+	float bufDmg = 0;
+	float bufHeal = 0;
 	C_PlayerBase* m_pPlayer;
 };
