@@ -31,32 +31,62 @@ void C_PlayerUI::Draw()
 	DrawPlayerGear(m_pPlayer->GetGearB(), { 100, -275 });
 }
 
+
+
+
 void C_PlayerUI::DrawPlayerHpGauge()
 {
 	Math::Rectangle gaugeRect = CreateRectFromTex(&m_playerHpGaugeTex);
 	Math::Rectangle headRect = CreateRectFromTex(&m_playerHpHeadTex);
 	Math::Rectangle tailRect = CreateRectFromTex(&m_playerHpTailTex);
-	float hpRatio = float(m_pPlayer->GetHP()) / float(m_pPlayer->GetMAXHP());
-	float gaugeWidth = gaugeRect.width * hpRatio;
-	float gaugeX = -gaugeRect.width / 2.0f + gaugeWidth / 2.0f;
+
+	if (bufHeal == bufDmg && bufDmg == m_pPlayer->GetHP())goto endCalc;
+
+	bufDmg = max((bufDmg - m_pPlayer->GetHP()) * 0.9f, 0.0f) + float(m_pPlayer->GetHP());
+	bufHeal = min((bufHeal - m_pPlayer->GetHP()) * 0.9f, 0.0f) + float(m_pPlayer->GetHP());
+endCalc:;
+
+	float healRatio = bufHeal / m_pPlayer->GetMAXHP();
+	float dmgRatio = bufDmg / m_pPlayer->GetMAXHP();
+	float gaugeWidth;
+	float gaugeX;
 	Math::Vector2 pos;
+
 	//下地
-	pos = m_hpGaugePos;
-	DrawTexFromTex(&m_playerHpBaseTex, pos);
-	//色調整
-	Math::Color gaugeColor = { Clamp((1 - hpRatio) * 2, 1, 0), Clamp(hpRatio * 2, 1, 0), 0, 1 };
-	//ゲージの描画
+	DrawTexFromTex(&m_playerHpBaseTex, m_hpGaugePos);
+
+	Math::Color gaugeColor;
+	//ダメージバッファ描画
+	//このゲージは回復には敏感に反応し、ダメージには鈍感に反応する
+	gaugeWidth = gaugeRect.width * dmgRatio + tailRect.width;
+	gaugeX = -gaugeRect.width / 2.0f + gaugeWidth / 2.0f - tailRect.width + 2;
+	pos = { m_hpGaugePos.x - gaugeRect.width / 2.0f + gaugeWidth + headRect.width / 2.0f - tailRect.width, m_hpGaugePos.y };
+	gaugeColor = bufDmg > m_pPlayer->GetHP() ? Math::Color{ 0.7,0,0,1 } : Math::Color{ 0.5, 1.7,0.5,1 };
+	DrawTexFromTex(&m_playerHpHeadTex, pos, { 1.0f, 1.0f }, 0.0f, gaugeColor);
+	SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(m_hpGaugePos.x + gaugeX, m_hpGaugePos.y, 0.0f));
+	//1ドットずれてしまうので+1
+	SHADER.m_spriteShader.DrawTex(&m_playerHpGaugeTex, 0, 0, &Math::Rectangle(0, 0, gaugeWidth + 1, gaugeRect.height), &gaugeColor);
+
+	//回復バッファ描画
+	//このゲージはダメージには敏感に反応し、回復には鈍感に反応する
 	if (m_pPlayer->GetHP() <= 0)goto DrawGaugeEnd;
+	gaugeWidth = gaugeRect.width * healRatio;
+	gaugeX = -gaugeRect.width / 2.0f + gaugeWidth / 2.0f;
+	//色調整
+	gaugeColor = { Clamp((1 - healRatio) * 2, 1, 0), Clamp(healRatio * 2, 1, 0), 0, 1 };
+
+	//ゲージの描画
 	pos = { m_hpGaugePos.x - gaugeRect.width / 2.0f - tailRect.width / 2.0f, m_hpGaugePos.y };
 	DrawTexFromTex(&m_playerHpTailTex, pos, { 1.0f, 1.0f }, 0.0f, gaugeColor);
 	SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(m_hpGaugePos.x + gaugeX, m_hpGaugePos.y, 0.0f));
-	//1ドットずれてしまうので+
+	//1ドットずれてしまうので+1
 	SHADER.m_spriteShader.DrawTex(&m_playerHpGaugeTex, 0, 0, &Math::Rectangle(0, 0, gaugeWidth + 1, gaugeRect.height), &gaugeColor);
 	pos = { m_hpGaugePos.x - gaugeRect.width / 2.0f + gaugeWidth + headRect.width / 2.0f, m_hpGaugePos.y };
 	DrawTexFromTex(&m_playerHpHeadTex, pos, { 1.0f, 1.0f }, 0.0f, gaugeColor);
 DrawGaugeEnd:;
+
 	//枠の描画
-	DrawTexFromTex(&m_playerHpFrameTex, { m_hpGaugePos.x, m_hpGaugePos.y }, { 1.0f, 1.0f }, 0.0f);
+	DrawTexFromTex(&m_playerHpFrameTex, m_hpGaugePos, { 1.0f, 1.0f }, 0.0f);
 }
 
 void C_PlayerUI::DrawPlayerSkill()
@@ -68,7 +98,7 @@ void C_PlayerUI::DrawPlayerSkill()
 	DrawTexFromTex(m_pPlayerSkillIconTex, m_skillGaugePos, { 1.0f, 1.0f }, 0.0f, CDColor);
 	Math::Rectangle cdRect = CreateRectFromTex(&m_playerSkillCDTex);
 	Math::Matrix mat, sMat, rMat, tMat;
-	sMat = Math::Matrix::CreateScale(1,1,1);
+	sMat = Math::Matrix::CreateScale(1, 1, 1);
 	rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(180.0f));
 	tMat = Math::Matrix::CreateTranslation(m_skillGaugePos.x, m_skillGaugePos.y - (cdRect.height * (1 - skillUIRatio) / 2.0f), 0);
 	mat = sMat * rMat * tMat;
@@ -77,12 +107,12 @@ void C_PlayerUI::DrawPlayerSkill()
 	DrawTexFromTex(&m_playerSkillFrameTex, m_skillGaugePos);
 }
 
-void C_PlayerUI::DrawPlayerGear(C_GearBase* a_pGear,Math::Vector2 a_pos)
+void C_PlayerUI::DrawPlayerGear(C_GearBase* a_pGear, Math::Vector2 a_pos)
 {
 	float gearCDGaugeRatio;
 	Math::Color CDIconColor;
 	float fanRatio;
-	if (a_pGear->GetPassiveOnly()) 
+	if (a_pGear->GetPassiveOnly())
 	{
 		gearCDGaugeRatio = a_pGear->GetPassiveCD() / a_pGear->GetCalcPassiveCDMax();
 		if (!a_pGear->GetHavePassiveCD())gearCDGaugeRatio = 0;
@@ -101,16 +131,16 @@ void C_PlayerUI::DrawPlayerGear(C_GearBase* a_pGear,Math::Vector2 a_pos)
 
 	Math::Color frameColor = fanRatio > 0 ? INVALID_COLOR : VALID_COLOR;
 
-	DrawTexFromTex(&m_playerSkillBaseTex,a_pos);
+	DrawTexFromTex(&m_playerSkillBaseTex, a_pos);
 	DrawTexFromTex(a_pGear->GetGearIconTex(), a_pos, { 1.0f, 1.0f }, 0.0f, CDIconColor);
 	Math::Rectangle cdRect = CreateRectFromTex(&m_playerSkillCDTex);
 	Math::Matrix mat;
-	mat = CreateMat({ a_pos.x, a_pos.y - (cdRect.height * (1 - gearCDGaugeRatio) / 2.0f) }, {1,1}, 180.0f);
+	mat = CreateMat({ a_pos.x, a_pos.y - (cdRect.height * (1 - gearCDGaugeRatio) / 2.0f) }, { 1,1 }, 180.0f);
 	SHADER.m_spriteShader.SetMatrix(mat);
 	SHADER.m_spriteShader.DrawTex(&m_playerSkillCDTex, 0, 0, &Math::Rectangle(0, 0, cdRect.width, cdRect.height * gearCDGaugeRatio), &Math::Color(1.0f, 1.0f, 1.0f, 0.4f));
-	
 
-	DrawTexFromTex(&m_playerSkillFrameTex,a_pos, { 1.0f, 1.0f }, 0.0f, frameColor);
+
+	DrawTexFromTex(&m_playerSkillFrameTex, a_pos, { 1.0f, 1.0f }, 0.0f, frameColor);
 	CreateFanTex(&m_playerSkillGaugeTex, &m_renderTex, CreateRectFromTex(&m_playerSkillGaugeTex), 360 * fanRatio);
 	D3D.SetBackBuffer();
 	D3D.SetBlendState(BlendMode::Add);
