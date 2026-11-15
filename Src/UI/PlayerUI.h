@@ -13,8 +13,12 @@ public:
 	void Draw();
 
 	void DrawPlayerHpGauge();
+	void UpdatePlayerHpGauge();
 	void DrawPlayerSkill();
 	void DrawPlayerGear(C_GearBase* a_pGear, Math::Vector2 a_pos);
+	void DrawGrowEffect();
+	void UpdateGrowEffect();
+	void AddGrowEffect(int a_addres, Math::Vector2 a_pos);
 
 	void Release();
 private:
@@ -30,13 +34,21 @@ private:
 	KdTexture m_playerSkillBaseTex;
 	KdTexture m_playerSkillCDTex;
 	KdTexture m_playerSkillGaugeTex;
-	KdTexture m_renderTex;
 	KdTexture* m_pPlayerSkillIconTex;
 	//======================================================
-
-	//数字変数
+	//レンダーテクスチャ====================================
+	KdTexture m_renderTex;
+	//======================================================
+	//発光エフェクト用の変数================================
+	// テクスチャ
+	KdTexture m_growTex;
+	// 変数
+	map<int, S_Grow> m_grow;
+	//数字変数==============================================
 	Math::Vector2 m_hpGaugePos{ -500.0f, -300.0f };
 	Math::Vector2 m_skillGaugePos{ 0, -275 };
+	Math::Vector2 m_gearAPos{ -100, -275 };
+	Math::Vector2 m_gearBPos{ 100, -275 };
 
 	float bufDmg = 0;
 	float bufHeal = 0;

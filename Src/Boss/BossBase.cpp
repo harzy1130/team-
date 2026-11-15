@@ -12,8 +12,8 @@ void C_BossBase::MatrixUpdate()
 	m_draw = m_pos - m_pCamera->GetPos();
 
 	float x, y;
-	x = GetPlusMinus(m_scale.x);
-	y = GetPlusMinus(m_scale.y);
+	x = GetSign(m_scale.x);
+	y = GetSign(m_scale.y);
 	m_sMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
 	m_rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(m_angle));
 	m_tMat = Math::Matrix::CreateTranslation(m_draw.x + m_gap.x * x, m_draw.y + m_gap.y * y, 0);

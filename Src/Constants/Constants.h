@@ -175,3 +175,19 @@ struct S_ParticleObjects
 
 static const Math::Color VALID_COLOR = Math::Color{ 1.0, 1.0, 1.0, 1.0f };
 static const Math::Color INVALID_COLOR = Math::Color{ 0.4, 0.4, 0.4, 1.0f };
+
+static const int lightNum = 8;
+struct S_Light
+{
+	Math::Vector2 scale = Math::Vector2{1.0f, 1.0f};
+	float deg;
+	Math::Color color;
+	Math::Matrix mat;
+};
+struct S_Grow
+{
+	S_Light light[lightNum];
+	Math::Vector2 pos;
+	float size;
+	float destSize;
+};

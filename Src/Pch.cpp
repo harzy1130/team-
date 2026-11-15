@@ -8,7 +8,7 @@ float Clamp(float a_value, float a_max, float a_min)
 	return a_value;
 }
 
-int GetPlusMinus(float a_value)
+int GetSign(float a_value)
 {
 	if (a_value >= 0)return 1;
 	return -1;
@@ -60,7 +60,7 @@ void DrawFan(Math::Vector2 a_pos, float a_radius, float a_deg, float a_angle, Ma
 {
 	SHADER.m_spriteShader.SetMatrix(Math::Matrix::Identity);
 	if ((int)a_deg == 0)return;
-	int lr = GetPlusMinus(a_deg);
+	int lr = GetSign(a_deg);
 	int deg = Clamp((int)a_deg, 360, 0);
 	float centorAngle;
 	if (a_bCenter)
@@ -119,5 +119,13 @@ void CreateFanTex(KdTexture* a_pTex, KdTexture* a_pOutTex, Math::Rectangle a_rec
 	D3D.SetBackBuffer();
 	SHADER.m_spriteShader.SetMatrix(Math::Matrix::Identity);
 	mask.Release();
+}
+
+float ClampSign(float a_value, float a_max, float a_min)
+{
+	int pm = GetSign(a_value);
+	float absValue = fabs(a_value);
+	absValue = Clamp(absValue, a_max, a_min);
+	return absValue * pm;
 }
 

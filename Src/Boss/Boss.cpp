@@ -52,7 +52,7 @@ void C_Boss::StartWalk()
 void C_Boss::Walk()
 {
 	if (m_state != State(walk))return;
-	m_lr = GetPlusMinus(m_pPlayer->GetPos().x - m_pos.x);
+	m_lr = GetSign(m_pPlayer->GetPos().x - m_pos.x);
 	m_scale = { m_size * m_lr, m_size };
 	m_chargeWait--;
 	if (m_chargeWait < 0)m_chargeWait = 0;

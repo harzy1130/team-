@@ -66,19 +66,19 @@ protected:
 	float m_activeCDMax;
 	float m_activeTimer;
 	float m_activeTimerMax;
-	bool m_bWhileActive;			//アクティブの効果が発動中かどうか
+	bool m_bWhileActive;					//アクティブの効果が発動中かどうか
 	bool m_bHaveActiveCD = true;
-	bool m_bWaitActiveTimer = false;	//アクティブの効果が終了してから、アクティブのクールダウンを開始する場合にTrueにする
+	bool m_bWaitActiveTimer = false;		//アクティブの効果が終了してから、アクティブのクールダウンを開始する場合にTrueにする
 	//パッシブ用
 	float m_passiveCD;
 	float m_passiveCDMax;
 	float m_passiveTimer;
 	float m_passiveTimerMax;
-	bool m_bWhilePassive;			//パッシブの効果が発動中かどうか
+	bool m_bWhilePassive;					//パッシブの効果が発動中かどうか
 	bool m_bHavePassiveCD = true;	
-	bool m_bWaitPassiveTimer = false;	//パッシブの効果が終了してから、パッシブのクールダウンを開始する場合にTrueにする
-	//装備効果がパッシブのみの場合にTrueにして、アクティブのクールダウンを無効化する
-	bool m_bPassiveOnly = false;
+	bool m_bWaitPassiveTimer = false;		//パッシブの効果が終了してから、パッシブのクールダウンを開始する場合にTrueにする
+	bool m_bPassiveOnly = false;			//装備効果がパッシブのみの場合にTrueにして、アクティブのクールダウンを無効化する
+											
 	//装備アイコン
 	KdTexture m_gearIconTex;
 	//プレイヤーを参照するためのポインタ

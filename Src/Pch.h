@@ -100,7 +100,7 @@
 //valueに入った値をmaxとminをもとに丸める。max>minである必要がある。
 float Clamp(float a_value, float a_max, float a_min);
 //valueの＋－を1,-1で返す。0の時は＋と判断し1を返す
-int GetPlusMinus(float a_value);
+int GetSign(float a_value);
 //Math::vector2AからBまでの距離を求める
 float GetDist(Math::Vector2 a_posA, Math::Vector2 a_posB);
 //二つの引数からRECTを作る。a_halfWidth,a_halfHeightは中心からの半幅、半高さ
@@ -115,3 +115,5 @@ void DrawFan(Math::Vector2 a_pos, float a_radius, float a_deg, float a_angle = 9
 Math::Matrix CreateMat(Math::Vector2 a_pos = {0,0}, Math::Vector2 a_scale = { 1,1 }, float a_angle = 0.0f);
 //画像の中心から扇状に画像を切り取とって戻り値で返す。a_pTexはnullptrでないこと、a_angleは角度、a_degは扇形の角度
 void CreateFanTex(KdTexture* a_pTex,KdTexture* a_pOutTex, Math::Rectangle a_rect, float a_deg, float a_angle = 90.0f, bool a_bCenter = false);
+//正負の符号を残しながら、a_valueをa_maxとa_minの範囲に丸める。a_max>a_minである必要がある。
+float ClampSign(float a_value, float a_max, float a_min);
