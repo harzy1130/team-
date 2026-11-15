@@ -38,12 +38,12 @@ void HitBase::DrawHitBox()
     color = { 1.0, 0, 0, 1.0 };
     for (auto const hitCircle : m_CircleObjects)
     {
-        int lr = GetPlusMinus(m_scale.x);
+        int lr = GetSign(m_scale.x);
         SHADER.m_spriteShader.DrawCircle(m_draw.x + hitCircle.gap.x * lr, m_draw.y + hitCircle.gap.y, hitCircle.radius,&color,false);
     }
 	for (auto const hitRect : m_RectObjects)
 	{
-		int lr = GetPlusMinus(m_scale.x);
+		int lr = GetSign(m_scale.x);
 		Math::Vector2 pos = { m_draw.x + hitRect.gap.x * lr, m_draw.y + hitRect.gap.y };
 		SHADER.m_spriteShader.DrawLine(pos.x + hitRect.rect.left, pos.y + hitRect.rect.top,     pos.x + hitRect.rect.right, pos.y + hitRect.rect.top, &color);
 		SHADER.m_spriteShader.DrawLine(pos.x + hitRect.rect.left, pos.y + hitRect.rect.bottom,  pos.x + hitRect.rect.right, pos.y + hitRect.rect.bottom, &color);
@@ -143,7 +143,7 @@ S_CircleObjects HitBase::GetCircleObjects(std::size_t index)
 {
     if (index > m_CircleObjects.size())return S_CircleObjects{ { 0,0 },0 };
     S_CircleObjects hitObj = m_CircleObjects[index];
-    hitObj.gap.x *= GetPlusMinus(m_scale.x);
+    hitObj.gap.x *= GetSign(m_scale.x);
     hitObj.gap += m_pos;
     return hitObj;
 }
@@ -152,7 +152,7 @@ S_RectObjects HitBase::GetRectObjects(std::size_t index)
 {
     if (index > m_RectObjects.size())return S_RectObjects{ { 0,0 },{ 0,0,0,0 } };
     S_RectObjects hitObj = m_RectObjects[index];
-    hitObj.gap.x *= GetPlusMinus(m_scale.x);
+    hitObj.gap.x *= GetSign(m_scale.x);
     hitObj.gap += m_pos;
     return hitObj;
 }
