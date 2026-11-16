@@ -14,6 +14,7 @@ public:
 	void Release();
 	void MoveDamage();
 	void MoveEffectDamage();
+	void MoveRecovery();
 
 	//êîéöÇÃê∂ê¨
 	void Generate(int a_number, Math::Vector2 a_pos,Math::Vector2 a_moveSpeed, Math::Vector2 a_size,float a_angle, Math::Color a_color, Math::Color a_frameColor, float a_lifespan,bool a_movingDirectionX);
@@ -21,6 +22,7 @@ public:
 	//ÉQÉbÉ^Å[
 	Math::Vector2 GetPos() { return m_pos; }
 	Math::Vector2 GetDrawPos() { return m_drawPos; }
+	Math::Vector2 GetSize() { return m_size; }
 	float GetAngle() { return m_angle; }
 	bool GetDrawFlg() { return m_drawFlg; }
 	float GetAlpha() { return m_alpha; }

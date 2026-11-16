@@ -156,13 +156,21 @@ void C_NumberUI::Release()
 void C_NumberUI::MoveDamage()
 {
 	if (!m_drawFlg)return;
-	
 	m_moveSpeed.x -= 0.1f;
-	m_moveSpeed.y -= 0.1f;
+	//m_moveSpeed.y -= 0.1f;
 	m_moveAngle = (m_lifespanTimer / m_lifespan * 180.0f)+90;
-	if(m_lifespanTimer > m_lifespan/2)
+	if (m_lifespanTimer > m_lifespan / 3 * 2)
 	{
-		m_alpha -= m_alphaSpeed*2;
+		m_alpha -= m_alphaSpeed * 2;
+		m_moveSpeed.y += 0.2f;
+		m_size.x -= 0.02f;
+		m_size.y -= 0.02f;
+	}
+	if (m_lifespanTimer <= m_lifespan / 3)
+	{
+		m_moveSpeed.x += 0.1f;
+		m_size.x += 0.01f;
+		m_size.y += 0.01f;
 	}
 	m_color = { m_color.R(), m_color.G(), m_color.B(), m_alpha };
 	m_frameColor = { m_frameColor.R(), m_frameColor.G(), m_frameColor.B(), m_alpha };
@@ -185,13 +193,40 @@ void C_NumberUI::MoveDamage()
 void C_NumberUI::MoveEffectDamage()
 {
 	if (!m_drawFlg)return;
-	m_moveSpeed.y -= 0.1f;
-	m_moveAngle = (m_lifespanTimer / m_lifespan * 180.0f) + 90;
-	if (m_lifespanTimer > m_lifespan / 2)
+	m_moveAngle = (m_lifespanTimer / m_lifespan * 180.0f) + 120;
+	if (m_lifespanTimer > m_lifespan / 3 * 2)
 	{
 		m_alpha -= m_alphaSpeed * 2;
+		m_size.x -= 0.01f;
+		m_size.y -= 0.01f;
+	}
+	if (m_lifespanTimer <= m_lifespan / 3)
+	{
+		m_size.x += 0.01f;
+		m_size.y += 0.01f;
 	}
 	m_color = {m_color.R(), m_color.G(), m_color.B(), m_alpha };
+	m_frameColor = { m_frameColor.R(), m_frameColor.G(), m_frameColor.B(), m_alpha };
+	m_pos.y += sinf(DirectX::XMConvertToRadians(m_moveAngle)) * m_moveSpeed.y;
+}
+
+void C_NumberUI::MoveRecovery()
+{
+	if (!m_drawFlg)return;
+	m_moveSpeed.y -= 0.1f;
+	m_moveAngle = (m_lifespanTimer / m_lifespan * 90.0f) + 90;
+	if (m_lifespanTimer > m_lifespan / 3*2)
+	{
+		m_alpha -= m_alphaSpeed * 2;
+		m_size.x -= 0.01f;
+		m_size.y -= 0.01f;
+	}
+	if(m_lifespanTimer <= m_lifespan / 3)
+	{
+		m_size.x += 0.01f;
+		m_size.y += 0.01f;
+	}
+	m_color = { m_color.R(), m_color.G(), m_color.B(), m_alpha };
 	m_frameColor = { m_frameColor.R(), m_frameColor.G(), m_frameColor.B(), m_alpha };
 	m_pos.y += sinf(DirectX::XMConvertToRadians(m_moveAngle)) * m_moveSpeed.y;
 }
