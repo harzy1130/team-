@@ -60,7 +60,7 @@ void C_Effect::UpdatePlayer()
 		else
 		{
 			m_pPlayer->SetHP(m_pPlayer->GetHP() - 1);	
-			m_pUIManager->CreatePoisonDamageUI(1, m_pPlayer->GetPos() + Math::Vector2(30 * (m_pPlayer->GetScaleX()*-1), 50));
+			m_pUIManager->CreatePoisonDamageUI(1, m_pPlayer->GetPos() + Math::Vector2(rand() % 60 - 30, 30));
 			m_poisonCount = 0;
 		}
 		m_poisonTime -= 1.0f / 60.0f;
@@ -73,13 +73,14 @@ void C_Effect::UpdatePlayer()
 	}
 	if (m_bCombustion)//âäè„
 	{
-		if(m_combustionCount<60)
+		if(m_combustionCount<30)
 		{
 			m_combustionCount++;
 		}
 		else
 		{
-			m_pPlayer->TakeDamage(3);
+			m_pPlayer->SetHP(m_pPlayer->GetHP() - 1);
+			m_pUIManager->CreateFlameDamageUI(1, m_pPlayer->GetPos() + Math::Vector2(rand() % 60 - 30, 30));
 			m_combustionCount = 0;
 		}
 		m_combustionTime -= 1.0f / 60.0f;
@@ -237,5 +238,8 @@ void C_Effect::EffectTest()
 {
 	if (GetAsyncKeyState('P') & 0x8000) {
 		SetPoison(10);
+	}
+	if (GetAsyncKeyState('C') & 0x8000) {
+		SetCombustion(10);
 	}
 }

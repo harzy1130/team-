@@ -1,6 +1,8 @@
 #include "PlayerBase.h"
 #include"Cursor/Cursor.h"
 #include <cmath>
+#include"UI/UIManager.h"
+
 
 void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor, C_UIManager* a_pUIManager)
 {
@@ -36,6 +38,7 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,
 	SetCameraClass(a_pCamera);
 	SetRect(PTEX_RADIUS, PTEX_RADIUS);
 	SetRadius(PTEX_RADIUS);
+	SetUIManagerClass(a_pUIManager);
 	//ó‘ÔˆÙí
 	m_effect.InitPlayer(this, a_pUIManager);
 }
@@ -405,5 +408,6 @@ bool C_PlayerBase::Heal(float a_heal)
 	{
 		return true;
 	}
+	m_pUIManager->CreateRecoveryUI(a_heal, { m_pos.x, m_pos.y + 20 });
 	return false;
 }

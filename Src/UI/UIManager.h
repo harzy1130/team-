@@ -3,6 +3,7 @@
 #include"NumberUI.h"
 #include"DamageUI.h"
 #include"EffectDmgUI.h"
+#include"RecoveryUI.h"
 
 class C_PlayerUI;
 class C_NumberUI;
@@ -25,11 +26,16 @@ public:
 
 	//エフェクトダメージUI生成
 	void CreatePoisonDamageUI(float a_Damage, Math::Vector2 a_Pos);
+	void CreateFlameDamageUI(float a_Damage, Math::Vector2 a_Pos);
+
+	//回復UI生成
+	void CreateRecoveryUI(float a_Recovery, Math::Vector2 a_Pos);
 
 private:
 	C_PlayerUI m_playerUI;
 	C_DamageUI m_damageUI;
 	C_EffectDmgUI m_effectDmgUI;
+	C_RecoveryUI m_recoveryUI;
 	//画像
 	KdTexture m_numberTex;
 	KdTexture m_numberFrameTex;

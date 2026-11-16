@@ -26,7 +26,7 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_U
 	m_playerStatus.lifStl = 0;
 	m_playerStatus.msUP = 0;
 	m_playerStatus.hpRegene = 0;
-	m_playerStatus.crtDmgP = 150;
+	m_playerStatus.crtDmgP = 200;
 	m_playerStatus.crtRate = 0;
 	m_playerStatus.skillHaste = 50;
 	m_playerStatus.increasedASP = 0;
