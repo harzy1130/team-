@@ -4,6 +4,7 @@
 
 void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_UIManager* a_pUIManager)
 {
+	C_PlayerBase::Init(a_pHit, a_pCamera, a_pCursor, a_pUIManager);
 	m_pGearA = std::make_unique<C_Gear1>();
 	m_pGearA->Init(this);
 	m_pGearB = std::make_unique<C_Gear2>();
@@ -17,36 +18,23 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_U
 	m_speed = 10;
 	m_bJump = false;
 	//基本ステータス
-	m_Level = 1;
 	m_playerStatus.maxHp = 100;
 	m_playerStatus.def = 50;
 	m_playerStatus.atk = 80;
 	m_atkSpeed = 1.2;
-	//特殊ステータス
-	m_playerStatus.lifStl = 0;
-	m_playerStatus.msUP = 0;
-	m_playerStatus.hpRegene = 0;
-	m_playerStatus.crtDmgP = 200;
-	m_playerStatus.crtRate = 0;
-	m_playerStatus.skillHaste = 50;
-	m_playerStatus.increasedASP = 0;
+	//装備ステータス
 	CalcGearStatus();
 	m_status = m_playerStatus + m_gearStatus;
 	m_Hp = m_status.maxHp;
 	//通常攻撃
 	InitAtk();
 	m_skill.Init();
-	//参照するクラスのポインタ
-	SetHitClass(a_pHit);
-	SetCameraClass(a_pCamera);
-	SetCursorClass(a_pCursor);
-	SetUIManagerClass(a_pUIManager);
+	//矩形の設定
 	SetRect(PTEX_RADIUS, 60);
 	SetRadius(PTEX_RADIUS);
 	NewRectObjects({ 0, 0 }, { -16, 48,16,-60});
 	m_hitRange = PTEX_SIZE;
-	//状態異常
-	m_effect.InitPlayer(this, a_pUIManager);
+	//武器
 	m_sword.Init(this, a_pHit, a_pCamera, a_pUIManager);
 }
 

@@ -62,6 +62,8 @@ public:
 	virtual float GetSkillCDMax()final { return m_skill.GetSkillCDMax(); }
 	virtual float GetSkillCalcCD()final { return m_skill.GetSkillCalcCD(this); }
 	virtual KdTexture* GetSkillIconTex()final { return m_pSkillIconTex; }
+	//ó‘ÔˆÙíŠÖŒW
+	virtual C_Effect* GetEffect()const final { return const_cast<C_Effect*>(&m_effect); }
 	//gearŠÖŒW
 	virtual C_GearBase* GetGearA()const final { return const_cast<C_GearBase*>(m_pGearA.get()); }
 	virtual C_GearBase* GetGearB()const final { return const_cast<C_GearBase*>(m_pGearB.get()); }

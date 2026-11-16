@@ -15,29 +15,20 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,
 	m_speed = 10;
 	m_bJump = false;
 	//基本ステータス
-	//m_MaxHp = 100;
-	//m_Hp = m_MaxHp;
-	m_playerStatus.def = 50;
-	m_playerStatus.atk = 80;
-	m_atkSpeed = 1.3;
+	m_Level = 1;
 	//特殊ステータス
 	m_playerStatus.lifStl = 0;
 	m_playerStatus.msUP = 0;
 	m_playerStatus.hpRegene = 0;
-	m_playerStatus.crtDmgP = 150;
+	m_playerStatus.crtDmgP = 200;
 	m_playerStatus.crtRate = 0;
 	m_playerStatus.skillHaste=50;
 	m_playerStatus.increasedASP = 0;
 	m_status = { 0,0,0,0,0,0,0,0 };
 	m_gearStatus = { 0,0,0,0,0,0,0,0 };
-	//通常攻撃
-	InitAtk();
-	m_skill.SetIconTexture(m_pSkillIconTex);
-	m_skill.Init();
+	//クラスポイント
 	SetHitClass(a_pHit);
 	SetCameraClass(a_pCamera);
-	SetRect(PTEX_RADIUS, PTEX_RADIUS);
-	SetRadius(PTEX_RADIUS);
 	SetUIManagerClass(a_pUIManager);
 	//状態異常
 	m_effect.InitPlayer(this, a_pUIManager);
