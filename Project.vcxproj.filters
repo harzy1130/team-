@@ -273,6 +273,9 @@
     <ClInclude Include="Src\UI\EffectDmgUI.h">
       <Filter>Src\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Src\UI\RecoveryUI.h">
+      <Filter>Src\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -414,6 +417,9 @@
       <Filter>Src\UI</Filter>
     </ClCompile>
     <ClCompile Include="Src\UI\EffectDmgUI.cpp">
+      <Filter>Src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\UI\RecoveryUI.cpp">
       <Filter>Src\UI</Filter>
     </ClCompile>
   </ItemGroup>

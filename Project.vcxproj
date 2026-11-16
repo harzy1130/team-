@@ -205,6 +205,7 @@
     <ClInclude Include="Src\UI\EffectDmgUI.h" />
     <ClInclude Include="Src\UI\NumberUI.h" />
     <ClInclude Include="Src\UI\PlayerUI.h" />
+    <ClInclude Include="Src\UI\RecoveryUI.h" />
     <ClInclude Include="Src\UI\UIManager.h" />
   </ItemGroup>
   <ItemGroup>
@@ -257,6 +258,7 @@
     <ClCompile Include="Src\UI\EffectDmgUI.cpp" />
     <ClCompile Include="Src\UI\NumberUI.cpp" />
     <ClCompile Include="Src\UI\PlayerUI.cpp" />
+    <ClCompile Include="Src\UI\RecoveryUI.cpp" />
     <ClCompile Include="Src\UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -152,25 +152,6 @@ struct S_RectObjects {
 
 static const float CAMERA_SPEED = 0.1f;
 
-//パーティクル定数============================
-
-struct S_ParticleObjects
-{
-	Math::Vector2 pos;
-	Math::Vector2 move;
-	Math::Vector2 draw;
-	Math::Vector2 scale;
-	Math::Color	  color;
-	Math::Matrix  mat;
-	Math::Matrix  sMat;
-	Math::Matrix  rMat;
-	Math::Matrix  tMat;
-	float		  size;
-	float		  m_lifeSpan;
-	float		  m_alpha;
-	int			  data;
-};
-
 //UI用定数====================================
 
 static const Math::Color VALID_COLOR = Math::Color{ 1.0, 1.0, 1.0, 1.0f };
