@@ -22,6 +22,10 @@ private:
 	KdTexture m_backTex;
 	KdTexture m_blackTex;
 	KdTexture m_skillIconTex;
+	KdTexture m_grainTex;
+	KdTexture m_atkUpTex;
+	KdTexture m_defUpTex;
+	KdTexture m_smokeTex;
 
 	C_GameStateManager m_game;
 	C_ParticleManager m_particle;

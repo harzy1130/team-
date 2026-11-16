@@ -11,7 +11,6 @@ void Scene::Draw2D()
 	{
 		m_map.Draw();
 		m_player.Draw();
-		m_particle.Draw();
 		if (inGame)
 		{
 			m_enemies.Draw();
@@ -19,6 +18,7 @@ void Scene::Draw2D()
 			m_boss.Draw();
 		}
 		m_ui.Draw();
+		m_particle.Draw();
 	}
 	m_game.SceneTransDraw();
 }
@@ -55,13 +55,17 @@ void Scene::Init()
 	m_playerAtkTex.Load(path + "atk1.png");
 	m_blackTex.Load(path + "black.png");
 	m_skillIconTex.Load(path + "SkillIcon.png");
+	m_grainTex.Load(path + "grain.png");
+	m_atkUpTex.Load(path + "atkUp.png");
+	m_defUpTex.Load(path + "defUp.png");
+	m_smokeTex.Load(path + "smoke.png");
 	m_map.SetTexture(&m_chipTex);
 	m_boss.SetTexture(&m_bossTex);
 	m_player.SetTex(&m_player1Tex);
 	m_player.SetAtkTex(&m_playerAtkTex);
 	m_player.SetSkillIconTex(&m_skillIconTex);
 	m_game.SetTexture(&m_blackTex, &m_backTex);
-	m_particle.SetTexture(&m_chipTex);
+	m_particle.SetTexture(&m_chipTex, &m_grainTex, &m_atkUpTex, &m_defUpTex, &m_smokeTex);
 	m_camera.Init();
 	m_ui.Init(&m_player, &m_camera);
 
@@ -87,6 +91,10 @@ void Scene::Release()
 	m_blackTex.Release();
 	m_skillIconTex.Release();
 	m_ui.Release();
+	m_grainTex.Release();
+	m_atkUpTex.Release();
+	m_defUpTex.Release();
+	m_smokeTex.Release();
 }
 
 void Scene::ImGuiUpdate()
