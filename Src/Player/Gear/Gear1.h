@@ -1,6 +1,6 @@
 #pragma once
 #include "GearBase.h"
-
+class C_Effect;
 class C_Gear1 : public C_GearBase
 {
 public:
@@ -15,6 +15,9 @@ public:
 private:
 	const float m_atkStatus = 20;
 	const float m_crtBonus = 100;
-	const float m_atkBonus = 30;
+	const float m_atkBonusP = 30;
+	
+	//参照クラスポインタ
+	C_Effect* m_pEffect = nullptr;
 };
 
