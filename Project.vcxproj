@@ -207,6 +207,7 @@
     <ClInclude Include="Src\UI\PlayerUI.h" />
     <ClInclude Include="Src\UI\RecoveryUI.h" />
     <ClInclude Include="Src\UI\UIManager.h" />
+    <ClInclude Include="Src\UI\HintUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Library\imgui\imgui.cpp" />
@@ -260,6 +261,7 @@
     <ClCompile Include="Src\UI\PlayerUI.cpp" />
     <ClCompile Include="Src\UI\RecoveryUI.cpp" />
     <ClCompile Include="Src\UI\UIManager.cpp" />
+    <ClCompile Include="Src\UI\HintUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="説明.txt" />

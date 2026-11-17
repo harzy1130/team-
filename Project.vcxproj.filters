@@ -255,6 +255,9 @@
     <ClInclude Include="Src\UI\UIManager.h">
       <Filter>Src\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Src\UI\HintUI.h">
+      <Filter>Src\UI</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Player\Gear\GearBase.h">
       <Filter>Src\Player\Gear</Filter>
     </ClInclude>
@@ -399,6 +402,9 @@
       <Filter>Src\UI</Filter>
     </ClCompile>
     <ClCompile Include="Src\UI\UIManager.cpp">
+      <Filter>Src\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\UI\HintUI.cpp">
       <Filter>Src\UI</Filter>
     </ClCompile>
     <ClCompile Include="Src\Player\Gear\GearBase.cpp">
