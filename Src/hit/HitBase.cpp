@@ -36,10 +36,14 @@ void HitBase::DrawHitBox()
     color = { 0,1,1,1 };
 	SHADER.m_spriteShader.DrawCircle(m_draw.x, m_draw.y, m_hitRange, &color, false);
     color = { 1.0, 0, 0, 1.0 };
-    for (auto const hitCircle : m_CircleObjects)
+    for (int i = 0; i < m_CircleObjects.size(); i++)
     {
-        int lr = GetSign(m_scale.x);
-        SHADER.m_spriteShader.DrawCircle(m_draw.x + hitCircle.gap.x * lr, m_draw.y + hitCircle.gap.y, hitCircle.radius,&color,false);
+		S_CircleObjects hitCircle = GetCircleObjects(i);
+		hitCircle.gap = hitCircle.gap - m_pos + m_draw;
+        SHADER.m_spriteShader.DrawCircle(
+            hitCircle.gap.x, 
+            hitCircle.gap.y, 
+            hitCircle.radius,&color,false);
     }
 	for (auto const hitRect : m_RectObjects)
 	{
@@ -51,6 +55,66 @@ void HitBase::DrawHitBox()
 		SHADER.m_spriteShader.DrawLine(pos.x + hitRect.rect.left, pos.y + hitRect.rect.top,     pos.x + hitRect.rect.left, pos.y + hitRect.rect.bottom, &color);
 
 	}
+	for (int i = 0; i < m_ObbObjects.size(); i++)
+	{
+		S_ObbObjects obb = GetObbObjects(i);
+		//obb.center.x *= GetSign(m_scale.x);
+		//obb.center = Math::Vector2{
+		//			m_draw.x + cosf(ToRadians(m_angle)) * obb.center.x - sinf(ToRadians(m_angle)) * obb.center.y,
+		//			m_draw.y + sinf(ToRadians(m_angle)) * obb.center.x + cosf(ToRadians(m_angle)) * obb.center.y
+		//};
+		//obb.angle = GetSign(m_scale.x) < 0 ? 90 - obb.angle + 90 : obb.angle;
+		//obb.angle += m_angle;
+		//obb.angle -= obb.angle > 360 ? 360 : 0;
+		//obb.center = obb.center;
+		obb.center = obb.center - m_pos + m_draw;
+		DrawObb(obb.center, obb.halfSize, obb.angle, &color);
+	}
+}
+
+void HitBase::DrawObb(Math::Vector2 a_center, Math::Vector2 a_halfSize, float a_angle, Math::Color* a_color)
+{
+	SHADER.m_spriteShader.SetMatrix(Math::Matrix::Identity);
+	SHADER.m_spriteShader.DrawCircle(a_center.x,a_center.y, 3, a_color);
+	SHADER.m_spriteShader.DrawLine(
+		a_center.x + cosf(ToRadians(a_angle)) * (a_halfSize.x) - (sinf(ToRadians(a_angle)) * (a_halfSize.y)),
+		a_center.y + sinf(ToRadians(a_angle)) * (a_halfSize.x) + (cosf(ToRadians(a_angle)) * (a_halfSize.y)),
+		a_center.x + cosf(ToRadians(a_angle)) * (a_halfSize.x) + (sinf(ToRadians(a_angle)) * (a_halfSize.y)),
+		a_center.y + sinf(ToRadians(a_angle)) * (a_halfSize.x) - (cosf(ToRadians(a_angle)) * (a_halfSize.y)),
+		a_color);
+	SHADER.m_spriteShader.DrawLine(
+		a_center.x + sinf(ToRadians(a_angle)) * (-a_halfSize.y) - (cosf(ToRadians(a_angle)) * (a_halfSize.x)),
+		a_center.y + cosf(ToRadians(a_angle)) * (a_halfSize.y) - (sinf(ToRadians(a_angle)) * (a_halfSize.x)),
+		a_center.x + sinf(ToRadians(a_angle)) * (-a_halfSize.y) + (cosf(ToRadians(a_angle)) * (a_halfSize.x)),
+		a_center.y + cosf(ToRadians(a_angle)) * (a_halfSize.y) + (sinf(ToRadians(a_angle)) * (a_halfSize.x)),
+		a_color);
+	SHADER.m_spriteShader.DrawLine(
+		a_center.x + cosf(ToRadians(a_angle)) * (-a_halfSize.x) - (sinf(ToRadians(a_angle)) * (a_halfSize.y)),
+		a_center.y + sinf(ToRadians(a_angle)) * (-a_halfSize.x) + (cosf(ToRadians(a_angle)) * (a_halfSize.y)),
+		a_center.x + cosf(ToRadians(a_angle)) * (-a_halfSize.x) + (sinf(ToRadians(a_angle)) * (a_halfSize.y)),
+		a_center.y + sinf(ToRadians(a_angle)) * (-a_halfSize.x) - (cosf(ToRadians(a_angle)) * (a_halfSize.y)),
+		a_color);
+	SHADER.m_spriteShader.DrawLine(
+		a_center.x + sinf(ToRadians(a_angle)) * (a_halfSize.y) - (cosf(ToRadians(a_angle)) * (a_halfSize.x)),
+		a_center.y + cosf(ToRadians(a_angle)) * (-a_halfSize.y) - (sinf(ToRadians(a_angle)) * (a_halfSize.x)),
+		a_center.x + sinf(ToRadians(a_angle)) * (a_halfSize.y) + (cosf(ToRadians(a_angle)) * (a_halfSize.x)),
+		a_center.y + cosf(ToRadians(a_angle)) * (-a_halfSize.y) + (sinf(ToRadians(a_angle)) * (a_halfSize.x)),
+		a_color);
+}
+
+Math::Matrix HitBase::CalcDrawMatrix
+()
+{
+	Math::Matrix mat, sMat, rMat, tMat;
+	float x, y;
+	x = GetSign(m_scale.x);
+	y = GetSign(m_scale.y);
+	sMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
+	rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(m_angle));
+	tMat = Math::Matrix::CreateTranslation(
+		m_draw.x + (cosf(ToRadians(m_angle)) * m_gap.x) - (sinf(ToRadians(m_angle)) * m_gap.y) * x,
+		m_draw.y + (sinf(ToRadians(m_angle)) * m_gap.x) + (cosf(ToRadians(m_angle)) * m_gap.y * y), 0);
+	return mat = sMat * rMat * tMat;
 }
 
 // 中心からの半幅・半高さを指定して、ローカル座標の当たり判定矩形を設定する。
@@ -139,12 +203,31 @@ void HitBase::DeleteRectObjects(std::size_t index)
     return;
 }
 
+void HitBase::NewObbObjects(Math::Vector2 a_center, Math::Vector2 a_halfSize, float a_angle)
+{
+	S_ObbObjects hitObj = { a_center,a_halfSize,a_angle };
+	m_ObbObjects.push_back(hitObj);
+}
+
+void HitBase::DeleteObbObjects(std::size_t index)
+{
+    if (index > m_ObbObjects.size())return;
+    auto itr = m_ObbObjects.begin();
+    itr += index;
+    itr = m_ObbObjects.erase(itr);
+    return;
+}
+
 S_CircleObjects HitBase::GetCircleObjects(std::size_t index)
 {
     if (index > m_CircleObjects.size())return S_CircleObjects{ { 0,0 },0 };
     S_CircleObjects hitObj = m_CircleObjects[index];
     hitObj.gap.x *= GetSign(m_scale.x);
-    hitObj.gap += m_pos;
+	hitObj.gap = {
+		m_pos.x + cosf(ToRadians(m_angle)) * hitObj.gap.x - sinf(ToRadians(m_angle)) * hitObj.gap.y,
+		m_pos.y + sinf(ToRadians(m_angle)) * hitObj.gap.x + cosf(ToRadians(m_angle)) * hitObj.gap.y
+	};
+	return hitObj;
     return hitObj;
 }
 
@@ -155,6 +238,24 @@ S_RectObjects HitBase::GetRectObjects(std::size_t index)
     hitObj.gap.x *= GetSign(m_scale.x);
     hitObj.gap += m_pos;
     return hitObj;
+}
+
+S_ObbObjects HitBase::GetObbObjects(std::size_t index)
+{
+	if (index > m_ObbObjects.size())return S_ObbObjects{ { 0,0 },{ 0,0 },0 };
+	S_ObbObjects hitObj = m_ObbObjects[index];
+	hitObj.halfSize.x = fabsf(hitObj.halfSize.x);
+	hitObj.halfSize.y = fabsf(hitObj.halfSize.y);
+	hitObj.center.x *= GetSign(m_scale.x);
+	hitObj.center = Math::Vector2{
+				m_pos.x + cosf(ToRadians(m_angle))* hitObj.center.x - sinf(ToRadians(m_angle)) * hitObj.center.y,
+				m_pos.y + sinf(ToRadians(m_angle))* hitObj.center.x + cosf(ToRadians(m_angle)) * hitObj.center.y
+	};
+	hitObj.angle = GetSign(m_scale.x) < 0 ? 90 - hitObj.angle + 90 : hitObj.angle;
+	hitObj.angle += m_angle;
+	hitObj.angle -= hitObj.angle > 360 ? 360 : 0;
+	hitObj.angle += hitObj.angle <= -360 ? 360 : 0;
+	return hitObj;
 }
 
 // 当たったオブジェクトリストに引数で指定したHitBaseを持つオブジェクトを追加
@@ -287,11 +388,13 @@ bool HitBase::LoadHitBox(const std::string& a_filePath)
 					getline(iss, right, ',');
 					getline(iss, bottom, ',');
 					Math::Vector2 gap = { stof(gapX) * m_scale.x, stof(gapY) * m_scale.y };
-					RECT rect = {   int(stof(left) * m_scale.x),
-                                    int(stof(top) * m_scale.y), 
-                                    int(stof(right) * m_scale.x), 
-                                    int(stof(bottom) * m_scale.y) };
-					m_RectObjects.push_back({ gap, rect });
+					//RECT rect = {   int(stof(left) * m_scale.x),
+     //                               int(stof(top) * m_scale.y), 
+     //                               int(stof(right) * m_scale.x), 
+     //                               int(stof(bottom) * m_scale.y) };
+					//m_RectObjects.push_back({ gap, rect });
+					Math::Vector2 halfSize = {stof(right) * m_scale.x, stof(bottom) * m_scale.y};
+					m_ObbObjects.push_back({ gap, halfSize, 0 });
 				}
 			}
 		}

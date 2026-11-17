@@ -38,7 +38,6 @@ protected:
 
 	//ó‘Ô
 	bool m_bAlive;
-	float m_angle;
 	int m_animationCnt;
 	float m_animationWait;
 	KdTexture* m_pTex;
@@ -57,7 +56,5 @@ protected:
 
 	//s—ñ
 	Math::Matrix m_mat;
-	Math::Matrix m_tMat;
-	Math::Matrix m_sMat;
-	Math::Matrix m_rMat;
+
 };

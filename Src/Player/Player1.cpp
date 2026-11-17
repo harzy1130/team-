@@ -32,7 +32,8 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_U
 	//‹éŒ`‚ÌÝ’è
 	SetRect(PTEX_RADIUS, 60);
 	SetRadius(PTEX_RADIUS);
-	NewRectObjects({ 0, 0 }, { -16, 48,16,-60});
+	//NewRectObjects({ 0, -6 }, { -16, 54,16,-54});
+	NewObbObjects({ 0, -6 }, { 16, 54 }, 0);
 	m_hitRange = PTEX_SIZE;
 	//•Ší
 	m_sword.Init(this, a_pHit, a_pCamera, a_pUIManager);
@@ -44,7 +45,6 @@ void C_Player1::Update()
 	if (m_damageInvincibleFrames > 0) --m_damageInvincibleFrames;
 	m_move.x = 0.0f;
 	m_move.y -= GRAVITY;
-
 	m_skill.Update();
 	GearUpdate();
 	PlayerInput();

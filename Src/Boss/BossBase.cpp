@@ -11,13 +11,7 @@ void C_BossBase::MatrixUpdate()
 	m_move.x = 0;
 	m_draw = m_pos - m_pCamera->GetPos();
 
-	float x, y;
-	x = GetSign(m_scale.x);
-	y = GetSign(m_scale.y);
-	m_sMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
-	m_rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(m_angle));
-	m_tMat = Math::Matrix::CreateTranslation(m_draw.x + m_gap.x * x, m_draw.y + m_gap.y * y, 0);
-	m_mat = m_sMat * m_rMat * m_tMat;
+	m_mat = CalcDrawMatrix();
 }
 
 void C_BossBase::Gravity()
@@ -53,10 +47,7 @@ void C_BossBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlaye
 	m_animationCnt = 0;
 	m_size = 1;
 	m_lr = 1;
-	m_sMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
-	m_rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(m_angle));
-	m_tMat = Math::Matrix::CreateTranslation(m_draw.x, m_draw.y, 0);
-	m_mat = m_sMat * m_rMat * m_tMat;
+	m_mat = CalcDrawMatrix();
 	SetHitClass(a_pHit);
 	SetCameraClass(a_pCamera);
 	SetPlayerClass(a_pPlayer);

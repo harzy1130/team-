@@ -1,4 +1,4 @@
-ï»¿#include "Pch.h"
+#include "Pch.h"
 #include "Enemy1.h"
 #include "Hit/Hit.h"
 #include "Map/Map.h"
@@ -16,7 +16,7 @@ namespace
     constexpr int NormalRecoveryFrames = 14;
     constexpr int NormalCooldownFrames = 30;
     constexpr float NormalReach = 12.0f;
-    // è·é›¢ã¯ä¸¡è€…ã®å½“ãŸã‚Šåˆ¤å®šã®ç«¯ã‹ã‚‰æ¸¬ã‚Šã€å¾Œé€€æ™‚é–“ã«ä¸Šé™ã‚’è¨­ã‘ã‚‹ã€‚
+    // ‹——£‚Í—¼Ò‚Ì“–‚½‚è”»’è‚Ì’[‚©‚ç‘ª‚èAŒã‘ŞŠÔ‚ÉãŒÀ‚ğİ‚¯‚éB
     constexpr float RetreatGap = 96.0f;
     constexpr float RetreatSpeed = 3.5f;
     constexpr int RetreatMaxFrames = 36;
@@ -28,7 +28,7 @@ namespace
         std::vector<unsigned char> rgba;
     };
 
-    // é€æ˜ãªç”Ÿæˆãƒã‚¤ã‚ºã‚’é™¤å»ã—ã€å„ã‚³ãƒã®æœ¬ä½“ã ã‘ã‚’æŠ½å‡ºã™ã‚‹ã€‚
+    // “§–¾‚È¶¬ƒmƒCƒY‚ğœ‹‚µAŠeƒRƒ}‚Ì–{‘Ì‚¾‚¯‚ğ’Šo‚·‚éB
     bool ReadSpriteFrames(const wchar_t* path, std::vector<SpritePixels>& frames)
     {
         DirectX::ScratchImage original, converted;
@@ -59,7 +59,7 @@ namespace
                     mask[y * width + x] = image->pixels[(originY + y) * image->rowPitch
                         + (originX + x) * 4 + 3] >= 128 ? 1 : 0;
 
-            // æœ€å¤§ã®é€£çµé ˜åŸŸã‚’æ®‹ã—ã€èƒŒæ™¯ã«æµ®ã„ãŸç‚¹ã‚’æç”»ã—ãªã„ã€‚
+            // Å‘å‚Ì˜AŒ‹—Ìˆæ‚ğc‚µA”wŒi‚É•‚‚¢‚½“_‚ğ•`‰æ‚µ‚È‚¢B
             std::vector<int> largest, pending;
             for (int start = 0; start < width * height; ++start)
             {
@@ -91,7 +91,7 @@ namespace
         return true;
     }
 
-    // æ­©è¡Œã¨çªé€²ã®å…¨ã‚³ãƒã‚’åŒã˜å€ç‡ãƒ»è¶³å…ƒã§é…ç½®ã—ã€æœ€è¿‘å‚ã§ç¸®å°ã™ã‚‹ã€‚
+    // •às‚Æ“Ëi‚Ì‘SƒRƒ}‚ğ“¯‚¶”{—¦E‘«Œ³‚Å”z’u‚µAÅ‹ß–T‚Åk¬‚·‚éB
     bool BuildEnemy1Atlas(std::vector<unsigned char>& pixels)
     {
         std::vector<SpritePixels> frames;
@@ -127,7 +127,7 @@ namespace
         return true;
     }
 
-    // CPU å´ã®å®Œæˆæ¸ˆã¿ã‚¢ãƒˆãƒ©ã‚¹ã‚’å…±æœ‰ã—ã€å€‹ä½“ã®è§£æ”¾ã§ã¯ç ´æ£„ã—ãªã„ã€‚
+    // CPU ‘¤‚ÌŠ®¬Ï‚İƒAƒgƒ‰ƒX‚ğ‹¤—L‚µAŒÂ‘Ì‚Ì‰ğ•ú‚Å‚Í”jŠü‚µ‚È‚¢B
     const std::vector<unsigned char>& CachedEnemy1Atlas()
     {
         static std::vector<unsigned char> cached;
@@ -156,7 +156,7 @@ bool Enemy1::PreloadSprites()
 }
 
 
-// ç¨®é¡ã”ã¨ã®æ—¢å®šå€¤ã‚’ä½¿ã†åˆæœŸåŒ–ã€‚é…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’æ¸¡ã™å ´åˆã¯ä¸‹ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰ã‚’ä½¿ã†ã€‚
+// í—Ş‚²‚Æ‚ÌŠù’è’l‚ğg‚¤‰Šú‰»B”z’uƒf[ƒ^‚ğ“n‚·ê‡‚Í‰º‚ÌƒI[ƒo[ƒ[ƒh‚ğg‚¤B
 bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map)
 {
     return Init(a_pHit, a_pCamera, map, SpawnSettings{});
@@ -170,10 +170,10 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map, const SpawnSet
         OutputDebugStringA("Enemy1 initialization texture load failed: Texture/Chara.png\n");
         return false;
     }
-    // å…ƒç”»åƒã‚„ã‚¢ãƒˆãƒ©ã‚¹ã®å¤§ãã•ã«é–¢ä¿‚ãªãã€æ—¢å­˜ã® 64x64 ã®å½“ãŸã‚Šåˆ¤å®šã‚’ä¿ã¤ã€‚
+    // Œ³‰æ‘œ‚âƒAƒgƒ‰ƒX‚Ì‘å‚«‚³‚ÉŠÖŒW‚È‚­AŠù‘¶‚Ì 64x64 ‚Ì“–‚½‚è”»’è‚ğ•Û‚ÂB
     SetRect(PTEX_RADIUS, PTEX_RADIUS);
-    // ãƒãƒ¼ãƒ ç‰ˆã®è¤‡åˆå½“ãŸã‚Šåˆ¤å®šã«ã‚‚ã€æ—¢å­˜ã® 64x64 ã®æœ¬ä½“ã‚’ç™»éŒ²ã™ã‚‹ã€‚
-    NewRectObjects({ 0.0f, 0.0f }, GetRect());
+    // ƒ`[ƒ€”Å‚Ì•¡‡“–‚½‚è”»’è‚É‚àAŠù‘¶‚Ì 64x64 ‚Ì–{‘Ì‚ğ“o˜^‚·‚éB
+    NewObbObjects({ 0.0f, 0.0f }, { float(GetRect().top), float(GetRect().left) }, 0.0f);
     m_hitRange = std::sqrt(2.0f) * PTEX_RADIUS;
     ResetHitRect();
     if (!LoadEnemy1Atlas(GetSpriteTexture()))
@@ -206,7 +206,7 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map, const SpawnSet
     return true;
 }
 
-// ã‚²ãƒ¼ãƒ ç”»é¢ãŒé¸æŠã•ã‚Œã¦ã„ã‚‹é–“ã€H ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸç¬é–“ã«è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ†ã‚¹ãƒˆã—ã€æ•µã®å…±é€šæ›´æ–°ã‚’å‘¼ã³å‡ºã™ã€‚
+// ƒQ[ƒ€‰æ–Ê‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚éŠÔAH ƒL[‚ğ‰Ÿ‚µ‚½uŠÔ‚É”íƒ_ƒ[ƒW‚ğƒeƒXƒg‚µA“G‚Ì‹¤’ÊXV‚ğŒÄ‚Ño‚·B
 void Enemy1::Update()
 {
     const bool focused = GetActiveWindow() != nullptr
@@ -246,12 +246,12 @@ void Enemy1::Update()
                 BeginRetreat();
             }
         }
-        // ä¸€åº¦ã®é€šå¸¸æ”»æ’ƒã§ã¯ä¸€åº¦ã ã‘å‘½ä¸­ã‚’èª¿ã¹ã‚‹ã€‚é›¢è„±ãƒ»è·³èºãƒ»èƒŒå¾Œã¸ã®å›é¿ãŒå¯èƒ½ã€‚
+        // ˆê“x‚Ì’ÊíUŒ‚‚Å‚Íˆê“x‚¾‚¯–½’†‚ğ’²‚×‚éB—£’EE’µ–ôE”wŒã‚Ö‚Ì‰ñ”ğ‚ª‰Â”\B
         if (m_normalHitPending && m_pHit != nullptr
             && m_pHit->CheckAttackHit(*this, *m_player, NormalReach, m_normalDirection))
             m_player->TakeDamage(static_cast<float>(GetAtk()));
     }
-    // å¾Œé€€å…ˆãŒå£ãªã‚‰è¿½è·¡ã¸æˆ»ã•ãšã€ãã®å ´ã§æ¬¡ã®æ”»æ’ƒã‚’å¾…ã¤ã€‚
+    // Œã‘Şæ‚ª•Ç‚È‚ç’ÇÕ‚Ö–ß‚³‚¸A‚»‚Ìê‚ÅŸ‚ÌUŒ‚‚ğ‘Ò‚ÂB
     if (m_spacingState == SpacingState::Retreat && m_retreatFrames > 0
         && wasGrounded && IsGrounded()
         && std::abs(GetPos().x - previousPos.x) < 0.01f)
@@ -274,7 +274,7 @@ void Enemy1::Update(C_PlayerBase* target, bool active)
         return;
     }
 
-    // é€šå¸¸ã®å…¥å ´ãƒ»å†å…¥å ´ãƒ»GUI ã‹ã‚‰ã®ç›´æ¥ã‚¹ãƒ†ãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆã«å¯¾å¿œã™ã‚‹ã€‚
+    // ’Êí‚Ì“üêEÄ“üêEGUI ‚©‚ç‚Ì’¼ÚƒXƒe[ƒWØ‚è‘Ö‚¦‚É‘Î‰‚·‚éB
     if (m_map != nullptr && (!m_wasActive || m_stage != m_map->GetStageNum()))
     {
         if (!PlaceOnMap(m_map))
@@ -292,7 +292,7 @@ void Enemy1::Update(C_PlayerBase* target, bool active)
 bool Enemy1::GetActionMove(float& horizontalMove)
 {
     const bool openingWasActive = m_openingSkill.IsWindingUp() || m_openingSkill.IsDashing();
-    // é–‹å¹•ã®çªé€²ã¯ä¸€åº¦ã ã‘è¡Œã„ã€çµ‚äº†å¾Œã¯é€šå¸¸æ”»æ’ƒã¨åŒã˜è·é›¢èª¿æ•´ã¸ç§»ã‚‹ã€‚
+    // ŠJ–‹‚Ì“Ëi‚Íˆê“x‚¾‚¯s‚¢AI—¹Œã‚Í’ÊíUŒ‚‚Æ“¯‚¶‹——£’²®‚ÖˆÚ‚éB
     if (m_openingSkill.Update(*this, m_player, IsChasing(), IsGrounded(), horizontalMove))
     {
         CancelNormalAttack();
@@ -309,7 +309,7 @@ bool Enemy1::GetActionMove(float& horizontalMove)
     if (m_normalState == NormalState::Ready)
     {
         if (UpdateSpacingMove(horizontalMove)) return true;
-        // ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ä¸­ã¯åŸºåº•ã®è¿½è·¡ç§»å‹•ã¸æˆ»ã•ãªã„ã€‚
+        // ƒN[ƒ‹ƒ_ƒEƒ“’†‚ÍŠî’ê‚Ì’ÇÕˆÚ“®‚Ö–ß‚³‚È‚¢B
         if (m_normalCooldown > 0)
         {
             horizontalMove = 0.0f;
@@ -376,7 +376,7 @@ bool Enemy1::UpdateSpacingMove(float& horizontalMove)
         else if (IsGrounded())
         {
             const float step = m_retreatDirection * std::min(RetreatSpeed, RetreatGap - gap);
-            // å´–éš›ã‚„å£ã§è·é›¢ã‚’å–ã‚Œãªã„å ´åˆã‚‚ã€å¾Œé€€ã‚’å»¶ã€…ã¨ç¹°ã‚Šè¿”ã•ãªã„ã€‚
+            // ŠRÛ‚â•Ç‚Å‹——£‚ğæ‚ê‚È‚¢ê‡‚àAŒã‘Ş‚ğ‰„X‚ÆŒJ‚è•Ô‚³‚È‚¢B
             if (HasRetreatGround(step)) horizontalMove = step;
             else m_spacingState = SpacingState::Wait;
         }

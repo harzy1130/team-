@@ -133,7 +133,6 @@ protected:
 	Math::Matrix m_transMat;
 	Math::Matrix m_scaleMat;
 	Math::Matrix m_rotMat;
-	float m_angle;
 
 	//ステータス
 	int m_Level=1;
