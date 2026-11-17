@@ -33,7 +33,7 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_U
 	SetRect(PTEX_RADIUS, 60);
 	SetRadius(PTEX_RADIUS);
 	//NewRectObjects({ 0, -6 }, { -16, 54,16,-54});
-	NewObbObjects({ 0, -6 }, { 16, 54 }, 0);
+	NewObbObjects({ 0, -6 }, 6, 54, 0);
 	m_hitRange = PTEX_SIZE;
 	//ïêäÌ
 	m_sword.Init(this, a_pHit, a_pCamera, a_pUIManager);
