@@ -75,10 +75,13 @@ void C_Sword::IfHitBoss(C_BossBase* a_pBoss)
 
 void C_Sword::IfHitEnemy(EnemyBase* a_pEnemy)
 {
-	bool isCritical = m_pPlayer->isCritical();
-	//UI‚ª”ò‚Ô•ûŒü‚ð”»’è
-	bool direction=a_pEnemy->GetPos().x > m_pPlayer->GetPos().x;
+	const Math::Vector2 playerPos = m_pPlayer->GetPos();
+	const Math::Vector2 enemyPos = a_pEnemy->GetPos();
+	const bool backstab = a_pEnemy->IsBehind(playerPos.x);
+	const bool isCritical = !backstab && m_pPlayer->isCritical();
+	const int damage = backstab ? a_pEnemy->GetHp() : static_cast<int>(m_pPlayer->DmageCalc(isCritical));
 
-	a_pEnemy->TakeDamage((int)m_pPlayer->DmageCalc(isCritical), m_pPlayer->GetPos().x);
-	m_pUIManager->CreateDamageUI((int)m_pPlayer->DmageCalc(isCritical), (a_pEnemy->GetPos() + m_pPlayer->GetPos()) * 0.5f, direction, isCritical);
+	if (!a_pEnemy->TakeDamage(damage, playerPos.x)) return;
+
+	m_pUIManager->CreateDamageUI(damage, (enemyPos + playerPos) * 0.5f, enemyPos.x > playerPos.x, isCritical);
 }
