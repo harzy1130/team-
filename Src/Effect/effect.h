@@ -22,17 +22,29 @@ public:
 	bool GetAtkUp(){ return m_bAtkUp; }
 	bool GetDefUp(){ return m_bDefUp; }
 
+	//状態異常のダメージタイミング取得用の関数
+	float GetPoisonTime() { return m_poisonCount; }
+	float GetCombustionTime() { return m_combustionCount; }
+
 	//引数に時間を秒数で入れるとその秒数だけ効果が持続する
-	void SetPoison(float a_time) { m_bPoison = true, m_poisonTime = a_time;m_poisonCount = 0; }
-	void SetCombustion(float a_time) { m_bCombustion = true, m_combustionTime = a_time; m_combustionCount = 0; }
-	void SetSutan(float a_time) { m_bSutan = true, m_sutanTime = a_time; }
-	void SetSuppress(float a_time) { m_bSuppress = true, m_suppressTime = a_time; }
-	void SetAtkUp(float a_time) { m_bAtkUp = true, m_atkUpTime = a_time; }
-	void SetDefUp(float a_time) { m_bDefUp = true, m_defUpTime = a_time; }
-	void SetAtkDown(float a_time) { m_bAtkDown = true, m_atkDownTime = a_time; }
-	void SetDefDown(float a_time) { m_bDefDown = true, m_defDownTime = a_time; }
+	void SetPoison(float a_time) { m_bPoison = true; m_poisonTime = a_time; }
+	void SetCombustion(float a_time) { m_bCombustion = true; m_combustionTime = a_time; }
+	void SetSutan(float a_time) { m_bSutan = true; m_sutanTime = a_time; }
+	void SetSuppress(float a_time) { m_bSuppress = true; m_suppressTime = a_time; }
+
+	//引数に時間(秒数)と上昇する値を入れるとその秒数だけ効果が持続する
+	void SetAtkUp(float a_time, int a_atkUp);
+	void SetDefUp(float a_time, int a_defUp);
+	void SetAtkDown(float a_time, int a_atkDown);
+	void SetDefDown(float a_time, int a_defDown);
+
+	//元のステータスを保存する変数をセットする関数
 	void SetBaseAtk(float a_atk) { m_baseAtk = a_atk; }
 	void SetBaseDef(float a_def) { m_baseDef = a_def; }
+
+	//攻撃力上昇倍率を返す関数
+	float GetAtkRatio() { return (100+m_atkUpP - m_atkDownP) / 100.0f; }
+	float GetDefRatio() { return (100 + m_defUpP - m_defDownP) / 100.0f; }
 
 private:
 	//元のステータスを保存する変数
@@ -53,17 +65,24 @@ private:
 	bool m_bSuppress;	//スキル封印
 	float m_suppressTime;
 
-	bool m_bAtkUp;		//攻撃力上昇
+	bool m_bAtkUp;		//攻撃力上昇(割合)
 	float m_atkUpTime;
+	int m_atkUpP;
 
-	bool m_bDefUp;		//防御力上昇
+	bool m_bDefUp;		//防御力上昇(割合)
 	float m_defUpTime;
+	int m_defUpP;
 
-	bool m_bAtkDown;	//攻撃力低下
+	bool m_bAtkDown;	//攻撃力低下（割合）
 	float m_atkDownTime;
+	int m_atkDownP;
 
-	bool m_bDefDown;	//防御力低下
+	bool m_bDefDown;	//防御力低下（割合）
 	float m_defDownTime;
+	int m_defDownP;
+
+	//プレーヤーに渡す値
+
 
 	//参照クラスのポインタ
 	C_PlayerBase* m_pPlayer;
