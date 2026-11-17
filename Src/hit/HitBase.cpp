@@ -58,15 +58,6 @@ void HitBase::DrawHitBox()
 	for (int i = 0; i < m_ObbObjects.size(); i++)
 	{
 		S_ObbObjects obb = GetObbObjects(i);
-		//obb.center.x *= GetSign(m_scale.x);
-		//obb.center = Math::Vector2{
-		//			m_draw.x + cosf(ToRadians(m_angle)) * obb.center.x - sinf(ToRadians(m_angle)) * obb.center.y,
-		//			m_draw.y + sinf(ToRadians(m_angle)) * obb.center.x + cosf(ToRadians(m_angle)) * obb.center.y
-		//};
-		//obb.angle = GetSign(m_scale.x) < 0 ? 90 - obb.angle + 90 : obb.angle;
-		//obb.angle += m_angle;
-		//obb.angle -= obb.angle > 360 ? 360 : 0;
-		//obb.center = obb.center;
 		obb.center = obb.center - m_pos + m_draw;
 		DrawObb(obb.center, obb.halfSize, obb.angle, &color);
 	}
@@ -109,11 +100,13 @@ Math::Matrix HitBase::CalcDrawMatrix
 	float x, y;
 	x = GetSign(m_scale.x);
 	y = GetSign(m_scale.y);
+	Math::Vector2 gap = m_gap;
+	gap *= { x, y };
 	sMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
 	rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(m_angle));
 	tMat = Math::Matrix::CreateTranslation(
-		m_draw.x + (cosf(ToRadians(m_angle)) * m_gap.x) - (sinf(ToRadians(m_angle)) * m_gap.y) * x,
-		m_draw.y + (sinf(ToRadians(m_angle)) * m_gap.x) + (cosf(ToRadians(m_angle)) * m_gap.y * y), 0);
+		m_draw.x + (cosf(ToRadians(m_angle)) * gap.x) - (sinf(ToRadians(m_angle)) * gap.y),
+		m_draw.y + (sinf(ToRadians(m_angle)) * gap.x) + (cosf(ToRadians(m_angle)) * gap.y), 0);
 	return mat = sMat * rMat * tMat;
 }
 
