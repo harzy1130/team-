@@ -1,0 +1,62 @@
+﻿#pragma once
+#include "Enemy1.h"
+#include "Enemy2.h"
+#include <memory>
+#include <string>
+#include <vector>
+
+// ステージごとの配置データから敵を生成し、更新・描画・解放をまとめて行う。
+class EnemyManager
+{
+public:
+    bool Init(C_Hit* hit, C_Camera* camera, C_Map* map,
+        const char* spawnFile = "Src/Enemy/EnemySpawns.csv");
+    void Update(C_PlayerBase* player, bool active);
+    void DrawVision();
+    void DrawStatusIndicators();
+    // 通常は索敵範囲を隠し、必要な時だけデバッグ表示を有効にする。
+    void SetVisionVisible(bool visible) { m_showVision = visible; }
+    void Draw();
+    void Release();
+
+    std::size_t GetCount() const { return m_pAllEnemies.size(); }
+    std::size_t GetAliveCount() const;
+
+    EnemyBase* GetEnemy(std::size_t index);
+    const EnemyBase* GetEnemy(std::size_t index)const;
+
+
+
+
+    Enemy1* GetEnemy1(std::size_t index);
+    const Enemy1* GetEnemy1(std::size_t index) const;
+    Enemy2* GetEnemy2(std::size_t index);
+    const Enemy2* GetEnemy2(std::size_t index) const;
+    bool SpawnEnemy2(const Enemy2::SpawnSettings& spawn);
+    void SetDebugEnemy(std::size_t index);
+    bool SpawnEnemy1(Enemy1::SpawnSettings a_spawn);
+    bool SpawnEnemy1(float a_x,float a_y);
+   
+private:
+    bool LoadStage(int stage);
+    void ClearEnemies();
+    // テクスチャを持つ敵本体はコピーせず、所有ポインターで保持する。
+    std::vector<std::unique_ptr<Enemy1>> m_enemies1;
+    std::vector<std::unique_ptr<Enemy2>> m_enemies2;
+    C_Hit* m_hit = nullptr;
+    C_Camera* m_camera = nullptr;
+    C_Map* m_map = nullptr;
+    std::string m_spawnFile;
+    int m_stage = -1;
+    bool m_wasActive = false;
+    bool m_debugSpawnWasDown = false;
+    std::size_t m_debugEnemy = 0;
+    bool m_showVision = false;
+    // ステージ切り替えでは再読込せず、全ての敵が共通の画像を使う。
+    KdTexture m_questionIcon;
+    KdTexture m_alertIcon;
+    KdTexture m_attackIcon;
+
+    // m_enemies が所有し、ここでは EnemyBase として参照する非所有ポインター一覧。
+    std::vector<EnemyBase*> m_pAllEnemies;
+};
