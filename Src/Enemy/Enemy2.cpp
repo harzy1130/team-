@@ -189,7 +189,7 @@ bool Enemy2::Init(C_Hit* hit, C_Camera* camera, C_Map* map, const SpawnSettings&
     if (!EnemyBase::Init(hit, camera, spawn.x, spawn.y, spawn.leftX, spawn.rightX,
         1.5f, "Texture/Chara.png")) return false;
     SetRect(32, 24);
-    NewObbObjects({0.0f, 0.0f}, { float(GetRect().top), float(GetRect().left) }, 0.0f);
+    NewObbObjects({0.0f, 0.0f}, GetRect().top, GetRect().left, 0.0f);
     m_hitRange = 40.0f;
     if (!LoadEnemy2Atlas(GetSpriteTexture()) || !LoadNeedleTexture(m_needleTexture))
     { Release(); return false; }

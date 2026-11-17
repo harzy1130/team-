@@ -203,9 +203,9 @@ void HitBase::DeleteRectObjects(std::size_t index)
     return;
 }
 
-void HitBase::NewObbObjects(Math::Vector2 a_center, Math::Vector2 a_halfSize, float a_angle)
+void HitBase::NewObbObjects(Math::Vector2 a_center, long a_halfWidth, long a_halfHeight, float a_angle)
 {
-	S_ObbObjects hitObj = { a_center,a_halfSize,a_angle };
+	S_ObbObjects hitObj = { a_center,{ float(a_halfWidth),float(a_halfHeight) },a_angle };
 	m_ObbObjects.push_back(hitObj);
 }
 

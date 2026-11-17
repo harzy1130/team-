@@ -173,7 +173,7 @@ bool Enemy1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Map* map, const SpawnSet
     // 元画像やアトラスの大きさに関係なく、既存の 64x64 の当たり判定を保つ。
     SetRect(PTEX_RADIUS, PTEX_RADIUS);
     // チーム版の複合当たり判定にも、既存の 64x64 の本体を登録する。
-    NewObbObjects({ 0.0f, 0.0f }, { float(GetRect().top), float(GetRect().left) }, 0.0f);
+    NewObbObjects({ 0.0f, 0.0f }, GetRect().top, GetRect().left, 0.0f);
     m_hitRange = std::sqrt(2.0f) * PTEX_RADIUS;
     ResetHitRect();
     if (!LoadEnemy1Atlas(GetSpriteTexture()))
