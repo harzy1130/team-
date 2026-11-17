@@ -1,9 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include"PlayerUI.h"
 #include"NumberUI.h"
 #include"DamageUI.h"
 #include"EffectDmgUI.h"
 #include"RecoveryUI.h"
+#include "HintUI.h"
+#include "Constants/Constants.h"
 
 class C_PlayerUI;
 class C_NumberUI;
@@ -14,29 +16,30 @@ public:
 	~C_UIManager() {};
 
 	void Init(C_PlayerBase* a_pPlayerBase, C_Camera* a_pCamera);
-	void Update();
+	void Update(GameState gameState, int stage);
 	void Draw();
 
 	void Release();
 
-	//ƒ_ƒ[ƒWUI¶¬
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸UIç”Ÿæˆ
 	void CreateDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical);
-	//“Gƒ_ƒ[ƒWUI¶¬
+	//æ•µãƒ€ãƒ¡ãƒ¼ã‚¸UIç”Ÿæˆ
 	void CreateEnemyDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical);
 
-	//ƒGƒtƒFƒNƒgƒ_ƒ[ƒWUI¶¬
+	//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ€ãƒ¡ãƒ¼ã‚¸UIç”Ÿæˆ
 	void CreatePoisonDamageUI(float a_Damage, Math::Vector2 a_Pos);
 	void CreateFlameDamageUI(float a_Damage, Math::Vector2 a_Pos);
 
-	//‰ñ•œUI¶¬
+	//å›å¾©UIç”Ÿæˆ
 	void CreateRecoveryUI(float a_Recovery, Math::Vector2 a_Pos);
 
 private:
+	HintUI m_hintUI;
 	C_PlayerUI m_playerUI;
 	C_DamageUI m_damageUI;
 	C_EffectDmgUI m_effectDmgUI;
 	C_RecoveryUI m_recoveryUI;
-	//‰æ‘œ
+	//ç”»åƒ
 	KdTexture m_numberTex;
 	KdTexture m_numberFrameTex;
 };

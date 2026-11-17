@@ -1,7 +1,8 @@
-#include"UIManager.h"
+ï»¿#include"UIManager.h"
 
 void C_UIManager::Init(C_PlayerBase* a_pPlayerBase, C_Camera* a_pCamera)
 {
+	m_hintUI.Init(a_pPlayerBase, a_pCamera);
 	std::string path = "Src/UI/Texture/NumberUI/";
 	m_numberTex.Load(path + "number.png");
 	m_numberFrameTex.Load(path + "numberFrame.png");
@@ -12,8 +13,12 @@ void C_UIManager::Init(C_PlayerBase* a_pPlayerBase, C_Camera* a_pCamera)
 	
 }
 
-void C_UIManager::Update()
+void C_UIManager::Update(GameState gameState, int stage)
 {
+	const bool inGame = gameState == GameState::Game;
+	m_hintUI.Update(inGame, stage);
+	if (!inGame && gameState != GameState::Select) return;
+
 	m_playerUI.Update();
 	m_damageUI.Update();
 	m_effectDmgUI.Update();
@@ -26,10 +31,12 @@ void C_UIManager::Draw()
 	m_recoveryUI.Draw();
 	m_damageUI.Draw();
 	m_playerUI.Draw();
+	m_hintUI.Draw();
 }
 
 void C_UIManager::Release()
 {
+	m_hintUI.Release();
 	m_numberTex.Release();
 	m_numberFrameTex.Release();
 	m_playerUI.Release();
@@ -38,7 +45,7 @@ void C_UIManager::Release()
 	m_recoveryUI.Release();
 }
 
-//ƒ_ƒ[ƒWUI¶¬(’l‚ğ“n‚·‚¾‚¯)
+//ãƒ€ãƒ¡ãƒ¼ã‚¸UIç”Ÿæˆ(å€¤ã‚’æ¸¡ã™ã ã‘)
 void C_UIManager::CreateDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical)
 {
 	m_damageUI.CreateDamageUI(a_Damage, a_Pos, a_movingDirectionX, a_critical);
