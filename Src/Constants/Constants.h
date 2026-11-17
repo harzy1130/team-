@@ -148,6 +148,12 @@ struct S_RectObjects {
 	Math::Vector2 gap;
 	RECT rect;
 };
+
+struct S_ObbObjects {
+	Math::Vector2 center;
+	Math::Vector2 halfSize;
+	float angle;
+};
 //ƒJƒƒ‰ˆÚ“®’è”==============================
 
 static const float CAMERA_SPEED = 0.1f;

@@ -1,4 +1,4 @@
-ï»¿#include "Pch.h"
+#include "Pch.h"
 #include "Enemy2.h"
 #include "Hit/Hit.h"
 #include "Map/Map.h"
@@ -19,7 +19,7 @@ namespace
         std::vector<unsigned char> rgba;
     };
 
-    // é€æ˜ãªç”Ÿæˆãƒã‚¤ã‚ºã‚’é™¤å»ã—ã€å„ã‚³ãƒã®æœ¬ä½“ã ã‘ã‚’æŠ½å‡ºã™ã‚‹ã€‚
+    // “§–¾‚È¶¬ƒmƒCƒY‚ğœ‹‚µAŠeƒRƒ}‚Ì–{‘Ì‚¾‚¯‚ğ’Šo‚·‚éB
     bool ReadSpriteFrames(const wchar_t* path, std::vector<SpritePixels>& frames, int columns = 2, int rows = 2)
     {
         DirectX::ScratchImage original, converted;
@@ -50,7 +50,7 @@ namespace
                     mask[y * width + x] = image->pixels[(originY + y) * image->rowPitch
                         + (originX + x) * 4 + 3] >= 128 ? 1 : 0;
 
-            // æœ€å¤§ã®é€£çµé ˜åŸŸã‚’æ®‹ã—ã€èƒŒæ™¯ã«æµ®ã„ãŸç‚¹ã‚’æç”»ã—ãªã„ã€‚
+            // Å‘å‚Ì˜AŒ‹—Ìˆæ‚ğc‚µA”wŒi‚É•‚‚¢‚½“_‚ğ•`‰æ‚µ‚È‚¢B
             std::vector<int> largest, pending;
             for (int start = 0; start < width * height; ++start)
             {
@@ -82,7 +82,7 @@ namespace
         return true;
     }
 
-    // æ­©è¡Œã¨çªé€²ã®å…¨ã‚³ãƒã‚’åŒã˜å€ç‡ãƒ»è¶³å…ƒã§é…ç½®ã—ã€æœ€è¿‘å‚ã§ç¸®å°ã™ã‚‹ã€‚
+    // •às‚Æ“Ëi‚Ì‘SƒRƒ}‚ğ“¯‚¶”{—¦E‘«Œ³‚Å”z’u‚µAÅ‹ß–T‚Åk¬‚·‚éB
     bool BuildEnemy2Atlas(std::vector<unsigned char>& pixels)
     {
         std::vector<SpritePixels> frames;
@@ -118,7 +118,7 @@ namespace
         return true;
     }
 
-    // CPU å´ã®å®Œæˆæ¸ˆã¿ã‚¢ãƒˆãƒ©ã‚¹ã‚’å…±æœ‰ã—ã€å€‹ä½“ã®è§£æ”¾ã§ã¯ç ´æ£„ã—ãªã„ã€‚
+    // CPU ‘¤‚ÌŠ®¬Ï‚İƒAƒgƒ‰ƒX‚ğ‹¤—L‚µAŒÂ‘Ì‚Ì‰ğ•ú‚Å‚Í”jŠü‚µ‚È‚¢B
     const std::vector<unsigned char>& CachedEnemy2Atlas()
     {
         static std::vector<unsigned char> cached;
@@ -139,7 +139,7 @@ namespace
         return texture.Create(SpriteWidth * 4, SpriteHeight * 2,
             DXGI_FORMAT_R8G8B8A8_UNORM, 1, &data);
     }
-    // æ¯’é‡ã‚‚æœ€åˆã«ä¸€åº¦ã ã‘æŠ½å‡ºã—ã€32x12 ã®æç”»ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’ä¿æŒã™ã‚‹ã€‚
+    // “Åj‚àÅ‰‚Éˆê“x‚¾‚¯’Šo‚µA32x12 ‚Ì•`‰æ—pƒf[ƒ^‚ğ•Û‚·‚éB
     const std::vector<unsigned char>& CachedNeedlePixels()
     {
         static std::vector<unsigned char> cached;
@@ -189,7 +189,7 @@ bool Enemy2::Init(C_Hit* hit, C_Camera* camera, C_Map* map, const SpawnSettings&
     if (!EnemyBase::Init(hit, camera, spawn.x, spawn.y, spawn.leftX, spawn.rightX,
         1.5f, "Texture/Chara.png")) return false;
     SetRect(32, 24);
-    NewRectObjects({0.0f, 0.0f}, GetRect());
+    NewObbObjects({0.0f, 0.0f}, { float(GetRect().top), float(GetRect().left) }, 0.0f);
     m_hitRange = 40.0f;
     if (!LoadEnemy2Atlas(GetSpriteTexture()) || !LoadNeedleTexture(m_needleTexture))
     { Release(); return false; }
@@ -260,7 +260,7 @@ bool Enemy2::GetActionMove(float& horizontalMove)
     if (!IsChasing() || m_player == nullptr) { CancelShot(); return false; }
     if (m_shotState == ShotState::Ready)
     {
-        // å°„æ’ƒé–“éš”ä¸­ã‚‚æ¥è¿‘ã—ã™ããšã€å°„ç¨‹å¤–ã§ã¯å…±é€šã®è¿½è·¡ç§»å‹•ã«æˆ»ã‚‹ã€‚
+        // ËŒ‚ŠÔŠu’†‚àÚ‹ß‚µ‚·‚¬‚¸AË’öŠO‚Å‚Í‹¤’Ê‚Ì’ÇÕˆÚ“®‚É–ß‚éB
         if (!IsGrounded() || !HasLineOfSight(*m_player, m_attack.range)) return false;
         horizontalMove = 0.0f;
         FaceDirection(m_player->GetPos().x < GetPos().x ? -1 : 1);
@@ -301,7 +301,7 @@ void Enemy2::FireNeedle()
     if (m_projectiles.size() >= 8) return;
     const auto muzzle = GetPos() + Math::Vector2(m_shotDirection * 40.0f, 24.0f);
     C_EnemyProjectile projectile;
-    // æº–å‚™é–‹å§‹æ™‚ã®ä½ç½®ã¸ç‹™ã„ã‚’å›ºå®šã—ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå›é¿ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ã€‚
+    // €”õŠJn‚ÌˆÊ’u‚Ö‘_‚¢‚ğŒÅ’è‚µAƒvƒŒƒCƒ„[‚ª‰ñ”ğ‚Å‚«‚é‚æ‚¤‚É‚·‚éB
     if (projectile.Init(muzzle, m_aimPoint - muzzle, m_attack.projectileSpeed, static_cast<float>(GetAtk())))
         m_projectiles.push_back(std::move(projectile));
 }
@@ -323,6 +323,7 @@ void Enemy2::Draw()
         (m_spriteFrame / 4) * SpriteHeight, SpriteWidth, SpriteHeight);
     DrawSpriteFrame(source, SpriteWidth, SpriteHeight, true, FootPadding);
     for (const auto& projectile : m_projectiles) projectile.Draw(m_pCamera, &m_needleTexture);
+	DrawHitBox();
 }
 
 void Enemy2::Release()

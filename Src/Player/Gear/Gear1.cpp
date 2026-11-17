@@ -20,6 +20,8 @@ void C_Gear1::WhileActiveGear()
 	if (m_bWhileActive)
 	{
 		m_status.atk = m_atkStatus + m_atkBonus;
+
+		m_status.crtRate = m_crtBonus;
 	}
 	C_GearBase::WhileActiveGear();
 }
@@ -28,4 +30,5 @@ void C_Gear1::EndActiveGear()
 {
 	C_GearBase::EndActiveGear();
 	m_status.atk = m_atkStatus;
+	m_status.crtRate = 0;
 }

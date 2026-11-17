@@ -60,6 +60,15 @@ public:
 	bool RectCircleHit(Math::Vector2 a_rectPos, RECT a_rect, Math::Vector2 a_circlePos, float a_circleRadius);
 	// 矩形と矩形の当たり判定を行う。
 	bool RectHit(Math::Vector2 a_pos1, RECT a_rect1, Math::Vector2 a_pos2, RECT a_rect2);
+	// OBBとOBBの当たり判定を行う。
+	bool ObbHit(S_ObbObjects a_obb1, S_ObbObjects a_obb2);
+	// OBBと円の当たり判定を行う。
+	bool ObbCircleHit(S_ObbObjects a_obb, Math::Vector2 a_circlePos, float a_circleRadius);
+	// OBBの軸を取得する
+	Math::Vector2 GetAxisX(const S_ObbObjects& a_obb);
+	Math::Vector2 GetAxisY(const S_ObbObjects& a_obb);
+	// SAT法を使用してOBB同士の当たり判定を行う。引数はOBBの中心座標、角度、OBB情報。
+	bool CheckSAT(const S_ObbObjects& a_obb1, const S_ObbObjects& a_obb2, Math::Vector2 axis);
     // 距離・上下の重なり・向きだけを調べ、攻撃タイミングやダメージは呼び出し側で管理する。
     bool CheckAttackHit(const HitBase& attacker, const HitBase& target,
         float horizontalReach, int facingDirection = 0) const;

@@ -9,7 +9,34 @@ void C_Boss::Update()
 	if (m_animationCnt > (6 * m_animationWait))m_animationCnt = 0;
 	Move();
 	Gravity();
-	
+	//デバッグ用
+	//m_pos = { 400, 0 };
+	//m_move = { 0, 0 };
+	//if (GetAsyncKeyState('J')) 
+	//{
+	//	m_move.x = -5;
+	//}
+	//if (GetAsyncKeyState('I'))
+	//{
+	//	m_move.y = 5;
+	//}
+	//if(GetAsyncKeyState('L'))
+	//{
+	//	m_move.x = 5;
+	//}
+	//if(GetAsyncKeyState('K'))
+	//{
+	//	m_move.y = -5;
+	//}
+	//if(GetAsyncKeyState('U'))
+	//{
+	//	m_angle += 1;
+	//}
+	//if(GetAsyncKeyState('O'))
+	//{
+	//	m_angle -= 1;
+	//}
+	if (m_angle > 360)m_angle -= 360;
 	MapCollision();
 	m_pHit->PlayerHitCheck(this);
 	ResetAlreadyHit();
@@ -107,6 +134,9 @@ void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer)
 	m_animationWait = 8;
 	m_scale = {m_size, m_size };
 	if (LoadHitBox("Capricorn"));
+	//NewObbObjects({ 160, 50 }, { 32, 64 }, 45);
+	//NewObbObjects({ 160, 50 }, { 32, 64 }, -45);
+	//NewObbObjects({ 160, -10 }, { 32, 64 }, 45);
 	m_hp = 500;
 	m_atk = 10;
 	m_moveSpeed = 5.0f;

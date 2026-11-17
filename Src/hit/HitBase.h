@@ -18,7 +18,9 @@ public:
 
     // デバッグ用の矩形表示
     void DrawHitBox();
-
+    void DrawObb(Math::Vector2 a_center, Math::Vector2 a_halfSize, float a_angle, Math::Color* a_color);
+	// 画像描画用の行列を計算する。
+	Math::Matrix CalcDrawMatrix();
     // 現在のワールド座標を設定する。
     void SetPos(float x, float y) { m_pos = Math::Vector2(x, y); }
     // 次に適用する X・Y 方向の移動量を設定する。
@@ -48,10 +50,10 @@ public:
     void NewCircleObjects(Math::Vector2 a_gap, float a_radius);
     // 円を削除
     void DeleteCircleObjects(std::size_t index);
-
-    void NewRectObjects(Math::Vector2 a_gap, RECT a_rect);
-
-    void DeleteRectObjects(std::size_t index);
+	// 新しく回転矩形を追加。a_centerは物体の中心からの座標、a_halfWidthとa_halfHeightは半幅・半高さ、a_angleは回転角度（度数法）です。
+	void NewObbObjects(Math::Vector2 a_center, long a_halfWidth, long a_halfHeight, float a_angle = 0.0f);
+	// 回転矩形を削除
+	void DeleteObbObjects(std::size_t index);
 
     // 引数に入れたHitBaseを持つオブジェクトが既に当たっているかを返す。当たっていた場合はtrueを返す。
     bool GetAlreadyHit(HitBase* a_pHitBase);
@@ -77,6 +79,10 @@ public:
     S_RectObjects GetRectObjects(std::size_t index);
 
     std::size_t GetRectObjectsCount() { return m_RectObjects.size(); }
+
+    S_ObbObjects GetObbObjects(std::size_t index);
+
+    std::size_t GetObbObjectsCount() { return m_ObbObjects.size(); }
 
     float GetHitRange() { return m_hitRange; }
 
@@ -114,12 +120,14 @@ protected:
     RECT m_rect{};
     std::vector<S_CircleObjects> m_CircleObjects;
     std::vector<S_RectObjects> m_RectObjects;
+	std::vector<S_ObbObjects> m_ObbObjects;
     S_HitRect m_bHitRect;
     Math::Vector2 m_pos{ 0.0f, 0.0f };
     Math::Vector2 m_draw{ 0.0f, 0.0f };
     Math::Vector2 m_scale{ 1.0f, 1.0f };
     Math::Vector2 m_move{ 0.0f, 0.0f };
 	Math::Vector2 m_gap{ 0.0f, 0.0f };
+	float m_angle = 0;
     float m_radius = 0;
 	float m_hitRange = 0;
 	int m_texWidth = 0;
@@ -129,4 +137,7 @@ protected:
 
 private:
     std::vector<HitBase*> m_alreadyHit;
+    //矩形判定はOBBに置き換えるため使わないで！！
+    void NewRectObjects(Math::Vector2 a_gap, RECT a_rect);
+    void DeleteRectObjects(std::size_t index);
 };

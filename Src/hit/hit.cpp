@@ -157,6 +157,66 @@ bool C_Hit::RectHit(Math::Vector2 a_pos1, RECT a_rect1, Math::Vector2 a_pos2, RE
 	return left < right && bottom < top;
 }
 
+bool C_Hit::ObbHit(S_ObbObjects a_obb1, S_ObbObjects a_obb2)
+{
+	Math::Vector2 axis[4]{
+		GetAxisX(a_obb1),
+		GetAxisY(a_obb1),
+		GetAxisX(a_obb2),
+		GetAxisY(a_obb2),
+	};
+
+	for (int i = 0; i < 4; i++)
+	{
+		if(!CheckSAT(a_obb1, a_obb2, axis[i])) return false;
+	}
+	return true;
+}
+
+bool C_Hit::ObbCircleHit(S_ObbObjects a_obb, Math::Vector2 a_circlePos, float a_circleRadius)
+{
+	Math::Vector2 dis = a_circlePos - a_obb.center;
+	float localX = dis.x * cosf(ToRadians(a_obb.angle)) + dis.y * sinf(ToRadians(a_obb.angle));
+	float localY = -dis.x * sinf(ToRadians(a_obb.angle)) + dis.y * cosf(ToRadians(a_obb.angle));
+	float closestX = Clamp(localX, a_obb.halfSize.x, -a_obb.halfSize.x);
+	float closestY = Clamp(localY, a_obb.halfSize.y, -a_obb.halfSize.y);
+	float dx = localX - closestX;
+	float dy = localY - closestY;
+	return (dx * dx + dy * dy) < (a_circleRadius * a_circleRadius);
+}
+
+Math::Vector2 C_Hit::GetAxisX(const S_ObbObjects& a_obb)
+{
+	return {
+		cosf(ToRadians(a_obb.angle)),
+		sinf(ToRadians(a_obb.angle))
+	};
+}
+
+Math::Vector2 C_Hit::GetAxisY(const S_ObbObjects& a_obb)
+{
+	return {
+		-sinf(ToRadians(a_obb.angle)),
+		cosf(ToRadians(a_obb.angle))
+	};
+}
+
+bool C_Hit::CheckSAT(const S_ObbObjects& a_obb1, const S_ObbObjects& a_obb2, Math::Vector2 axis)
+{
+	Math::Vector2 axis1X = GetAxisX(a_obb1);
+	Math::Vector2 axis1Y = GetAxisY(a_obb1);
+
+	Math::Vector2 axis2X = GetAxisX(a_obb2);
+	Math::Vector2 axis2Y = GetAxisY(a_obb2);
+
+	float center1 = axis.Dot(a_obb1.center);
+	float center2 = axis.Dot(a_obb2.center);
+	float radius1 = a_obb1.halfSize.x * fabsf(axis.Dot(axis1X)) + a_obb1.halfSize.y * fabsf(axis.Dot(axis1Y));
+	float radius2 = a_obb2.halfSize.x * fabsf(axis.Dot(axis2X)) + a_obb2.halfSize.y * fabsf(axis.Dot(axis2Y));
+	bool hit = fabsf(center1 - center2) < radius1 + radius2;
+	return hit;
+}
+
 RECT C_Hit::CreateRectPos(float a_halfWidth, float a_halfHeight, Math::Vector2 a_pos)
 {
 	RECT rect;
@@ -198,20 +258,36 @@ bool C_Hit::CheckHitBox(HitBase* a_pHitBase, HitBase* a_pTarget)
 			if (isHit)return true;
 		}
 	}
-	for (int i = 0;i < a_pTarget->GetRectObjectsCount();i++)
+	//for (int i = 0;i < a_pTarget->GetRectObjectsCount();i++)
+	//{
+	//	S_RectObjects hitobj = a_pTarget->GetRectObjects(i);
+	//	for (int c = 0;c < a_pHitBase->GetCircleObjectsCount();c++)
+	//	{
+	//		S_CircleObjects cHitobj = a_pHitBase->GetCircleObjects(c);
+	//		isHit = RectCircleHit(hitobj.gap, hitobj.rect, cHitobj.gap, cHitobj.radius);
+	//		if (isHit)return true;
+	//	}
+	//	for (int r = 0;r < a_pHitBase->GetRectObjectsCount();r++)
+	//	{
+	//		S_RectObjects rHitobj = a_pHitBase->GetRectObjects(r);
+	//		isHit = RectHit(rHitobj.gap, rHitobj.rect, hitobj.gap, hitobj.rect);
+	//		if (isHit)return true;
+	//	}
+	//}
+	for(int i = 0; i < a_pTarget->GetObbObjectsCount(); i++)
 	{
-		S_RectObjects hitobj = a_pTarget->GetRectObjects(i);
+		S_ObbObjects hitobj = a_pTarget->GetObbObjects(i);
 		for (int c = 0;c < a_pHitBase->GetCircleObjectsCount();c++)
 		{
 			S_CircleObjects cHitobj = a_pHitBase->GetCircleObjects(c);
-			isHit = RectCircleHit(hitobj.gap, hitobj.rect, cHitobj.gap, cHitobj.radius);
+			isHit = ObbCircleHit(hitobj, cHitobj.gap, cHitobj.radius);
 			if (isHit)return true;
 		}
-		for (int r = 0;r < a_pHitBase->GetRectObjectsCount();r++)
+		for (int o = 0;o < a_pHitBase->GetObbObjectsCount();o++)
 		{
-			S_RectObjects rHitobj = a_pHitBase->GetRectObjects(r);
-			isHit = RectHit(rHitobj.gap, rHitobj.rect, hitobj.gap, hitobj.rect);
-			if (isHit)return true;
+			S_ObbObjects oHitobj = a_pHitBase->GetObbObjects(o);
+			isHit = ObbHit(hitobj, oHitobj);
+ 			if (isHit)return true;
 		}
 	}
 	return false;
