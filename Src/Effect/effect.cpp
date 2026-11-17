@@ -112,54 +112,42 @@ void C_Effect::UpdatePlayer()
 	if (m_bAtkUp)//攻撃力上昇
 	{
 		m_atkUpTime -= 1.0f / 60.0f;
-		m_pPlayer->SetATK(m_baseAtk * 1.5f);
 		if(m_atkUpTime <= 0)
 		{
 			m_atkUpTime = 0;
-			m_pPlayer->SetATK(m_baseAtk);
+			m_atkUpP = 0;
 			m_bAtkUp = false;
 		}
 	}
 	if (m_bDefUp)//防御力上昇
 	{
 		m_defUpTime -= 1.0f / 60.0f;
-		m_pPlayer->SetDEF(m_baseDef * 1.5f);
 		if(m_defUpTime <= 0)
 		{
 			m_defUpTime = 0;
-			m_pPlayer->SetDEF(m_baseDef);
+			m_defUpP = 0;
 			m_bDefUp = false;
 		}
 	}
 	if (m_bAtkDown)//攻撃力低下
 	{
 		m_atkDownTime -= 1.0f / 60.0f;
-		m_pPlayer->SetATK(m_baseAtk * 0.5f);
 		if (m_atkDownTime <= 0)
 		{
 			m_atkDownTime = 0;
-			m_pPlayer->SetATK(m_baseAtk);
+			m_atkDownP = 0;
 			m_bAtkDown = false;
 		}
 	}
 	if(m_bDefDown)//防御力低下
 	{
 		m_defDownTime -= 1.0f / 60.0f;
-		m_pPlayer->SetDEF(m_baseDef * 0.5f);
 		if (m_defDownTime <= 0)
 		{
 			m_defDownTime = 0;
-			m_pPlayer->SetDEF(m_baseDef);
+			m_defDownP = 0;
 			m_bDefDown = false;
 		}
-	}
-	if (m_bAtkUp && m_bAtkDown)//元のステータスに戻す
-	{
-		m_pPlayer->SetATK(m_baseAtk);
-	}
-	if (m_bDefUp && m_bDefDown)//元のステータスに戻す
-	{
-		m_pPlayer->SetDEF(m_baseDef);
 	}
 }
 
@@ -243,3 +231,32 @@ void C_Effect::EffectTest()
 		SetCombustion(10);
 	}
 }
+
+void C_Effect::SetAtkUp(float a_time, int a_atkUp)
+{
+	m_bAtkUp = true;
+	m_atkUpTime = a_time;
+	m_atkUpP = a_atkUp;
+}
+
+void C_Effect::SetDefUp(float a_time, int a_defUp)
+{
+	m_bDefUp = true;
+	m_defUpTime = a_time;
+	m_defUpP = a_defUp;
+}
+
+void C_Effect::SetAtkDown(float a_time, int a_atkDown)
+{
+	m_bAtkDown = true;
+	m_atkDownTime = a_time;
+	m_atkDownP = a_atkDown;
+}
+
+void C_Effect::SetDefDown(float a_time, int a_defDown)
+{
+	m_bDefDown = true;
+	m_defDownTime = a_time;
+	m_defDownP = a_defDown;
+}
+

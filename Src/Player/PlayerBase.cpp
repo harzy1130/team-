@@ -30,6 +30,9 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,
 	SetHitClass(a_pHit);
 	SetCameraClass(a_pCamera);
 	SetUIManagerClass(a_pUIManager);
+	//‘•”õ
+	m_pGearA=nullptr;
+	m_pGearB=nullptr;
 	//ó‘ÔˆÙí
 	m_effect.InitPlayer(this, a_pUIManager);
 }
@@ -356,13 +359,16 @@ void C_PlayerBase::ExpUpdate()
 void C_PlayerBase::StatusUpdate()
 {
 	CalcGearStatus();
+	m_playerStatus.maxHp = m_baseHp + (m_Level - 1) * m_LevelUpHp;
+	m_playerStatus.atk = m_baseAtk + (m_Level - 1) * m_LevelUpAtk;
+	m_playerStatus.def = m_baseDef + (m_Level - 1) * m_LevelUpDef;
 	m_status = m_playerStatus + m_gearStatus;
 	//HPƒŠƒWƒFƒl
 	HPRegeneCalc();
 
-	m_playerStatus.maxHp = m_baseHp + (m_Level - 1) * m_LevelUpHp;
-	m_playerStatus.atk = m_baseAtk + (m_Level - 1) * m_LevelUpAtk;
-	m_playerStatus.def = m_baseDef + (m_Level - 1) * m_LevelUpDef;
+	m_status.atk *= m_effect.GetAtkRatio();
+	m_status.def *= m_effect.GetDefRatio();
+	
 }
 
 void C_PlayerBase::CalcGearStatus()

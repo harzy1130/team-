@@ -1,5 +1,6 @@
 #include"Gear1.h"
-
+#include"Player/PlayerBase.h"
+#include"Effect/Effect.h"
 void C_Gear1::Init(C_PlayerBase* a_pPlayer)
 {
 	C_GearBase::Init(a_pPlayer);
@@ -8,6 +9,7 @@ void C_Gear1::Init(C_PlayerBase* a_pPlayer)
 	m_activeTimerMax = 60 * 4;
 	m_bHavePassiveCD = true;
 	m_bWaitActiveTimer = true;
+	m_pEffect = a_pPlayer->GetEffect();
 }
 
 void C_Gear1::OnceActiveGear()
@@ -19,8 +21,7 @@ void C_Gear1::WhileActiveGear()
 {
 	if (m_bWhileActive)
 	{
-		m_status.atk = m_atkStatus + m_atkBonus;
-
+		m_pEffect->SetAtkUp(m_activeTimerMax/60, m_atkBonusP);
 		m_status.crtRate = m_crtBonus;
 	}
 	C_GearBase::WhileActiveGear();
