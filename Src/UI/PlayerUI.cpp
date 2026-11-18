@@ -34,6 +34,7 @@ void C_PlayerUI::Draw()
 	DrawPlayerSkill();
 	DrawPlayerGear(m_pPlayer->GetGearA(), m_gearAPos);
 	DrawPlayerGear(m_pPlayer->GetGearB(), m_gearBPos);
+	DrawPlayerStatusBar();
 }
 
 void C_PlayerUI::DrawPlayerHpGauge()
@@ -42,8 +43,8 @@ void C_PlayerUI::DrawPlayerHpGauge()
 	Math::Rectangle headRect = CreateRectFromTex(&m_playerHpHeadTex);
 	Math::Rectangle tailRect = CreateRectFromTex(&m_playerHpTailTex);
 	//ゲージの長さを計算
-	float healRatio = bufHeal / m_pPlayer->GetMAXHP();
-	float dmgRatio = bufDmg / m_pPlayer->GetMAXHP();
+	float healRatio = m_bufHeal / m_pPlayer->GetMAXHP();
+	float dmgRatio = m_bufDmg / m_pPlayer->GetMAXHP();
 	float gaugeWidth;
 	float gaugeX;
 	Math::Vector2 pos;
@@ -54,11 +55,16 @@ void C_PlayerUI::DrawPlayerHpGauge()
 	Math::Color gaugeColor;
 	//ダメージバッファ描画
 	//このゲージは回復には敏感に反応し、ダメージには鈍感に反応する
-	gaugeWidth = gaugeRect.width * dmgRatio + tailRect.width;
+	m_hpOffset = m_bufHeal > 0 ? headRect.width + tailRect.width : m_hpOffset * 0.9f;
+	float gaugeOffset = max(m_hpOffset - tailRect.width, 0.0f);
+	gaugeWidth = gaugeRect.width * dmgRatio + gaugeOffset;
+	int headOffset = gaugeOffset <= 0 ? headRect.width - m_hpOffset : 0;
 	gaugeX = -gaugeRect.width / 2.0f + gaugeWidth / 2.0f - tailRect.width;
-	pos = { m_hpGaugePos.x - gaugeRect.width / 2.0f + gaugeWidth + headRect.width / 2.0f - tailRect.width, m_hpGaugePos.y };
-	gaugeColor = bufDmg > m_pPlayer->GetHP() ? Math::Color{ 0.7,0,0,1 } : Math::Color{ 0.5, 1.7,0.5,1 };
-	DrawTexFromTex(&m_playerHpHeadTex, pos, { 1.0f, 1.0f }, 0.0f, gaugeColor);
+	pos = { m_hpGaugePos.x - gaugeRect.width / 2.0f + gaugeWidth + (headRect.width - headOffset) / 2.0f - tailRect.width, m_hpGaugePos.y };
+	gaugeColor = m_bufDmg > m_pPlayer->GetHP() ? Math::Color{ 0.7,0,0,1 } : Math::Color{ 0.5, 1.7,0.5,1 };
+	//DrawTexFromTex(&m_playerHpHeadTex, pos, { 1.0f, 1.0f }, 0.0f, gaugeColor);
+	SHADER.m_spriteShader.SetMatrix(CreateMat(pos));
+	SHADER.m_spriteShader.DrawTex(&m_playerHpHeadTex, 0, 0, &Math::Rectangle(headOffset, 0, headRect.width - headOffset, headRect.height), &gaugeColor);
 	SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(m_hpGaugePos.x + gaugeX, m_hpGaugePos.y, 0.0f));
 	//1ドットずれてしまうので+1
 	SHADER.m_spriteShader.DrawTex(&m_playerHpGaugeTex, 0, 0, &Math::Rectangle(0, 0, gaugeWidth + 1, gaugeRect.height), &gaugeColor);
@@ -80,17 +86,27 @@ void C_PlayerUI::DrawPlayerHpGauge()
 	pos = { m_hpGaugePos.x - gaugeRect.width / 2.0f + gaugeWidth + headRect.width / 2.0f, m_hpGaugePos.y };
 	DrawTexFromTex(&m_playerHpHeadTex, pos, { 1.0f, 1.0f }, 0.0f, gaugeColor);
 DrawGaugeEnd:;
-
+	SHADER.m_spriteShader.SetMatrix(Math::Matrix::Identity);
+	for (int i = 0; i <= m_pPlayer->GetMAXHP(); i += 10)
+	{
+		int x = m_hpGaugePos.x - gaugeRect.width / 2.0f + (gaugeRect.width * i / m_pPlayer->GetMAXHP());
+		int thic = i % m_hpScaleLine == 0 && i != 0 ? 2 : 1;
+		SHADER.m_spriteShader.DrawBox(x, m_hpGaugePos.y, thic, gaugeRect.height / 2, &Math::Color{ 0,0,0,0.2f });
+	}
 	//枠の描画
 	DrawTexFromTex(&m_playerHpFrameTex, m_hpGaugePos, { 1.0f, 1.0f }, 0.0f);
+	if (GetAsyncKeyState('B'))
+	{
+		int a = 0;
+	}
 }
 
 void C_PlayerUI::UpdatePlayerHpGauge()
 {
 	//HPゲージの更新
-	if (bufHeal == bufDmg && bufDmg == m_pPlayer->GetHP())return;
-		bufDmg = max((bufDmg - m_pPlayer->GetHP()) * 0.9f, 0.0f) + float(m_pPlayer->GetHP());
-		bufHeal = min((bufHeal - m_pPlayer->GetHP()) * 0.9f, 0.0f) + float(m_pPlayer->GetHP());
+	if (m_bufHeal == m_bufDmg && m_bufDmg == m_pPlayer->GetHP())return;
+		m_bufDmg = max((m_bufDmg - m_pPlayer->GetHP()) * 0.9f, 0.0f) + float(m_pPlayer->GetHP());
+		m_bufHeal = min((m_bufHeal - m_pPlayer->GetHP()) * 0.9f, 0.0f) + float(m_pPlayer->GetHP());
 }
 
 void C_PlayerUI::DrawPlayerSkill()
@@ -171,6 +187,37 @@ void C_PlayerUI::DrawPlayerGear(C_GearBase* a_pGear, Math::Vector2 a_pos)
 	D3D.SetBlendState(BlendMode::Add);
 	DrawTexFromTex(&m_renderTex, a_pos, { 1.0f, 1.0f }, 0.0f, Math::Color{ 1.0f, 0.5f, 0.0f, 1.0f });
 	D3D.SetBlendState(BlendMode::Alpha);
+}
+
+void C_PlayerUI::DrawPlayerStatusBar()
+{
+	for(auto itr = m_statusBarOrder.begin(); itr != m_statusBarOrder.end();)
+	{
+		float fanRatio = *m_statusBar[*itr].time / *m_statusBar[*itr].maxTime;
+		if (fanRatio <= 0)
+		{
+			m_statusBar.erase(*itr);
+			itr = m_statusBarOrder.erase(itr);
+			continue;
+		}
+		Math::Vector2 pos = { m_statusBarHeadPos.x + (itr - m_statusBarOrder.begin()) * 32, m_statusBarHeadPos.y };
+		DrawTexFromTex(m_statusBar[*itr].pTex, pos, { 0.4f, 0.4f }, 0.0f, Math::Color{ 0.8f, 0.8f, 0.8f, 1.0f });
+		CreateFanTex(&m_playerSkillCDTex, &m_renderTex, CreateRectFromTex(&m_playerSkillCDTex), 360 * fanRatio);
+		D3D.SetBlendState(BlendMode::Add);
+		DrawTexFromTex(&m_renderTex, pos, { 0.4f, 0.4f }, 0.0f, Math::Color{ 1.0f, 1.0f, 1.0f, 0.2f });
+		D3D.SetBlendState(BlendMode::Alpha);
+		++itr;
+	}
+}
+
+void C_PlayerUI::AddStatusChip(string a_tag, KdTexture* a_pTex, float* a_maxTime, float* a_time)
+{
+	if(m_statusBar.find(a_tag) == m_statusBar.end())
+	{
+		S_StatusChip chip{ a_pTex, a_maxTime, a_time };
+		m_statusBar.emplace(a_tag, chip);
+		m_statusBarOrder.push_back(a_tag);
+	}
 }
 
 void C_PlayerUI::DrawGrowEffect()

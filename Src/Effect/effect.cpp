@@ -23,12 +23,13 @@ void C_Effect::InitPlayer(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager)
 	m_defUpTime = 0;
 	m_atkDownTime = 0;
 	m_defDownTime = 0;
+	m_poisonIconTex.Load("Src/Effect/Texture/PoisonIcon.png");
 }
 
-void C_Effect::InitEnemy(EnemyBase* a_pEnemy, C_UIManager* a_pUIManager)
+void C_Effect::InitEnemy(EnemyBase* a_pEnemy)
 {
 	m_pEnemy = a_pEnemy;
-	m_pUIManager = a_pUIManager;
+	m_pUIManager = nullptr;
 	m_baseAtk = a_pEnemy->GetAtk();
 	m_bPoison = false;
 	m_bCombustion = false;
@@ -230,6 +231,13 @@ void C_Effect::EffectTest()
 	if (GetAsyncKeyState('C') & 0x8000) {
 		SetCombustion(10);
 	}
+}
+
+void C_Effect::SetPoison(float a_time)
+{
+	m_bPoison = true; m_poisonTime = a_time; m_poisonMaxTime = a_time;
+	if(m_pUIManager == nullptr)return;
+	m_pUIManager->AddPlayerStatusChip("Poison", &m_poisonIconTex, &m_poisonMaxTime, &m_poisonTime);
 }
 
 void C_Effect::SetAtkUp(float a_time, int a_atkUp)

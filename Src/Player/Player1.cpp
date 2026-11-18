@@ -7,9 +7,9 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_U
 	C_PlayerBase::Init(a_pHit, a_pCamera, a_pCursor, a_pUIManager);
 	//‘•”õ
 	m_pGearA = std::make_unique<C_Gear1>();
-	m_pGearA->Init(this);
+	m_pGearA->Init(this, a_pUIManager);
 	m_pGearB = std::make_unique<C_Gear2>();
-	m_pGearB->Init(this);
+	m_pGearB->Init(this, a_pUIManager);
 	//ƒXƒLƒ‹
 	m_pSkillA = std::make_unique<C_DashSkill>();
 	m_pSkillA->Init(this);

@@ -2,6 +2,7 @@
 #include"Constants/Constants.h"
 
 class C_PlayerBase;
+class C_UIManager;
 class C_GearBase
 {
 public:
@@ -15,7 +16,7 @@ public:
 		m_gearIconTex.Release();
 	};
 
-	virtual void Init(C_PlayerBase* a_pPlayer);
+	virtual void Init(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager);
 	virtual void Draw();
 
 	virtual void OnceActiveGear();
@@ -83,6 +84,7 @@ protected:
 	KdTexture m_gearIconTex;
 	//プレイヤーを参照するためのポインタ
 	C_PlayerBase* m_pPlayer = nullptr;
-
+	//UIマネージャを参照するためのポインタ
+	C_UIManager* m_pUIManager = nullptr;
 private:
 };

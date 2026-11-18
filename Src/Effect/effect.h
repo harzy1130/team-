@@ -6,10 +6,12 @@ class C_Effect
 {
 public:
 	C_Effect() {};
-	~C_Effect() {};
+	~C_Effect() {
+		m_poisonIconTex.Release();
+	};
 
 	void InitPlayer(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager);
-	void InitEnemy(EnemyBase* a_pEnemy, C_UIManager* a_pUIManager);
+	void InitEnemy(EnemyBase* a_pEnemy);
 	void UpdatePlayer();
 	void UpdateEnemy();
 	void Draw();
@@ -26,8 +28,10 @@ public:
 	float GetPoisonTime() { return m_poisonCount; }
 	float GetCombustionTime() { return m_combustionCount; }
 
+	float GetPoinsonRatio() { return m_poisonTime / m_poisonMaxTime; }
+
 	//引数に時間を秒数で入れるとその秒数だけ効果が持続する
-	void SetPoison(float a_time) { m_bPoison = true; m_poisonTime = a_time; }
+	void SetPoison(float a_time);
 	void SetCombustion(float a_time) { m_bCombustion = true; m_combustionTime = a_time; }
 	void SetSutan(float a_time) { m_bSutan = true; m_sutanTime = a_time; }
 	void SetSuppress(float a_time) { m_bSuppress = true; m_suppressTime = a_time; }
@@ -51,9 +55,11 @@ private:
 	float m_baseAtk;
 	float m_baseDef;
 
+	KdTexture m_poisonIconTex;
 	bool m_bPoison;		//毒
 	int m_poisonCount;	//ダメージ用のカウント変数
 	float m_poisonTime;//毒の持続時間
+	float m_poisonMaxTime; //現在の毒の持続時間の最大値
 
 	bool m_bCombustion; //炎上
 	int m_combustionCount;

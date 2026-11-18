@@ -1,9 +1,10 @@
 #include "Gear2.h"
 #include"Player/PlayerBase.h"
+#include"UI/UIManager.h"
 
-void C_Gear2::Init(C_PlayerBase* a_pPlayer)
+void C_Gear2::Init(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager)
 {
-	C_GearBase::Init(a_pPlayer);
+	C_GearBase::Init(a_pPlayer, a_pUIManager);
 	m_status.hpRegene = m_hpRegeneStatus;
 	m_bHavePassiveCD = false;
 	m_bWaitPassiveTimer = false;

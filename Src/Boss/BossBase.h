@@ -45,7 +45,7 @@ protected:
 	int m_hp = 500;
 	int m_atk = 20;
 	int m_invincibleFrames = 0;
-	int m_state;
+	int m_moveState;
 	int m_lr;
 	float m_size;
 	float m_moveSpeed = 5;

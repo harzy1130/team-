@@ -185,6 +185,7 @@
     <ClInclude Include="Src\Map\StringUtility.h" />
     <ClInclude Include="Src\Player\Player1.h" />
     <ClInclude Include="Src\Player\PlayerBase.h" />
+    <ClInclude Include="Src\Skill\DashSkill.h" />
     <ClInclude Include="Src\Skill\SkillBase.h" />
     <ClInclude Include="Src\System\Audio\KdAudio.h" />
     <ClInclude Include="src\System\Direct3D\KdDirect3D.h" />
@@ -238,6 +239,7 @@
     <ClCompile Include="Src\Map\Map.cpp" />
     <ClCompile Include="Src\Player\Player1.cpp" />
     <ClCompile Include="Src\Player\PlayerBase.cpp" />
+    <ClCompile Include="Src\Skill\DashSkill.cpp" />
     <ClCompile Include="Src\Skill\SkillBase.cpp" />
     <ClCompile Include="Src\System\Audio\KdAudio.cpp" />
     <ClCompile Include="src\System\Direct3D\KdDirect3D.cpp" />
