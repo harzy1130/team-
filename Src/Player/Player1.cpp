@@ -5,10 +5,14 @@
 void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_UIManager* a_pUIManager)
 {
 	C_PlayerBase::Init(a_pHit, a_pCamera, a_pCursor, a_pUIManager);
+	//‘•”õ
 	m_pGearA = std::make_unique<C_Gear1>();
 	m_pGearA->Init(this);
 	m_pGearB = std::make_unique<C_Gear2>();
 	m_pGearB->Init(this);
+	//ƒXƒLƒ‹
+	m_pSkillA = std::make_unique<C_DashSkill>();
+	m_pSkillA->Init(this);
 	//ˆÚ“®
 	m_bAlive = true;
 	m_pos = { 0,0 };
@@ -28,7 +32,6 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_U
 	m_Hp = m_status.maxHp;
 	//’ÊíUŒ‚
 	InitAtk();
-	m_skill.Init();
 	//‹éŒ`‚ÌÝ’è
 	SetRect(PTEX_RADIUS, 60);
 	SetRadius(PTEX_RADIUS);
@@ -45,7 +48,7 @@ void C_Player1::Update()
 	if (m_damageInvincibleFrames > 0) --m_damageInvincibleFrames;
 	m_move.x = 0.0f;
 	m_move.y -= GRAVITY;
-	m_skill.Update();
+	SkillUpdate();
 	GearUpdate();
 	PlayerInput();
 	UpdateAtk();

@@ -1,6 +1,7 @@
 #pragma once
 #include"Constants/Constants.h"
 #include"Skill/SkillBase.h"
+#include"Skill/DashSkill.h"
 #include"Camera/Camera.h"
 #include"Hit/HitBase.h"
 #include"Hit/Hit.h"
@@ -29,6 +30,7 @@ public:
 	virtual void Update();
 	virtual void Draw();
 	virtual void GearUpdate();
+	virtual void SkillUpdate();
 
     // 被ダメージの共通処理。防御力・無敵時間・HP 減少・死亡を処理する。
     bool TakeDamage(float rawDamage);
@@ -58,9 +60,9 @@ public:
 	//攻撃関係
 	virtual bool GetAtkFlg()final { return m_bAtk; }
 	//スキル関係
-	virtual float GetSkillCD()final { return m_skill.GetSkillCD(); }
-	virtual float GetSkillCDMax()final { return m_skill.GetSkillCDMax(); }
-	virtual float GetSkillCalcCD()final { return m_skill.GetSkillCalcCD(this); }
+	virtual float GetSkillCD()final { return m_pSkillA->GetSkillCD(); }
+	virtual float GetSkillCDMax()final { return m_pSkillA->GetSkillCDMax(); }
+	virtual float GetSkillCalcCD()final { return m_pSkillA->GetSkillCalcCD(this); }
 	virtual KdTexture* GetSkillIconTex()final { return m_pSkillIconTex; }
 	//状態異常関係
 	virtual C_Effect* GetEffect()const final { return const_cast<C_Effect*>(&m_effect); }
@@ -221,7 +223,7 @@ protected:
 	//スキル用
 	KdTexture* m_pSkillTex;
 	KdTexture* m_pSkillIconTex;
-	C_Skill m_skill;
+	std::unique_ptr<C_SkillBase> m_pSkillA;
 
 	//装備用
 	std::unique_ptr<C_GearBase> m_pGearA;
