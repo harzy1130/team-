@@ -50,6 +50,7 @@ public:
     int GetAtk() const { return m_atk; }
     float GetMoveSpeed() const { return m_moveSpeed; }
     bool GetAlive() const { return m_bAlive; }
+    bool IsBehind(float worldX) const { return (worldX - m_pos.x) * m_direction < 0.0f; }
 
 
 protected:

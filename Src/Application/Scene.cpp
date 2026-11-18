@@ -17,8 +17,8 @@ void Scene::Draw2D()
 			m_enemies.DrawVision();
 			m_boss.Draw();
 		}
-		m_ui.Draw();
 		m_particle.Draw();
+		m_ui.Draw();
 	}
 	m_game.SceneTransDraw();
 }
@@ -33,13 +33,13 @@ void Scene::Update()
 		m_camera.Update();
 		m_map.Update();
 		m_player.Update();
-		m_ui.Update();
 		m_particle.Update();
 		m_camera.SetTurget(m_player.GetPos());
 	}
 	m_enemies.Update(m_player.GetAFlg() ? &m_player : nullptr, inGame);
 	if (inGame) m_boss.Update();
 	m_game.Update();
+	m_ui.Update(static_cast<GameState>(m_game.GetGameState()), m_map.GetStageNum());
 }
 
 void Scene::Init()
