@@ -33,6 +33,8 @@ void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,
 	//装備
 	m_pGearA=nullptr;
 	m_pGearB=nullptr;
+	//スキル
+	m_pSkillA = nullptr;
 	//状態異常
 	m_effect.InitPlayer(this, a_pUIManager);
 }
@@ -44,7 +46,6 @@ void C_PlayerBase::Update()
 	m_move.x = 0.0f;
 	m_move.y -= GRAVITY;
 
-	m_skill.Update();
 	GearUpdate();
 	PlayerInput();
 	UpdateAtk();
@@ -107,6 +108,14 @@ EndA:;
 	m_pGearB->WhilePassiveGear();
 	m_pGearB->UpdateCD();
 EndB:;
+}
+
+//スキル更新
+void C_PlayerBase::SkillUpdate()
+{
+	if(m_pSkillA==nullptr) return;
+	m_pSkillA->WhileActiveSkill();
+	m_pSkillA->UpdateCooldown();
 }
 
 //防御力計算
@@ -212,7 +221,7 @@ void C_PlayerBase::PlayerInput()
 		}
 	}
 	if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
-		m_skill.SkillActivation(this);
+		if(m_pSkillA) m_pSkillA->OnceActiveSkill();
 	}
 	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000&& m_AttackDelay==0)
 	{
