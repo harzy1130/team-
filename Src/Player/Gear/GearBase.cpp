@@ -1,11 +1,11 @@
 #include "GearBase.h"
 #include"Player/PlayerBase.h"
 
-
-void C_GearBase::Init(C_PlayerBase* a_pPlayer)
+void C_GearBase::Init(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager)
 {
 	m_status = { 0,0,0,0,0,0,0,0 };
 	m_pPlayer = a_pPlayer;
+	m_pUIManager = a_pUIManager;
 	m_activeCDMax = 0;
 	m_activeCD = 0;
 	m_activeTimerMax = 0;

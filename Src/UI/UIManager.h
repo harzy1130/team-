@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include"PlayerUI.h"
 #include"NumberUI.h"
 #include"DamageUI.h"
@@ -21,25 +21,27 @@ public:
 
 	void Release();
 
-	//ãƒ€ãƒ¡ãƒ¼ã‚¸UIç”Ÿæˆ
+	//ƒ_ƒ[ƒWUI¶¬
 	void CreateDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical);
-	//æ•µãƒ€ãƒ¡ãƒ¼ã‚¸UIç”Ÿæˆ
+	//“Gƒ_ƒ[ƒWUI¶¬
 	void CreateEnemyDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical);
 
-	//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ€ãƒ¡ãƒ¼ã‚¸UIç”Ÿæˆ
+	//ƒGƒtƒFƒNƒgƒ_ƒ[ƒWUI¶¬
 	void CreatePoisonDamageUI(float a_Damage, Math::Vector2 a_Pos);
 	void CreateFlameDamageUI(float a_Damage, Math::Vector2 a_Pos);
 
-	//å›å¾©UIç”Ÿæˆ
+	//‰ñ•œUI¶¬
 	void CreateRecoveryUI(float a_Recovery, Math::Vector2 a_Pos);
 
+	//ƒvƒŒƒCƒ„[ƒXƒe[ƒ^ƒXƒo[‚ÌƒXƒe[ƒ^ƒXƒ`ƒbƒv¶¬
+	void AddPlayerStatusChip(string a_tag, KdTexture* a_pTex, float* a_maxTime, float* a_time);
 private:
 	HintUI m_hintUI;
 	C_PlayerUI m_playerUI;
 	C_DamageUI m_damageUI;
 	C_EffectDmgUI m_effectDmgUI;
 	C_RecoveryUI m_recoveryUI;
-	//ç”»åƒ
+	//‰æ‘œ
 	KdTexture m_numberTex;
 	KdTexture m_numberFrameTex;
 };

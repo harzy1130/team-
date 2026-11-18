@@ -1,9 +1,11 @@
 #include"Gear1.h"
 #include"Player/PlayerBase.h"
 #include"Effect/Effect.h"
-void C_Gear1::Init(C_PlayerBase* a_pPlayer)
+#include"UI/UIManager.h"
+
+void C_Gear1::Init(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager)
 {
-	C_GearBase::Init(a_pPlayer);
+	C_GearBase::Init(a_pPlayer, a_pUIManager);
 	m_status.atk = m_atkStatus;
 	m_activeCDMax = 60 * 8;
 	m_activeTimerMax = 60 * 4;
@@ -15,15 +17,16 @@ void C_Gear1::Init(C_PlayerBase* a_pPlayer)
 void C_Gear1::OnceActiveGear()
 {
 	C_GearBase::OnceActiveGear();
+	m_pEffect->SetAtkUp(m_activeTimerMax / 60, m_atkBonusP);
 }
 
 void C_Gear1::WhileActiveGear()
 {
 	if (m_bWhileActive)
 	{
-		m_pEffect->SetAtkUp(m_activeTimerMax/60, m_atkBonusP);
 		m_status.crtRate = m_crtBonus;
 	}
+	m_pUIManager->AddPlayerStatusChip("CrtUp", &m_gearIconTex, &m_activeTimerMax, &m_activeTimer);
 	C_GearBase::WhileActiveGear();
 }
 

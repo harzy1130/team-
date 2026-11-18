@@ -1,4 +1,4 @@
-ï»¿#include"UIManager.h"
+#include"UIManager.h"
 
 void C_UIManager::Init(C_PlayerBase* a_pPlayerBase, C_Camera* a_pCamera)
 {
@@ -45,7 +45,7 @@ void C_UIManager::Release()
 	m_recoveryUI.Release();
 }
 
-//ãƒ€ãƒ¡ãƒ¼ã‚¸UIç”Ÿæˆ(å€¤ã‚’æ¸¡ã™ã ã‘)
+//ƒ_ƒ[ƒWUI¶¬(’l‚ğ“n‚·‚¾‚¯)
 void C_UIManager::CreateDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical)
 {
 	m_damageUI.CreateDamageUI(a_Damage, a_Pos, a_movingDirectionX, a_critical);
@@ -69,4 +69,9 @@ void C_UIManager::CreateFlameDamageUI(float a_Damage, Math::Vector2 a_Pos)
 void C_UIManager::CreateRecoveryUI(float a_Recovery, Math::Vector2 a_Pos)
 {
 	m_recoveryUI.CreateRecoveryUI(a_Recovery, a_Pos);
+}
+
+void C_UIManager::AddPlayerStatusChip(string a_tag, KdTexture* a_pTex, float* a_maxTime, float* a_time)
+{
+	m_playerUI.AddStatusChip(a_tag, a_pTex, a_maxTime, a_time);
 }

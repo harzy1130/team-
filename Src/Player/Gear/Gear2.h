@@ -6,7 +6,7 @@ class C_Gear2 :public C_GearBase
 public:
 	C_Gear2() : C_GearBase("Texture/HealGearIcon.png") {};
 	~C_Gear2() {};
-	void Init(C_PlayerBase* a_pPlayer)override;
+	void Init(C_PlayerBase* a_pPlayer,C_UIManager* a_pUIManager)override;
 
 	bool PassiveTiming()override;
 	void OncePassiveGear()override;

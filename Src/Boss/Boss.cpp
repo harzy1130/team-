@@ -38,7 +38,10 @@ void C_Boss::Update()
 	//}
 	if (m_angle > 360)m_angle -= 360;
 	MapCollision();
-	m_pHit->PlayerHitCheck(this);
+	if (!(m_moveState == State(walk) || m_moveState == State(stance)))
+	{
+		m_pHit->PlayerHitCheck(this);
+	}
 	ResetAlreadyHit();
 }
 
@@ -53,13 +56,13 @@ void C_Boss::Move()
 }
 void C_Boss::ChangeChargeStance()
 {
-	m_state = State(stance);
+	m_moveState = State(stance);
 	m_chargeWait = 30;
 }
 
 void C_Boss::ChargeStance()
 {
-	if (m_state != State(stance))return;
+	if (m_moveState != State(stance))return;
 	m_animationCnt = 0;
 	m_chargeWait--;
 	if (m_chargeWait < 0) {
@@ -72,13 +75,14 @@ void C_Boss::ChargeStance()
 
 void C_Boss::StartWalk()
 {
-	m_state = State(walk);
+	m_moveState = State(walk);
 	m_chargeWait = 180;
 }
 
+
 void C_Boss::Walk()
 {
-	if (m_state != State(walk))return;
+	if (m_moveState != State(walk))return;
 	m_lr = GetSign(m_pPlayer->GetPos().x - m_pos.x);
 	m_scale = { m_size * m_lr, m_size };
 	m_chargeWait--;
@@ -93,14 +97,14 @@ void C_Boss::Walk()
 
 void C_Boss::StartDashCharge()
 {
-	m_state = State(dashCharge);
+	m_moveState = State(dashCharge);
 	m_chargeWait = 30;
 	m_skillMove.x = 30;
 }
 
 void C_Boss::DashCharge()
 {
-	if (m_state != State(dashCharge))return;
+	if (m_moveState != State(dashCharge))return;
 	m_skillMove.x *= 0.99;
 	m_chargeWait--;
 	if (m_chargeWait < 0) {
@@ -111,7 +115,7 @@ void C_Boss::DashCharge()
 
 void C_Boss::StartJumpCharge()
 {
-	m_state = State(jumpCharge);
+	m_moveState = State(jumpCharge);
 	m_move.y = 12;
 	m_skillMove.x = 30;
 	ResetHitRect();
@@ -119,7 +123,7 @@ void C_Boss::StartJumpCharge()
 
 void C_Boss::JumpCharge()
 {
-	if (m_state !=State(jumpCharge))return;
+	if (m_moveState !=State(jumpCharge))return;
 	if (m_skillMove.x > 10)m_skillMove.x -= 1;
 	if (m_bHitRect.bottom) {
 		m_skillMove = {0,0};
@@ -140,7 +144,7 @@ void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer)
 	m_hp = 500;
 	m_atk = 10;
 	m_moveSpeed = 5.0f;
-	m_state = State(walk);
+	m_moveState = State(walk);
 	m_angle = 0;
 	m_chargeWait = 0;
 }

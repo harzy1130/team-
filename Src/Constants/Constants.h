@@ -178,3 +178,10 @@ struct S_Grow
 	float size;
 	float destSize;
 };
+
+struct S_StatusChip
+{
+	KdTexture* pTex;
+	float* maxTime;
+	float* time;
+};
