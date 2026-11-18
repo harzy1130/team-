@@ -10,16 +10,23 @@ enum S_State
 };
 
 class C_PlayerBase;
-class C_Skill
+class C_SkillBase
 {
 public:
-	C_Skill() {};
-	~C_Skill() {};
+	C_SkillBase() {};
+	~C_SkillBase() {};
 
-	virtual void Init();
+	virtual void Init(C_PlayerBase* a_pPlayer);
 	virtual void Update();
-	virtual void Draw(Math::Vector2 a_pos);
-	virtual void SkillActivation(C_PlayerBase*a_pPlayer );
+	virtual void Draw();
+
+	void UpdateCooldown();
+
+	//スキル発動用
+	//virtual void SkillActivation();
+	virtual void OnceActiveSkill();
+	virtual void WhileActiveSkill();
+	virtual void EndActiveSkill();
 
 	//ゲッター
 	virtual bool GetbSkillMotion() { return m_bSkillMotion; }
@@ -37,13 +44,17 @@ protected:
 	float m_skillCDMax;
 	bool m_bSkillMotion;
 	float m_count;
+	float m_countMax;
+	bool m_bWaitActiveTimer = false;		//アクティブの効果が終了してから、アクティブのクールダウンを開始する場合にTrueにする
 	KdTexture* m_pTexture;
 	KdTexture* m_pIconTexture;
-	S_State m_CurrentState;
-	C_PlayerBase *m_PB;
+	S_State m_CurrentState;//スキル状態
+
+	//参照クラスポインタ
+	C_PlayerBase *m_pPlayer;
 
 	//計算
 	float SkillHasteCalc(float a_CDMax, C_PlayerBase *a_pPlayer);
-	void UpdateCooldown();
+	
 };
 
