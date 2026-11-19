@@ -71,6 +71,7 @@ void C_Sword::IfHitBoss(C_BossBase* a_pBoss)
 
 	a_pBoss->TakeDamage((int)m_pPlayer->DmageCalc(isCritical));
 	m_pUIManager->CreateDamageUI((int)m_pPlayer->DmageCalc(isCritical),(a_pBoss->GetPos()+m_pPlayer->GetPos())*0.5f, direction, isCritical);
+	m_pPlayer->GearOnHitBoss(a_pBoss);
 }
 
 void C_Sword::IfHitEnemy(EnemyBase* a_pEnemy)
@@ -84,4 +85,5 @@ void C_Sword::IfHitEnemy(EnemyBase* a_pEnemy)
 	if (!a_pEnemy->TakeDamage(damage, playerPos.x)) return;
 
 	m_pUIManager->CreateDamageUI(damage, (enemyPos + playerPos) * 0.5f, enemyPos.x > playerPos.x, isCritical);
+	m_pPlayer->GearOnHitEnemy(a_pEnemy);
 }
