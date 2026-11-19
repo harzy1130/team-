@@ -29,11 +29,17 @@ public:
 	virtual void Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor*a_pCursor, C_UIManager* a_pUIManager);
 	virtual void Update();
 	virtual void Draw();
+	//装備関係
 	virtual void GearUpdate();
+	virtual void GearOnHitBoss(C_BossBase* a_pBoss);
+	virtual void GearOnHitEnemy(EnemyBase* a_pEnemy);
+
+	//スキル関係
 	virtual void SkillUpdate();
 
+
     // 被ダメージの共通処理。防御力・無敵時間・HP 減少・死亡を処理する。
-    bool TakeDamage(float rawDamage);
+    bool TakeDamage(float rawDamage, HitBase* a_pHit);
     bool IsDamageInvincible() const { return m_damageInvincibleFrames > 0; }
 	// 外部からも呼び出す固定アクション
 	bool Heal(float a_heal);
