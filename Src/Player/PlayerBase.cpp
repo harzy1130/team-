@@ -2,6 +2,9 @@
 #include"Cursor/Cursor.h"
 #include <cmath>
 #include"UI/UIManager.h"
+#include"Enemy/EnemyBase.h"
+#include"Boss/BossBase.h"
+#include"Gear/GearBase.h"
 
 
 void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor, C_UIManager* a_pUIManager)
@@ -95,7 +98,7 @@ void C_PlayerBase::GearUpdate()
 
 	if (m_pGearA == nullptr) goto EndA;
 	if(m_pGearA->PassiveTiming()) m_pGearA->OncePassiveGear();
-	if(GetAsyncKeyState('Q') & 0x8000)m_pGearA->OnceActiveGear();
+	if(GetAsyncKeyState('Q') & 0x8000)m_pGearA->OpeningActiveGear();
 	m_pGearA->WhileActiveGear();
 	m_pGearA->WhilePassiveGear();
 	m_pGearA->UpdateCD();
@@ -103,11 +106,52 @@ EndA:;
 
 	if(m_pGearB == nullptr) goto EndB;
 	if(m_pGearB->PassiveTiming()) m_pGearB->OncePassiveGear();
-	if (GetAsyncKeyState('E') & 0x8000)m_pGearB->OnceActiveGear();
+	if (GetAsyncKeyState('E') & 0x8000)m_pGearB->OpeningActiveGear();
 	m_pGearB->WhileActiveGear();
 	m_pGearB->WhilePassiveGear();
 	m_pGearB->UpdateCD();
 EndB:;
+}
+
+//装備が攻撃HIT時に発動する処理
+void C_PlayerBase::GearOnHitBoss(C_BossBase* a_pBoss)
+{
+	if (m_pGearA != nullptr) {
+		float dmg = m_pGearA->OnBossHitGear(a_pBoss);
+		Math::Vector2 uiPos = (a_pBoss->GetPos() + m_pos) * 0.5f;
+		if (dmg > 0) {
+			bool direction = a_pBoss->GetPos().x > m_pos.x;
+			m_pUIManager->CreateDamageUI((int)dmg, {uiPos.x,uiPos.y-30}, direction, false);
+		}
+	}
+	if (m_pGearB != nullptr) {
+		float dmg = m_pGearB->OnBossHitGear(a_pBoss);
+		Math::Vector2 uiPos = (a_pBoss->GetPos() + m_pos) * 0.5f;
+		if (dmg > 0) {
+			bool direction = a_pBoss->GetPos().x > m_pos.x;
+			m_pUIManager->CreateDamageUI((int)dmg, {uiPos.x,uiPos.y-30}, direction, false);
+		}
+	}
+}
+
+void C_PlayerBase::GearOnHitEnemy(EnemyBase* a_pEnemy)
+{
+	if (m_pGearA != nullptr) {
+		Math::Vector2 uiPos = (a_pEnemy->GetPos() + m_pos) * 0.5f;
+		float dmg = m_pGearA->OnEnemyHitGear(a_pEnemy);
+		if (dmg > 0) {
+			bool direction = a_pEnemy->GetPos().x > m_pos.x;
+			m_pUIManager->CreateDamageUI((int)dmg, { uiPos.x,uiPos.y - 30 }, direction, false);
+		}
+	}
+	if (m_pGearB != nullptr) {
+		Math::Vector2 uiPos = (a_pEnemy->GetPos() + m_pos) * 0.5f;
+		float dmg = m_pGearB->OnEnemyHitGear(a_pEnemy);
+		if (dmg > 0) {
+			bool direction = a_pEnemy->GetPos().x > m_pos.x;
+			m_pUIManager->CreateDamageUI((int)dmg, { uiPos.x,uiPos.y - 30 }, direction, false);
+		}
+	}
 }
 
 //スキル更新
@@ -391,12 +435,22 @@ EndA:;
 EndB:;
 }
 
-bool C_PlayerBase::TakeDamage(float rawDamage)
+bool C_PlayerBase::TakeDamage(float rawDamage, HitBase* a_pHit)
 {
     if (!m_bAlive || m_Hp <= 0 || m_damageInvincibleFrames > 0 || !std::isfinite(rawDamage) || !(rawDamage > 0) || !std::isfinite(m_status.def)) return false;
     const float damage = DefCalc(rawDamage, std::max(0.0f, m_status.def), 0.0f);
     m_Hp = std::max(0, m_Hp - (int)damage);
     m_damageInvincibleFrames = 30;
+	if(EnemyBase* pEnemy = dynamic_cast<EnemyBase*>(a_pHit))
+    {
+		m_pGearA->OnHurtEnemyGear(pEnemy);
+		m_pGearB->OnHurtEnemyGear(pEnemy);
+    }
+	if(C_BossBase* pBoss = dynamic_cast<C_BossBase*>(a_pHit))
+    {
+        m_pGearA->OnHurtBossGear(pBoss);
+		m_pGearB->OnHurtBossGear(pBoss);
+    }
     if (m_Hp == 0)
     {
         m_bAlive = false;

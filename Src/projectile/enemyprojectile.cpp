@@ -1,4 +1,4 @@
-ï»¿#include "Pch.h"
+#include "Pch.h"
 #include "enemyprojectile.h"
 #include "Map/Map.h"
 #include "Player/PlayerBase.h"
@@ -6,7 +6,7 @@
 
 namespace
 {
-    // å¼¾ã®å¹…ãƒ»é«˜ã•ã‚’å«ã‚ãŸç·šåˆ†åˆ¤å®šã§ã€é«˜é€Ÿç§»å‹•æ™‚ã®ã™ã‚ŠæŠœã‘ã‚’é˜²ãã€‚
+    // ’e‚Ì•E‚‚³‚ğŠÜ‚ß‚½ü•ª”»’è‚ÅA‚‘¬ˆÚ“®‚Ì‚·‚è”²‚¯‚ğ–h‚®B
     bool Sweep(const Math::Vector2& start, const Math::Vector2& move,
         const RECT& body, float left, float bottom, float right, float top, float& time)
     {
@@ -54,7 +54,7 @@ void C_EnemyProjectile::Update(C_Map* map, C_PlayerBase* player)
     const int lastCol = static_cast<int>(std::floor((std::max(m_pos.x, end.x) + m_rect.right - LEFT_EDGE + CHIP_RADIUS) / CHIP_SIZE));
     const int firstRow = static_cast<int>(std::floor((TOP_EDGE + CHIP_RADIUS - std::max(m_pos.y, end.y) - m_rect.top) / CHIP_SIZE));
     const int lastRow = static_cast<int>(std::floor((TOP_EDGE + CHIP_RADIUS - std::min(m_pos.y, end.y) - m_rect.bottom) / CHIP_SIZE));
-    // ãƒãƒƒãƒ—å¤–ã«å‡ºãŸå¼¾ã¯ã€è² ã®æ·»å­—ã‚’æ¸¡ã•ãšç ´æ£„ã™ã‚‹ã€‚
+    // ƒ}ƒbƒvŠO‚Éo‚½’e‚ÍA•‰‚Ì“Yš‚ğ“n‚³‚¸”jŠü‚·‚éB
     if (firstCol < 0 || lastCol >= MAP_WIDTH || firstRow < 0 || lastRow >= MAP_HEIGHT)
     { m_alive = false; return; }
     for (int row = firstRow; row <= lastRow; ++row)
@@ -70,11 +70,11 @@ void C_EnemyProjectile::Update(C_Map* map, C_PlayerBase* player)
     if (player != nullptr && player->GetAFlg())
         Sweep(m_pos, m_velocity, m_rect, player->GetHitLeft(), player->GetHitBottom(),
             player->GetHitRight(), player->GetHitTop(), playerTime);
-    // åŒæ™‚åˆ»ã®å ´åˆã¯å£ã‚’å„ªå…ˆã—ã€å£è¶Šã—ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆãªã„ã€‚
+    // “¯‚Ìê‡‚Í•Ç‚ğ—Dæ‚µA•Ç‰z‚µ‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚È‚¢B
     if (playerTime <= 1.0f && playerTime < wallTime)
     {
         m_pos += m_velocity * playerTime;
-        player->TakeDamage(m_damage);
+        player->TakeDamage(m_damage, this);
         m_alive = false;
     }
     else if (wallTime <= 1.0f) { m_pos += m_velocity * wallTime; m_alive = false; }
@@ -86,7 +86,7 @@ void C_EnemyProjectile::Draw(C_Camera* camera, KdTexture* texture) const
 {
     if (!m_alive || texture == nullptr) return;
     const auto draw = camera != nullptr ? m_pos - camera->GetPos() : m_pos;
-    // å…ƒç”»åƒã¯å·¦å‘ããªã®ã§ã€å³å‘ãã«ç›´ã—ã¦ã‹ã‚‰å°„å‡ºè§’åº¦ã‚’é©ç”¨ã™ã‚‹ã€‚
+    // Œ³‰æ‘œ‚Í¶Œü‚«‚È‚Ì‚ÅA‰EŒü‚«‚É’¼‚µ‚Ä‚©‚çËoŠp“x‚ğ“K—p‚·‚éB
     const auto matrix = Math::Matrix::CreateScale(-1.0f, 1.0f, 1.0f)
         * Math::Matrix::CreateRotationZ(m_angle)
         * Math::Matrix::CreateTranslation(draw.x, draw.y, 0.0f);

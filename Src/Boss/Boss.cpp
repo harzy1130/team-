@@ -150,5 +150,5 @@ void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer)
 }
 void C_Boss::IfHitPlayer(C_PlayerBase* a_pPlayer)
 {
-	a_pPlayer->TakeDamage(m_atk);
+	a_pPlayer->TakeDamage(m_atk, this);
 }

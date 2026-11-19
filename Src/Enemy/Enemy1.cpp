@@ -239,7 +239,7 @@ void Enemy1::Update()
         if (m_openingSkill.IsDashing())
         {
             if (m_openingSkill.TryHit(*this, previousPos, *m_player))
-                m_player->TakeDamage(GetAtk() * m_openingSkill.GetDamageMultiplier());
+                m_player->TakeDamage(GetAtk() * m_openingSkill.GetDamageMultiplier(), this);
             if (std::abs(GetPos().x - previousPos.x) + 0.01f < m_openingSkill.GetSpeed())
             {
                 m_openingSkill.StopAtWall();
@@ -249,7 +249,7 @@ void Enemy1::Update()
         // 一度の通常攻撃では一度だけ命中を調べる。離脱・跳躍・背後への回避が可能。
         if (m_normalHitPending && m_pHit != nullptr
             && m_pHit->CheckAttackHit(*this, *m_player, NormalReach, m_normalDirection))
-            m_player->TakeDamage(static_cast<float>(GetAtk()));
+            m_player->TakeDamage(static_cast<float>(GetAtk()), this);
     }
     // 後退先が壁なら追跡へ戻さず、その場で次の攻撃を待つ。
     if (m_spacingState == SpacingState::Retreat && m_retreatFrames > 0
