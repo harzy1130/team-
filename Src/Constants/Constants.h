@@ -52,8 +52,8 @@ const enum MapChip
 	dirt = 1,
 	glass = 2,
 	stone = 3,
-	gate1 = 10,
-	gate2 = 11,
+	gate1 = 50,
+	gate2 = 51,
 };
 
 const enum StageNum
