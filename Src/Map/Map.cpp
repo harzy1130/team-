@@ -44,6 +44,39 @@ void C_Map::Draw()
 			case MapChip::stone:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 3, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
+			case 4:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 4, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 5:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 5, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 6:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 6, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 7:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 7, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 8:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 8, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 9:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 9, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 10:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 10, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 11:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 11, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 12:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 12, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 13:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 13, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
+			case 14:
+				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 14, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
+				break;
 			case MapChip::gate1:
 			case MapChip::gate2:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(0, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
@@ -122,6 +155,13 @@ void C_Map::Load()
 			m_chip[h][w].data = result.Number;
 			if (m_chip[h][w].data != MapChip::dirt &&
 				m_chip[h][w].data != MapChip::glass &&
+				m_chip[h][w].data != 4 &&
+				m_chip[h][w].data != 5 &&
+				m_chip[h][w].data != 6 &&
+				m_chip[h][w].data != 7 &&
+				m_chip[h][w].data != 8 &&
+				m_chip[h][w].data != 9 &&
+				m_chip[h][w].data != 14 &&
 				m_chip[h][w].data != MapChip::stone)m_chip[h][w].collisionFlg = false;
 			else m_chip[h][w].collisionFlg = true;
 			w++;

@@ -19,55 +19,55 @@ enum ParticleType
     bleed = 6
 };
 
-struct S_ParticleObjects
+struct S_Config
 {
     ParticleType type;
     Math::Vector2 pos;
     Math::Vector2 move;
-    Math::Vector2 draw;
-    Math::Vector2 scale;
-    Math::Color color;
-    Math::Rectangle rect;
-    Math::Matrix mat;
-    Math::Matrix sMat;
-    Math::Matrix rMat;
-    Math::Matrix tMat;
+    std::pair<float, float> randomOffsetX;
+    std::pair<float, float> randomOffsetY;
+    std::pair<float, float> randomOffsetMoveX;
+    std::pair<float, float> randomOffsetMoveY;
     long size;
     float angle;
     float alpha;
-    int data;
     float lifeSpan;
-    float spawnIntervalTime;
-    bool IsActive;
+    bool IsRepeat;
+    //ê∂ê¨êî
+    int generateNum;
+    //òAë±ê∂ê¨éûä‘
+    int generateTime;
+    //ê∂ê¨ä‘äu
+    int generateInterval;
+    //ÉvÉåÉCÉÑÅ[Ç…í«è]Ç∑ÇÈÇ©
+    bool IsFollowPlayer;
 };
 
-//struct S_ParticleConfig
-//{
-//	ParticleType type;
-//    Math::Vector2 pos;
-//    Math::Vector2 move;
-//	int generateTime;//òAë±ê∂ê¨éûä‘
-//	int generateInterval;//ê∂ê¨ä‘äu
-//	float lifeSpan;
-//    long size;
-//    float angle;
-//};
-//
-//struct S_Particle
-//{
-//    ParticleType type;
-//    Math::Vector2 pos;
-//    Math::Vector2 move;
-//    Math::Rectangle rect;
-//    Math::Matrix tmat;
-//    Math::Matrix smat;
-//    Math::Matrix mat;
-//	int elapsedTime;//åoâﬂéûä‘
-//	int generateIntervalTime;//ê∂ê¨ä‘äuéûä‘
-//	int lifeSpan;
-//	bool IsActive;
-//    int data;
-//};
+struct S_Particle
+{
+    ParticleType type;
+    Math::Vector2 pos;
+    Math::Vector2 move;
+    long size;
+    float angle;
+    float alpha;
+    int lifeSpan;
+    bool IsActive;
+    int data;
+};
+
+struct S_Emitter
+{
+    ParticleType type;
+    Math::Vector2 pos;
+    //åoâﬂéûä‘
+    int elapsedTime;
+    //ê∂ê¨ä‘äuéûä‘
+    int generateIntervalTime;
+    bool IsActive;
+    bool IsRepeat;
+    bool IsFollowPlayer;
+};
 
 class C_Map;
 class C_PlayerBase;
@@ -84,13 +84,15 @@ public:
     void Update();
     void Draw();
 
+    int Getparticle() { return m_particles.size(); }
+
     void SetTexture(KdTexture* a_pChipTex, KdTexture* a_pGrainTex, KdTexture* a_pAtkUpTex, KdTexture* a_pDefUpTex, KdTexture* a_pSmokeTex);
 
 private:
     C_Map* m_pMap;
     C_PlayerBase* m_pPlayer;
     C_Camera* m_pCamera;
-    C_Effect m_pEffect;
+    C_Effect* m_pEffect;
 
     KdTexture* m_pChipTex;
     KdTexture* m_pGrainTex;
@@ -99,32 +101,33 @@ private:
     KdTexture* m_pSmokeTex;
 
 
-    //std::vector< S_ParticleConfig> m_particleConfig;
-    //std::vector< S_Particle> m_particles;
 
-
-
-    std::vector<S_ParticleObjects> m_grain;
-
-    float m_spawnIntervalTimer;
-    float m_spawnDefIntervalTimer;
-    float m_spawnPoisonIntervalTimer;
-    bool m_bDefRepeat;
-    bool m_bPoisonRepeat;
-    float m_defRpeatTime;
-    float m_poisonRpeatTime;
-    float m_spawnAtkIntervalTimer;
-    bool m_bAtkRepeat;
-    float m_atkRpeatTime;
+    std::vector< S_Config> m_config;
+    std::vector< S_Emitter> m_emitter;
+    std::vector< S_Particle> m_particles;
+    std::vector< ParticleType> m_playedTypes;
 
     void UpdatePlayer();
     void DrawPlayer();
 
-    void startParticle(ParticleType a_type, Math::Vector2 a_pos);
+    void startEmitter(ParticleType a_type, Math::Vector2 a_pos);
     void spawnParticle(ParticleType a_type, Math::Vector2 a_pos);
     void UpdateParticle();
-    //const S_ParticleConfig* GetConfig(ParticleType a_type);
+    void UpdateEmitter();
+    void FinishEmitter(S_Emitter& emitter);
+    //EmitterÇÃê∂ê¨óvãÅÇéÛÇØéÊÇÈä÷êî
+    void UpdateEmitterRequest(ParticleType a_type, bool IsRequested, Math::Vector2 a_pos);
+
+    void DrawDust(S_Particle particle);
+    void DrawAtk(S_Particle particle);
+
+    void DrawPoison(S_Particle particle);
+    void DrawPoison2(S_Particle particle);
+
+    const S_Config* GetConfig(ParticleType a_type);
     int GetUnderChip(Math::Vector2 a_pos);
+    bool IsPlaying(ParticleType a_type);
     float Rnd();
-    void EraseGrain(std::vector<S_ParticleObjects>& a_grain);
+
+    void EraseParticle(std::vector<S_Particle>& a_grain);
 };
