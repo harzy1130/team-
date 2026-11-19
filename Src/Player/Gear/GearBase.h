@@ -1,8 +1,11 @@
 #pragma once
 #include"Constants/Constants.h"
 
+
 class C_PlayerBase;
 class C_UIManager;
+class C_BossBase;
+class EnemyBase;
 class C_GearBase
 {
 public:
@@ -19,9 +22,22 @@ public:
 	virtual void Init(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager);
 	virtual void Draw();
 
+	virtual void OpeningActiveGear();
 	virtual void OnceActiveGear();
 	virtual void WhileActiveGear();
 	virtual void EndActiveGear();
+
+	//UŒ‚HIT
+	virtual float OnBossHitGear(C_BossBase* a_pBoss);
+	virtual float OnEnemyHitGear(EnemyBase* a_pEnemy);
+
+	//UŒ‚i“–‚½‚ç‚È‚­‚Ä‚àj
+	virtual void OnAttackGear(C_PlayerBase* a_pPlayer) {};
+
+	//UŒ‚‚³‚ê‚½i–hŒäj
+	virtual float OnHurtEnemyGear(EnemyBase* a_pEnemy);
+	virtual float OnHurtBossGear(C_BossBase* a_pBoss);
+
 
 	virtual bool PassiveTiming();
 

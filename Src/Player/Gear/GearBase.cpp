@@ -1,5 +1,8 @@
 #include "GearBase.h"
 #include"Player/PlayerBase.h"
+#include "UI/UIManager.h"
+#include "Boss/BossBase.h"
+#include "Enemy/EnemyBase.h"
 
 void C_GearBase::Init(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager)
 {
@@ -24,6 +27,20 @@ void C_GearBase::Init(C_PlayerBase* a_pPlayer, C_UIManager* a_pUIManager)
 void C_GearBase::Draw()
 {
 		
+}
+
+void C_GearBase::OpeningActiveGear()
+{
+	if (m_bPassiveOnly)return;
+	if (m_activeCD > 0)return;
+	if(m_bWhileActive)return;
+	m_bWhileActive = true;
+	m_activeTimer = m_activeTimerMax;
+	if (!m_bWaitActiveTimer)
+	{
+		m_activeCD = m_pPlayer->CalcSkillHaste(m_activeCDMax);
+	}
+	OnceActiveGear();
 }
 
 void C_GearBase::OnceActiveGear()
@@ -56,6 +73,18 @@ void C_GearBase::EndActiveGear()
 	{
 		m_activeCD = m_pPlayer->CalcSkillHaste(m_activeCDMax);
 	}
+}
+
+
+
+float C_GearBase::OnHurtEnemyGear(EnemyBase* a_pEnemy)
+{
+	return 0.0f;
+}
+
+float C_GearBase::OnHurtBossGear(C_BossBase* a_pBoss)
+{
+	return 0.0f;
 }
 
 bool C_GearBase::PassiveTiming()
@@ -125,5 +154,15 @@ float C_GearBase::GetCalcActiveCDMax()
 float C_GearBase::GetCalcPassiveCDMax()
 {
 	return m_pPlayer->CalcSkillHaste(m_passiveCDMax); 
+}
+
+float C_GearBase::OnBossHitGear(C_BossBase* a_pBoss)
+{
+	return 0.0f;
+}
+
+float C_GearBase::OnEnemyHitGear(EnemyBase* a_pEnemy)
+{
+	return 0.0f;
 }
 
