@@ -96,6 +96,7 @@ bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
 
 bool C_Hit::BossHitCheck(HitBase* a_pHitBase)
 {
+	if (m_pBoss == nullptr)return false;
 	if (!m_pBoss->GetAlive())return false; 
 	//すべての当たり判定をチェック
 	bool isHit = CheckHitBox(a_pHitBase, m_pBoss);
@@ -110,6 +111,7 @@ bool C_Hit::BossHitCheck(HitBase* a_pHitBase)
 
 bool C_Hit::PlayerHitCheck(HitBase* a_pHitBase)
 {
+	if (m_pPlayer == nullptr)return false;
 	if (!m_pPlayer->GetAFlg())return false;
 	bool isHit = CheckHitBox(a_pHitBase, m_pPlayer);
 	if (isHit)

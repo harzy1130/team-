@@ -2,7 +2,7 @@
 #include"GameStateManager/GameStateManager.h"
 #include "GUI/CharacterGUI.h"
 #include "Particle/ParticleManager.h"
-#include"Boss/Boss.h"
+#include"Boss/BossManager.h"
 #include"Enemy/EnemyManager.h"
 #include"Player/Player1.h"
 #include"Map/Map.h"
@@ -17,7 +17,6 @@ private:
 	KdTexture m_playerTex;
 	KdTexture m_player1Tex;
 	KdTexture m_playerAtkTex;
-	KdTexture m_bossTex;
 	KdTexture m_chipTex;
 	KdTexture m_backTex;
 	KdTexture m_blackTex;
@@ -30,7 +29,7 @@ private:
 	C_GameStateManager m_game;
 	C_ParticleManager m_particle;
 	C_Player1 m_player;
-	C_Boss m_boss;
+	C_BossManager m_bossManager;
 	EnemyManager m_enemies;
 	C_Map m_map;
 	C_Camera m_camera;

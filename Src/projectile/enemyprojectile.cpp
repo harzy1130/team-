@@ -87,9 +87,10 @@ void C_EnemyProjectile::Draw(C_Camera* camera, KdTexture* texture) const
     if (!m_alive || texture == nullptr) return;
     const auto draw = camera != nullptr ? m_pos - camera->GetPos() : m_pos;
     // 元画像は左向きなので、右向きに直してから射出角度を適用する。
-    const auto matrix = Math::Matrix::CreateScale(-1.0f, 1.0f, 1.0f)
-        * Math::Matrix::CreateRotationZ(m_angle)
-        * Math::Matrix::CreateTranslation(draw.x, draw.y, 0.0f);
-    SHADER.m_spriteShader.SetMatrix(matrix);
-    SHADER.m_spriteShader.DrawTex(texture, Math::Rectangle(0, 0, 32, 12), 1.0f);
+    //const auto matrix = Math::Matrix::CreateScale(-1.0f, 1.0f, 1.0f)
+    //    * Math::Matrix::CreateRotationZ(m_angle)
+    //    * Math::Matrix::CreateTranslation(draw.x, draw.y, 0.0f);
+    //SHADER.m_spriteShader.SetMatrix(matrix);
+    //SHADER.m_spriteShader.DrawTex(texture, Math::Rectangle(0, 0, 32, 12), 1.0f);
+    DrawTexFromTex(texture, draw, { 1.0f, 1.0f }, ToRadians(m_angle), Math::Color(1, 1, 1, 1));
 }

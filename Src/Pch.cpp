@@ -129,3 +129,9 @@ float ClampSign(float a_value, float a_max, float a_min)
 	return absValue * pm;
 }
 
+float CalcAngle(Math::Vector2 a_srcPos, Math::Vector2 a_destPos)
+{
+	float rad = atan2f(a_destPos.y - a_srcPos.y, a_destPos.x - a_srcPos.x);
+	return ToDegrees(rad);
+}
+
