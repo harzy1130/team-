@@ -10,13 +10,13 @@ void Scene::Draw2D()
 	if (inSelect || inGame)
 	{
 		m_map.Draw();
-		m_player.Draw();
 		if (inGame)
 		{
+			m_bossManager.Draw();
 			m_enemies.Draw();
 			m_enemies.DrawVision();
-			m_boss.Draw();
 		}
+		m_player.Draw();
 		m_particle.Draw();
 		m_ui.Draw();
 	}
@@ -36,20 +36,18 @@ void Scene::Update()
 		m_particle.Update();
 		m_camera.SetTurget(m_player.GetPos());
 	}
+	m_bossManager.Update();
 	m_enemies.Update(m_player.GetAFlg() ? &m_player : nullptr, inGame);
-	if (inGame) m_boss.Update();
 	m_game.Update();
 	m_ui.Update(static_cast<GameState>(m_game.GetGameState()), m_map.GetStageNum());
 }
 
 void Scene::Init()
 {
-
-	m_game.Init(&m_map, &m_player);
+	m_game.Init(&m_map, &m_player, &m_bossManager);
 	std::string path = "Texture/";
 	m_backTex.Load(path + "back1.png");
 	m_chipTex.Load(path + "MapChip.png");
-	m_bossTex.Load(path + "Capricorn.png");
 	m_playerTex.Load(path + "Chara.png");
 	m_player1Tex.Load(path + "Player1.png");
 	m_playerAtkTex.Load(path + "atk1.png");
@@ -60,7 +58,6 @@ void Scene::Init()
 	m_defUpTex.Load(path + "defUp.png");
 	m_smokeTex.Load(path + "smoke.png");
 	m_map.SetTexture(&m_chipTex);
-	m_boss.SetTexture(&m_bossTex);
 	m_player.SetTex(&m_player1Tex);
 	m_player.SetAtkTex(&m_playerAtkTex);
 	m_player.SetSkillIconTex(&m_skillIconTex);
@@ -71,19 +68,17 @@ void Scene::Init()
 
 	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera, &m_cursor, &m_ui);
-	m_boss.Init(&m_hit, &m_camera,&m_player);
-    m_hit.Init(&m_map, &m_enemies, &m_boss, &m_player);
+	m_bossManager.Init(&m_hit, &m_camera, &m_player, 0);
+    m_hit.Init(&m_map, &m_enemies, m_bossManager.GetBoss(), &m_player);
 	m_particle.Init(&m_map, &m_player, &m_camera);
     if (!m_enemies.Init(&m_hit, &m_camera, &m_map))
         OutputDebugStringA("Enemy manager initialization failed.\n");
-	
 }
 
 void Scene::Release()
 {
 	m_backTex.Release();
 	m_chipTex.Release();
-	m_bossTex.Release();
 	m_playerTex.Release();
 	m_player1Tex.Release();
 	m_playerAtkTex.Release();
@@ -91,6 +86,7 @@ void Scene::Release()
 	m_blackTex.Release();
 	m_skillIconTex.Release();
 	m_ui.Release();
+	m_bossManager.Release();
 	m_grainTex.Release();
 	m_atkUpTex.Release();
 	m_defUpTex.Release();

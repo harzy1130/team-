@@ -2,17 +2,18 @@
 #include"Constants/Constants.h"
 #include"Map/Map.h"
 #include"Player/PlayerBase.h"
+#include"Boss/BossManager.h"
 
 class C_Map;
 class C_PlayerBase;
-class C_Boss;
+class C_BossManager;
 class C_GameStateManager
 {
 public:
 	C_GameStateManager();
 	~C_GameStateManager() {};
 
-	void Init(C_Map* a_pMap, C_PlayerBase* a_pPlayer);
+	void Init(C_Map* a_pMap, C_PlayerBase* a_pPlayer, C_BossManager* a_pBossManager);
 	void Update();
 	void Draw();
 	void SceneTransDraw();
@@ -33,6 +34,7 @@ private:
 	int m_scaleNum;	     //ägëÂó¶ÅEèkè¨ó¶óp
 
 	KdTexture* m_pBackTex;
+	C_BossManager* m_pBossManager;
 	KdTexture* m_pBlackTex;
 	StageNum m_nextStage{};
 	bool m_bTransScene = false;

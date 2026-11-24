@@ -282,6 +282,12 @@
     <ClInclude Include="Src\Skill\DashSkill.h">
       <Filter>Src\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Boss\Boss2.h">
+      <Filter>Src\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Boss\BossManager.h">
+      <Filter>Src\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -433,6 +439,12 @@
     </ClCompile>
     <ClCompile Include="Src\Skill\DashSkill.cpp">
       <Filter>Src\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Boss\Boss2.cpp">
+      <Filter>Src\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Boss\BossManager.cpp">
+      <Filter>Src\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

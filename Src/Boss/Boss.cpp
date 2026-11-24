@@ -1,12 +1,29 @@
 #include"Boss.h"
 
+void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlayer)
+{
+	C_BossBase::Init(a_pHit, a_pCamera, a_pPlayer);
+	m_animationCnt = 0;
+	m_animationFrame = 0;
+	m_animationMaxFrame = 6;
+	m_animationWait = 8;
+	m_size = 0.5;
+	m_scale = { m_size, m_size };
+	m_texture.Load("Texture/Capricorn.png");
+	if (LoadHitBox("Capricorn"));
+	m_hp = 500;
+	m_atk = 30;
+	m_moveSpeed = 5.0f;
+	m_moveState = State::walk;
+	m_angle = 0;
+	m_moveCnt = 0;
+	m_backStep = 1;
+}
 
 void C_Boss::Update()
 {
 	if (!m_bAlive)return;
-	m_animationCnt += 1;
 	if (m_invincibleFrames > 0) --m_invincibleFrames;
-	if (m_animationCnt > (6 * m_animationWait))m_animationCnt = 0;
 	Move();
 	Gravity();
 	//デバッグ用
@@ -38,11 +55,10 @@ void C_Boss::Update()
 	//}
 	if (m_angle > 360)m_angle -= 360;
 	MapCollision();
-	if (!(m_moveState == State(walk) || m_moveState == State(stance)))
+	if (!(m_moveState == State::walk || m_moveState == State::stance))
 	{
 		m_pHit->PlayerHitCheck(this);
 	}
-	ResetAlreadyHit();
 }
 
 void C_Boss::Move()
@@ -51,21 +67,22 @@ void C_Boss::Move()
 	Walk();
 	JumpCharge();
 	DashCharge();
+	Tired();
 	m_move.x += m_skillMove.x * m_lr;
 
 }
 void C_Boss::ChangeChargeStance()
 {
-	m_moveState = State(stance);
-	m_chargeWait = 30;
+	m_moveState = State::stance;
+	m_moveCnt = 30;
 }
 
 void C_Boss::ChargeStance()
 {
-	if (m_moveState != State(stance))return;
-	m_animationCnt = 0;
-	m_chargeWait--;
-	if (m_chargeWait < 0) {
+	if (m_moveState != State::stance)return;
+	m_animationFrame = 3;
+	m_moveCnt--;
+	if (m_moveCnt < 0) {
 		if (m_pPlayer->GetPos().y > m_pos.y)StartJumpCharge();
 		else {
 			StartDashCharge();
@@ -75,47 +92,58 @@ void C_Boss::ChargeStance()
 
 void C_Boss::StartWalk()
 {
-	m_moveState = State(walk);
-	m_chargeWait = 180;
+	m_moveState = State::walk;
+	m_moveCnt = 180;
 }
 
 
 void C_Boss::Walk()
 {
-	if (m_moveState != State(walk))return;
+	if (m_moveState != State::walk)return;
 	m_lr = GetSign(m_pPlayer->GetPos().x - m_pos.x);
 	m_scale = { m_size * m_lr, m_size };
-	m_chargeWait--;
-	if (m_chargeWait < 0)m_chargeWait = 0;
-
+	m_moveCnt--;
+	if (m_moveCnt < 0)m_moveCnt = 0;
 	bool CheckDist = m_chargeRange > GetDist(m_pos, m_pPlayer->GetPos());
-	if (m_chargeWait <= 0 && CheckDist)ChangeChargeStance();
-	m_rawMove.x += (m_moveSpeed / 15) * m_lr;
-	m_rawMove.x = Clamp(m_rawMove.x, m_moveSpeed, -m_moveSpeed);
+	if (m_chargeRange * 0.6 > GetDist(m_pos, m_pPlayer->GetPos()) && m_backStep >= 1)
+	{
+		m_backStep = -0.6;
+	}
+	if (m_chargeRange < GetDist(m_pos, m_pPlayer->GetPos()) && m_backStep < 1)
+	{
+		m_backStep = 1;
+	}
+	if (m_moveCnt <= 0 && CheckDist)ChangeChargeStance();
+	Animation(m_backStep);
+	m_rawMove.x += (m_moveSpeed / 15) * (m_lr * m_backStep);
+	m_rawMove.x = Clamp(m_rawMove.x, m_moveSpeed * fabsf(m_backStep), -m_moveSpeed * fabsf(m_backStep));
 	m_move += m_rawMove;
 }
 
+
 void C_Boss::StartDashCharge()
 {
-	m_moveState = State(dashCharge);
-	m_chargeWait = 30;
+	m_moveState = State::dashCharge;
+	ResetAlreadyHit();
+	m_moveCnt = 30;
 	m_skillMove.x = 30;
 }
 
 void C_Boss::DashCharge()
 {
-	if (m_moveState != State(dashCharge))return;
+	if (m_moveState != State::dashCharge)return;
 	m_skillMove.x *= 0.99;
-	m_chargeWait--;
-	if (m_chargeWait < 0) {
+	m_moveCnt--;
+	if (m_moveCnt < 0) {
 		m_skillMove = { 0,0 };
-		StartWalk();
+		StartTired();
 	}
 }
 
 void C_Boss::StartJumpCharge()
 {
-	m_moveState = State(jumpCharge);
+	m_moveState = State::jumpCharge;
+	ResetAlreadyHit();
 	m_move.y = 12;
 	m_skillMove.x = 30;
 	ResetHitRect();
@@ -123,31 +151,31 @@ void C_Boss::StartJumpCharge()
 
 void C_Boss::JumpCharge()
 {
-	if (m_moveState !=State(jumpCharge))return;
+	if (m_moveState !=State::jumpCharge)return;
 	if (m_skillMove.x > 10)m_skillMove.x -= 1;
 	if (m_bHitRect.bottom) {
 		m_skillMove = {0,0};
+		StartTired();
+	}
+}
+
+void C_Boss::StartTired()
+{
+	m_moveState = State::tired;
+	m_skillMove = { 0,0 };
+	m_moveCnt = 60;
+}
+
+void C_Boss::Tired()
+{
+	if (m_moveState != State::tired)return;
+	m_moveCnt--;
+	if (m_moveCnt < 0) {
 		StartWalk();
 	}
 }
 
-void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera,C_PlayerBase* a_pPlayer)
-{
-	C_BossBase::Init(a_pHit, a_pCamera, a_pPlayer);
-	m_size = 0.5;
-	m_animationWait = 8;
-	m_scale = {m_size, m_size };
-	if (LoadHitBox("Capricorn"));
-	//NewObbObjects({ 160, 50 }, { 32, 64 }, 45);
-	//NewObbObjects({ 160, 50 }, { 32, 64 }, -45);
-	//NewObbObjects({ 160, -10 }, { 32, 64 }, 45);
-	m_hp = 500;
-	m_atk = 10;
-	m_moveSpeed = 5.0f;
-	m_moveState = State(walk);
-	m_angle = 0;
-	m_chargeWait = 0;
-}
+
 void C_Boss::IfHitPlayer(C_PlayerBase* a_pPlayer)
 {
 	a_pPlayer->TakeDamage(m_atk, this);

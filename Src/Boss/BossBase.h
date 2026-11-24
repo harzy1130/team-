@@ -8,13 +8,15 @@
 class C_PlayerBase;
 class C_BossBase : public HitBase{
 public:
-
-	virtual ~C_BossBase() = default;
+	C_BossBase() {};
+	~C_BossBase() = default;
 	
 	virtual void Update() = 0;
 	virtual void Move() = 0;
 	virtual void Draw();
 	virtual void Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlayer);
+	virtual void Release();
+	virtual void Animation(float a_sign = 1.0f);
 
 	bool TakeDamage(int a_damage);
 	//セッター
@@ -31,7 +33,7 @@ private:
 	void SetPlayerClass(C_PlayerBase* a_pPlayer);
 
 protected:
-	//必須純粋仮想関数
+	//必須仮想関数
 	virtual void MatrixUpdate() final;
 	virtual void Gravity() final;
 	virtual void MapCollision() final;
@@ -39,8 +41,11 @@ protected:
 	//状態
 	bool m_bAlive;
 	int m_animationCnt;
-	float m_animationWait;
+	int m_animationWait;
+	int m_animationFrame;
+	int m_animationMaxFrame;
 	KdTexture* m_pTex;
+	KdTexture m_texture;
 
 	int m_hp = 500;
 	int m_atk = 20;

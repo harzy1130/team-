@@ -72,6 +72,8 @@ public:
     // 距離・上下の重なり・向きだけを調べ、攻撃タイミングやダメージは呼び出し側で管理する。
     bool CheckAttackHit(const HitBase& attacker, const HitBase& target,
         float horizontalReach, int facingDirection = 0) const;
+
+	C_Map* GetMapClass() { return m_pMap; }
 private:
 	RECT CreateRectPos(float a_halfWidth, float a_halfHeight, Math::Vector2 a_pos);
 	bool RectInPos(RECT a_rect, Math::Vector2 a_pos);

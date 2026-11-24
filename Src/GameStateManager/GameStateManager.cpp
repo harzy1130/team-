@@ -6,16 +6,18 @@ C_GameStateManager::C_GameStateManager() :
 	m_pPlayer(nullptr),
 	m_pBackTex(nullptr),
 	m_pBlackTex(nullptr),
+	m_pBossManager(nullptr),
 	m_bTransScene(false),
 	m_scaleNum(1) {
 }
 
-void C_GameStateManager::Init(C_Map* a_pMap, C_PlayerBase* a_pPlayer)
+void C_GameStateManager::Init(C_Map* a_pMap, C_PlayerBase* a_pPlayer, C_BossManager* a_pBossManager)
 {
 	m_renderTex.CreateRenderTarget(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_renderTex2.CreateRenderTarget(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_pMap = a_pMap;
+	m_pBossManager = a_pBossManager;
 	m_pPlayer = a_pPlayer;
 }
 
@@ -203,6 +205,7 @@ void C_GameStateManager::StageTrans()
 	if (foundStage && GetAsyncKeyState('F') & 0x8000)
 	{
 		m_nextStage = nearStage;
+		m_pBossManager->SetBoss(m_nextStage);
 		m_bTransScene = true;
 		m_loadCnt = 0;
 	}
@@ -244,6 +247,7 @@ void C_GameStateManager::DebugKey()
 		m_pMap->SetStageNum(StageNum::stageSelect);
 		m_pMap->Load();
 		m_pMap->Create();
+		m_pBossManager->SetBoss(0);
 	}
 	//ステージ選択画面
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
@@ -267,6 +271,7 @@ void C_GameStateManager::DebugKey()
 		{
 			m_gameState = GameState::Result;
 		}
+		m_pBossManager->SetBoss(0);	
 	}
 	//	テストステージ
 	if (GetAsyncKeyState('1') & 0x8000)
