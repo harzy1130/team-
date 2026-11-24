@@ -12,17 +12,21 @@ enum ParticleType
 {
     dust = 0,
     atkUp = 1,
-    defUp1 = 2,
-    defUp2 = 3,
-    heal = 4,
-    poison = 5,
-    bleed = 6
+    atkUp2 = 2,
+    defUp1 = 3,
+    defUp2 = 4,
+    heal = 5,
+    heal2 = 6,
+    poison = 7,
+    poison2 = 8,
+    burn = 9,
+    atkDown = 10,
+    atkDown2 = 11,
 };
 
 struct S_Config
 {
     ParticleType type;
-    Math::Vector2 pos;
     Math::Vector2 move;
     std::pair<float, float> randomOffsetX;
     std::pair<float, float> randomOffsetY;
@@ -47,11 +51,13 @@ struct S_Particle
 {
     ParticleType type;
     Math::Vector2 pos;
+    Math::Vector2 InitialPos;
     Math::Vector2 move;
     long size;
     float angle;
+    float scale;
     float alpha;
-    int lifeSpan;
+    float lifeSpan;
     bool IsActive;
     int data;
 };
@@ -86,7 +92,7 @@ public:
 
     int Getparticle() { return m_particles.size(); }
 
-    void SetTexture(KdTexture* a_pChipTex, KdTexture* a_pGrainTex, KdTexture* a_pAtkUpTex, KdTexture* a_pDefUpTex, KdTexture* a_pSmokeTex);
+    void SetTexture(KdTexture* a_pChipTex, KdTexture* a_pGrainTex, KdTexture* a_pAtkUpTex, KdTexture* a_pDefUpTex, KdTexture* a_pSmokeTex, KdTexture* a_pHealTex, KdTexture* a_pBurnTex);
 
 private:
     C_Map* m_pMap;
@@ -99,6 +105,8 @@ private:
     KdTexture* m_pAtkUpTex;
     KdTexture* m_pDefUpTex;
     KdTexture* m_pSmokeTex;
+    KdTexture* m_pHealTex;
+    KdTexture* m_pBurnTex;
 
 
 
@@ -120,9 +128,18 @@ private:
 
     void DrawDust(S_Particle particle);
     void DrawAtk(S_Particle particle);
+    void DrawAtk2(S_Particle particle);
+    void DrawDef(S_Particle particle);
+    void DrawDef2(S_Particle particle);
+    void DrawHeal(S_Particle particle);
+    void DrawHeal2(S_Particle particle);
 
     void DrawPoison(S_Particle particle);
     void DrawPoison2(S_Particle particle);
+    void DrawBurn(S_Particle particle);
+
+    void DrawAtkDown(S_Particle particle);
+    void DrawAtkDown2(S_Particle particle);
 
     const S_Config* GetConfig(ParticleType a_type);
     int GetUnderChip(Math::Vector2 a_pos);

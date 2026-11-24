@@ -57,12 +57,14 @@ void Scene::Init()
 	m_atkUpTex.Load(path + "atkUp.png");
 	m_defUpTex.Load(path + "defUp.png");
 	m_smokeTex.Load(path + "smoke.png");
+	m_healTex.Load(path + "heal.png");
+	m_burnTex.Load(path + "burn.png");
 	m_map.SetTexture(&m_chipTex);
 	m_player.SetTex(&m_player1Tex);
 	m_player.SetAtkTex(&m_playerAtkTex);
 	m_player.SetSkillIconTex(&m_skillIconTex);
 	m_game.SetTexture(&m_blackTex, &m_backTex);
-	m_particle.SetTexture(&m_chipTex, &m_grainTex, &m_atkUpTex, &m_defUpTex, &m_smokeTex);
+	m_particle.SetTexture(&m_chipTex, &m_grainTex, &m_atkUpTex, &m_defUpTex, &m_smokeTex, &m_healTex, &m_burnTex);
 	m_camera.Init();
 	m_ui.Init(&m_player, &m_camera);
 
@@ -91,6 +93,8 @@ void Scene::Release()
 	m_atkUpTex.Release();
 	m_defUpTex.Release();
 	m_smokeTex.Release();
+	m_healTex.Release();
+	m_burnTex.Release();
 }
 
 void Scene::ImGuiUpdate()
