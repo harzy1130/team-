@@ -25,6 +25,8 @@ private:
 	KdTexture m_atkUpTex;
 	KdTexture m_defUpTex;
 	KdTexture m_smokeTex;
+	KdTexture m_healTex;
+	KdTexture m_burnTex;
 
 	C_GameStateManager m_game;
 	C_ParticleManager m_particle;
