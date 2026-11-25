@@ -160,7 +160,7 @@ void C_ParticleManager::Init(C_Map* a_pMap, C_PlayerBase* a_pPlayer, C_Camera* a
 	HEAL.IsRepeat = true;
 	HEAL.generateNum = 1;
 	HEAL.generateTime = 45;
-	HEAL.generateInterval = 10;
+	HEAL.generateInterval = 5;
 	HEAL.IsFollowPlayer = true;
 	m_config.push_back(HEAL);
 	S_Config HEAL2;
@@ -265,6 +265,8 @@ void C_ParticleManager::UpdatePlayer()
 	bool moveRight = m_pPlayer->GetMove().x > 0;
 	bool moveLeft = m_pPlayer->GetMove().x < 0;
 	bool moveStop = m_pPlayer->GetMove().x == 0;
+	bool dush = GetAsyncKeyState(VK_SHIFT) & 0x8000;
+	bool landing;
 	bool AtkUp = m_pPlayer->GetGearA()->GetWhileActive() == true;
 	//毒状態かどうかではなく、毒にかかった瞬間が欲しい
 	bool poisning = m_pEffect->GetPoison();
@@ -275,6 +277,8 @@ void C_ParticleManager::UpdatePlayer()
 	bool burn2 = GetAsyncKeyState('C') & 0x8000;
 	bool AtkDown = GetAsyncKeyState('O') & 0x8000;
 
+
+	//着地のときのパーティクル
 	UpdateEmitterRequest(ParticleType::dust, (moveLeft || moveRight) && !jump, { m_pPlayer->GetPos().x,m_pPlayer->GetPos().y - 60.0f });
 	UpdateEmitterRequest(ParticleType::atkUp, AtkUp, m_pPlayer->GetPos());
 	UpdateEmitterRequest(ParticleType::atkUp2, AtkUp, m_pPlayer->GetPos());
@@ -285,12 +289,27 @@ void C_ParticleManager::UpdatePlayer()
 	UpdateEmitterRequest(ParticleType::poison, poisning, m_pPlayer->GetPos());
 	UpdateEmitterRequest(ParticleType::poison2, poisning2, m_pPlayer->GetPos());
 
-	UpdateEmitterRequest(ParticleType::heal, heal, m_pPlayer->GetPos());
-	//UpdateEmitterRequest(ParticleType::heal2, heal, m_pPlayer->GetPos());
+	UpdateEmitterRequest(ParticleType::heal, debug, m_pPlayer->GetPos());
+	UpdateEmitterRequest(ParticleType::heal2, debug, m_pPlayer->GetPos());
 	UpdateEmitterRequest(ParticleType::burn, burn, m_pPlayer->GetPos());
 
 	UpdateEmitterRequest(ParticleType::atkDown, AtkDown, m_pPlayer->GetPos());
 	UpdateEmitterRequest(ParticleType::atkDown2, AtkDown, m_pPlayer->GetPos());
+
+	if (heal)
+	{
+		debug = true;
+	}
+	if (debug == true)
+	{
+		count--;
+	}
+	if (count <= 0)
+	{
+		debug = false;
+		count = Dtime;
+	}
+
 }
 void C_ParticleManager::DrawPlayer()
 {
@@ -376,6 +395,7 @@ void C_ParticleManager::spawnParticle(ParticleType a_type, Math::Vector2 a_pos)
 	particle.lifeSpan = config->lifeSpan;
 	particle.IsActive = true;
 	particle.data = 0;
+	particle.alphaCalc = 0;
 	particle.InitialPos = particle.pos;
 
 	m_particles.push_back(particle);
@@ -497,7 +517,8 @@ void C_ParticleManager::UpdateParticle()
 			if (particle.type == ParticleType::heal2)
 			{
 				particle.alpha = 0;
-				if (particle.alpha <= 1.0f)particle.alpha += particle.lifeSpan / config->lifeSpan;
+				particle.alphaCalc = 0;
+				if (particle.alpha <= 1.0f)particle.alpha = particle.lifeSpan / config->lifeSpan;
 			}
 		}
 	}
@@ -506,6 +527,7 @@ void C_ParticleManager::UpdateParticle()
 
 void C_ParticleManager::DrawDust(S_Particle particle)
 {
+	if (particle.data == 0)return;
 	Math::Vector2 draw = particle.pos - m_pCamera->GetPos();
 	Math::Color color;
 	Math::Rectangle rect;
@@ -565,12 +587,12 @@ void C_ParticleManager::DrawAtk2(S_Particle particle)
 
 	float alpha = 0;
 
-	alpha = particle.alpha / 2.5f;
+	alpha = particle.alpha / 3.0f;
 
 	rect = { 32, 0, particle.size, particle.size };
 	color = { 1, 1, 1, alpha };
 
-	sMat = Math::Matrix::CreateScale(3, 4, 1);
+	sMat = Math::Matrix::CreateScale(2.5f, 4.0f, 1);
 	tMat = Math::Matrix::CreateTranslation(draw.x, draw.y, 0);
 	mat = sMat * tMat;
 
@@ -651,13 +673,15 @@ void C_ParticleManager::DrawHeal(S_Particle particle)
 	Math::Matrix mat;
 
 	float alpha = 0;
+	float scale = 0;
 
 	alpha = particle.alpha / 1.2f;
+	scale = particle.scale;
 
 	rect = { 0, 0, particle.size, particle.size };
 	color = { 1, 1, 1, alpha };
 
-	sMat = Math::Matrix::CreateScale(alpha, alpha, 1);
+	sMat = Math::Matrix::CreateScale(scale, scale, 1);
 	rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(particle.angle));
 	tMat = Math::Matrix::CreateTranslation(draw.x, draw.y, 0);
 	//mat = sMat * rMat * tMat;
@@ -803,7 +827,7 @@ void C_ParticleManager::DrawAtkDown(S_Particle particle)
 	alpha = particle.alpha / 1.2f;
 
 	rect = { 0, 0, particle.size, particle.size };
-	color = { 0.8f,0.5f,0.7f, alpha };
+	color = { 0.5f,0.6f,0.6f, alpha };
 
 	sMat = Math::Matrix::CreateScale(alpha, alpha * 2.0f, 1);
 	tMat = Math::Matrix::CreateTranslation(draw.x, draw.y, 0);
@@ -827,12 +851,12 @@ void C_ParticleManager::DrawAtkDown2(S_Particle particle)
 
 	float alpha = 0;
 
-	alpha = particle.alpha / 2.5f;
+	alpha = particle.alpha / 3.0f;
 
 	rect = { 32, 0, particle.size, particle.size };
-	color = { 0.8f,0.5f,0.7f, alpha };
+	color = { 0.5f,0.6f,0.6f, alpha };
 
-	sMat = Math::Matrix::CreateScale(3, 4, 1);
+	sMat = Math::Matrix::CreateScale(2.5f, 4.0f, 1);
 	rMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(180));
 	tMat = Math::Matrix::CreateTranslation(draw.x, draw.y, 0);
 	mat = sMat * rMat * tMat;
@@ -864,6 +888,14 @@ int C_ParticleManager::GetUnderChip(Math::Vector2 a_pos)
 	}
 	return 0;
 }
+
+//bool C_ParticleManager::GetLandingFlg(C_PlayerBase* player)
+//{
+//	//bool landing;
+//	//if(player->GetJumpFlg() == true)
+//
+//	//return ;
+//}
 
 bool C_ParticleManager::IsPlaying(ParticleType a_type)
 {
