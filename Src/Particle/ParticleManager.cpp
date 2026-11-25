@@ -882,7 +882,7 @@ const S_Config* C_ParticleManager::GetConfig(ParticleType a_type)
 int C_ParticleManager::GetUnderChip(Math::Vector2 a_pos)
 {
 	const auto underChip = m_pMap->GetIndex(a_pos.x + 32, a_pos.y - 92);
-	if (underChip.second < MAP_HEIGHT && underChip.first < MAP_WIDTH && underChip.second >= 0 && underChip.first >= 0)
+	if (underChip.second < m_pMap->GetHeight() && underChip.first < m_pMap->GetWidth() && underChip.second >= 0 && underChip.first >= 0)
 	{
 		return m_pMap->GetData(underChip.second, underChip.first);
 	}

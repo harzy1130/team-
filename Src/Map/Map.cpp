@@ -12,28 +12,28 @@ void C_Map::Init(C_Camera* a_pCamera)
 
 void C_Map::Update()
 {
-	for (int h = 0; h < MAP_HEIGHT; h++)
+	for (int h = 0; h < GetHeight(); h++)
 	{
-		for (int w = 0; w < MAP_WIDTH; w++)
+		for (int w = 0; w < GetWidth(); w++)
 		{
-			m_chip[h][w].draw = m_chip[h][w].pos - m_pCamera->GetPos();
-			m_chip[h][w].mat = Math::Matrix::CreateTranslation(
-				m_chip[h][w].draw.x, m_chip[h][w].draw.y, 0);
+			m_drawList[h][w] = m_posList[h][w] - m_pCamera->GetPos();
+			m_matList[h][w] = Math::Matrix::CreateTranslation(
+				m_drawList[h][w].x, m_drawList[h][w].y, 0);
 		}
 	}
 }
 
 void C_Map::Draw()
 {
-	for (int h = 0; h < MAP_HEIGHT; h++)
+	for (int h = 0; h < GetHeight(); h++)
 	{
-		for (int w = 0; w < MAP_WIDTH; w++)
+		for (int w = 0; w < GetWidth(); w++)
 		{
-			if (m_chip[h][w].draw.x > RIGHT_EDGE + CHIP_RADIUS || m_chip[h][w].draw.x < LEFT_EDGE - CHIP_RADIUS)continue;
-			if (m_chip[h][w].draw.y > TOP_EDGE + CHIP_RADIUS || m_chip[h][w].draw.y < BOTTOM_EDGE - CHIP_RADIUS)continue;
+			if (m_drawList[h][w].x > RIGHT_EDGE + CHIP_RADIUS || m_drawList[h][w].x < LEFT_EDGE - CHIP_RADIUS)continue;
+			if (m_drawList[h][w].y > TOP_EDGE + CHIP_RADIUS || m_drawList[h][w].y < BOTTOM_EDGE - CHIP_RADIUS)continue;
 
-			SHADER.m_spriteShader.SetMatrix(m_chip[h][w].mat);//画像の行列をセット
-			switch (m_chip[h][w].data)
+			SHADER.m_spriteShader.SetMatrix(m_matList[h][w]);//画像の行列をセット
+			switch (m_dataList[h][w])
 			{
 			case MapChip::dirt:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
@@ -80,7 +80,6 @@ void C_Map::Draw()
 			case MapChip::gate1:
 			case MapChip::gate2:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(0, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
-				break;
 			default:
 				break;
 			}
@@ -88,102 +87,98 @@ void C_Map::Draw()
 	}
 }
 
-void C_Map::Create()
-{
-	for (int h = 0; h < MAP_HEIGHT; h++)
-	{
-		for (int w = 0; w < MAP_WIDTH; w++)
-		{
-			m_chip[h][w].pos.x = LEFT_EDGE + w * CHIP_SIZE;
-			m_chip[h][w].pos.y = TOP_EDGE - h * CHIP_SIZE;
-			m_chip[h][w].mat = Math::Matrix::CreateTranslation(m_chip[h][w].pos.x, m_chip[h][w].pos.y, 0);
-		}
-	}
-}
-
 void C_Map::Load()
 {
-	for (int h = 0; h < MAP_HEIGHT; h++)
+
+	std::ifstream ifs("Src/Map/MapData/Stage" + std::to_string(m_stageNum) + ".csv");
+	if (!ifs.is_open())return;
+
+	m_dataList.clear();
+	m_collusionFlgList.clear();
+
+	std::string lineString;
+
+	while (std::getline(ifs, lineString))
 	{
-		for (int w = 0; w < MAP_WIDTH; w++)
+		std::istringstream iss(lineString);
+		std::string tempString;
+		std::vector<int> tempList;
+		std::vector<bool> tempCollFlgList;
+
+		while (std::getline(iss, tempString, ','))
 		{
-			m_chip[h][w].data = 0;
+			if (tempString == "")tempString = '0';
+			int tempData = std::stoi(tempString);
+			tempList.push_back(tempData);
+
+			bool tempCollFlg;
+			if (tempData != MapChip::dirt &&
+				tempData != MapChip::glass &&
+				tempData != 4 &&
+				tempData != 5 &&
+				tempData != 6 &&
+				tempData != 7 &&
+				tempData != 8 &&
+				tempData != 9 &&
+				tempData != 14 &&
+				tempData != MapChip::stone)tempCollFlg = false;
+			else tempCollFlg = true;
+			tempCollFlgList.push_back(tempCollFlg);
 		}
+		tempList.push_back(0);
+		tempCollFlgList.push_back(false);
+		m_dataList.push_back(tempList);
+		m_collusionFlgList.push_back(tempCollFlgList);
 	}
 
-	std::string value = "";
-	std::vector<std::string> list;
-	FILE* mapfp;
-	std::string filename = "Src/Map/MapData/Stage" + std::to_string(m_stageNum) + ".csv";
-
-	if ((mapfp = fopen(filename.c_str(), "r")) != nullptr)
+	// 行ごとの列数を、マップ内で最も長い行に揃える。
+	size_t maxWidth = 0;
+	for (const auto& row : m_dataList)
 	{
-		char ch;
-		while ((ch = fgetc(mapfp)) != EOF)
-		{
-			if (ch == ',')
-			{
-				list.push_back(value);
-				value.clear();
-			}
-			else if (ch == '\n')
-			{
-				list.push_back(value);
-				list.push_back(NEXT_ROW);
-				value.clear();
-			}
-			else
-			{
-				value += ch;
-			}
-		}
+		if (row.size() > maxWidth) maxWidth = row.size();
 	}
-	else
+	for (size_t row = 0; row < m_dataList.size(); ++row)
 	{
-		return;
+		m_dataList[row].resize(maxWidth, 0);
+		m_collusionFlgList[row].resize(maxWidth, false);
 	}
-	fclose(mapfp);
+	ifs.close();
+}
+void C_Map::Create()
+{
+	m_posList.clear();
+	m_matList.clear();
+	m_drawList.clear();
 
-	int h = 0;
-	int w = 0;
-	for (int i = 0; i < list.size(); i++)
+	for (int h = 0; h < GetHeight(); h++)
 	{
-		IntParseResult result = StringUtility::TryIntParse(list[i]);
+		std::vector<Math::Vector2> tempPosList;
+		std::vector<Math::Matrix> tempMatList;
+		for (int w = 0; w < GetWidth(); w++)
+		{
+			Math::Vector2 tempPos;
+			tempPos.x = LEFT_EDGE + (CHIP_SIZE * w);
+			tempPos.y = TOP_EDGE - (CHIP_SIZE * h);
 
-		if (result.IsSuccess)
-		{
-			m_chip[h][w].data = result.Number;
-			if (m_chip[h][w].data != MapChip::dirt &&
-				m_chip[h][w].data != MapChip::glass &&
-				m_chip[h][w].data != 4 &&
-				m_chip[h][w].data != 5 &&
-				m_chip[h][w].data != 6 &&
-				m_chip[h][w].data != 7 &&
-				m_chip[h][w].data != 8 &&
-				m_chip[h][w].data != 9 &&
-				m_chip[h][w].data != 14 &&
-				m_chip[h][w].data != MapChip::stone)m_chip[h][w].collisionFlg = false;
-			else m_chip[h][w].collisionFlg = true;
-			w++;
+			tempPosList.push_back(tempPos);
+			tempMatList.push_back(Math::Matrix::Identity);
 		}
-		else
-		{
-			h++;
-			w = 0;
-		}
+		m_posList.push_back(tempPosList);
+		m_drawList.push_back(tempPosList);
+		m_matList.push_back(tempMatList);
 	}
 }
 
 bool C_Map::GetCollisionFlg(int h, int w)
 {
-	if (h >= MAP_HEIGHT || w >= MAP_WIDTH)return true;
-	return m_chip[h][w].collisionFlg;
+	if (h >= GetHeight() || w >= GetWidth())return true;
+	return m_collusionFlgList[h][w];
 }
 
 Math::Vector2 C_Map::GetPosition(int h, int w)
 {
-	if (h >= MAP_HEIGHT || w >= MAP_WIDTH)return Math::Vector2{ 0,0 };
-	return m_chip[h][w].pos;
+	if (h >= GetHeight() || w >= GetWidth())return Math::Vector2{ 0,0 };
+	return { m_posList[h][w].x ,m_posList[h][w].y };
 }
 
 std::pair<int, int> C_Map::GetIndex(Math::Vector2 a_pos)

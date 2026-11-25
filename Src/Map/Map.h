@@ -13,26 +13,34 @@ public:
 	void Init(C_Camera* a_pCamera);
 	void Update();
 	void Draw();
-	void Create();
 	void Load();
+	void Create();
 
 	void SetTexture(KdTexture* a_pTex) { m_pTex = a_pTex; }
 	void SetStageNum(int a_stageNum) { m_stageNum = a_stageNum; }
 
 	Math::Vector2 GetPosition(int h, int w);
 	bool GetCollisionFlg(int h, int w);
-	int GetData(int h, int w) { return m_chip[h][w].data; }
+	int GetData(int h, int w) { return m_dataList[h][w]; }
 	int GetStageNum() { return m_stageNum; }
 
 	//firstが横、secondが縦
+	float GetHeight() { return m_dataList.size(); }
+	float GetWidth() { return m_dataList.begin()->size(); }
+
 	std::pair<int, int> GetIndex(Math::Vector2 a_pos);
 	std::pair<int, int> GetIndex(float x, float y);
-	std::pair<int, int> GetIdxMaxMin() { return std::make_pair(MAP_WIDTH - 1, MAP_HEIGHT - 1); }
+	std::pair<int, int> GetIdxMaxMin() { return std::make_pair(GetWidth() - 1, GetHeight() - 1); }
 
 private:
 
 	KdTexture* m_pTex;
-	S_ChipData    m_chip[MAP_HEIGHT][MAP_WIDTH];
+
+	std::vector<std::vector<Math::Vector2>> m_posList;
+	std::vector<std::vector<Math::Vector2>> m_drawList;
+	std::vector<std::vector<Math::Matrix>> m_matList;
+	std::vector<std::vector<bool>> m_collusionFlgList;
+	std::vector<std::vector<int>>  m_dataList;
 	int m_stageNum;
 
 	//参照する別クラスのポインタ

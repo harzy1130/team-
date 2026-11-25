@@ -55,7 +55,7 @@ void C_EnemyProjectile::Update(C_Map* map, C_PlayerBase* player)
     const int firstRow = static_cast<int>(std::floor((TOP_EDGE + CHIP_RADIUS - std::max(m_pos.y, end.y) - m_rect.top) / CHIP_SIZE));
     const int lastRow = static_cast<int>(std::floor((TOP_EDGE + CHIP_RADIUS - std::min(m_pos.y, end.y) - m_rect.bottom) / CHIP_SIZE));
     // マップ外に出た弾は、負の添字を渡さず破棄する。
-    if (firstCol < 0 || lastCol >= MAP_WIDTH || firstRow < 0 || lastRow >= MAP_HEIGHT)
+    if (firstCol < 0 || lastCol >= map->GetWidth() || firstRow < 0 || lastRow >= map->GetHeight())
     { m_alive = false; return; }
     for (int row = firstRow; row <= lastRow; ++row)
         for (int col = firstCol; col <= lastCol; ++col)

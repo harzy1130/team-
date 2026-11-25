@@ -79,11 +79,6 @@ void C_Player1::Update()
 	m_pos += m_move;
 	m_AtkPos = { m_pos.x + (m_scale.x * 55),m_pos.y };
 
-	if (m_pos.y <= -300) {
-		m_pos.y = -300;
-		m_move.y = 0.0f;
-		m_bJump = false;
-	}
 	MatrixUpdate();
 	m_sword.Update();
 }
