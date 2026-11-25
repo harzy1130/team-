@@ -19,6 +19,7 @@ void Scene::Draw2D()
 		m_player.Draw();
 		m_particle.Draw();
 		m_ui.Draw();
+		m_armory.Draw();
 	}
 	m_game.SceneTransDraw();
 }
@@ -28,16 +29,34 @@ void Scene::Update()
 	const bool inGame   = m_game.GetGameState() == GameState::Game;
 	const bool inSelect = m_game.GetGameState() == GameState::Select;
 
+	if (inSelect)m_armory.Update();
 	if (inSelect || inGame)
 	{
 		m_camera.Update();
 		m_map.Update();
-		m_player.Update();
+		if (!m_armory.GetArmoryOpen()) {
+			if (!m_bSlowMotion) {
+				m_player.Update();
+			}
+			else if ((int)m_flame % 2 == 0)
+			{
+				m_player.Update();
+			}
+		}
+
 		m_particle.Update();
 		m_camera.SetTurget(m_player.GetPos());
 	}
-	m_bossManager.Update();
-	m_enemies.Update(m_player.GetAFlg() ? &m_player : nullptr, inGame);
+	if (!m_bSlowMotion)
+	{
+		m_enemies.Update(m_player.GetAFlg() ? &m_player : nullptr, inGame);
+		m_bossManager.Update();
+	}
+	else if ((int)m_flame % 2 == 0)
+	{
+		m_enemies.Update(m_player.GetAFlg() ? &m_player : nullptr, inGame);
+		m_bossManager.Update();
+	}
 	m_game.Update();
 	m_ui.Update(static_cast<GameState>(m_game.GetGameState()), m_map.GetStageNum());
 }
@@ -70,6 +89,8 @@ void Scene::Init()
 
 	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera, &m_cursor, &m_ui);
+	m_armory.Init();
+	m_player.SetSceneClass(this);
 	m_bossManager.Init(&m_hit, &m_camera, &m_player, 0);
     m_hit.Init(&m_map, &m_enemies, m_bossManager.GetBoss(), &m_player);
 	m_particle.Init(&m_map, &m_player, &m_camera);
@@ -95,6 +116,7 @@ void Scene::Release()
 	m_smokeTex.Release();
 	m_healTex.Release();
 	m_burnTex.Release();
+	m_armory.Release();
 }
 
 void Scene::ImGuiUpdate()

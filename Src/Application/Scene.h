@@ -10,6 +10,7 @@
 #include"hit/hit.h"
 #include"Cursor/Cursor.h"
 #include"UI/UIManager.h"
+#include"Player/Gear/Armory.h"
 
 class Scene
 {
@@ -39,6 +40,12 @@ private:
     CharacterGUI m_gui;
 	C_Cursor m_cursor;
 	C_UIManager m_ui;
+	C_Armory m_armory;
+
+	// フレーム
+	float m_flame = 0;
+	// ゲームの状態
+	bool m_bSlowMotion = false;
 
 public:
 
@@ -56,6 +63,10 @@ public:
 
 	// GUI処理
 	void ImGuiUpdate();
+
+	//スローモーションの切り替え
+	void SetSlowMotion(bool a_bSlowMotion) { m_bSlowMotion = a_bSlowMotion; }
+
 
 private:
 
