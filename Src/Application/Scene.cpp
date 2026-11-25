@@ -84,10 +84,10 @@ void Scene::Init()
 	m_player.SetSkillIconTex(&m_skillIconTex);
 	m_game.SetTexture(&m_blackTex, &m_backTex);
 	m_particle.SetTexture(&m_chipTex, &m_grainTex, &m_atkUpTex, &m_defUpTex, &m_smokeTex, &m_healTex, &m_burnTex);
-	m_camera.Init();
+	m_map.Init(&m_camera);
+	m_camera.Init(&m_map);
 	m_ui.Init(&m_player, &m_camera);
 
-	m_map.Init(&m_camera);
 	m_player.Init(&m_hit,&m_camera, &m_cursor, &m_ui);
 	m_armory.Init();
 	m_player.SetSceneClass(this);

@@ -32,8 +32,6 @@ struct S_RenderTarget
 };
 
 //É}ÉbÉvíËêî====================================
-static const int  MAP_HEIGHT  = 12;
-static const int  MAP_WIDTH   = 64;
 const int		  CHIP_SIZE   = 64;
 const int		  CHIP_RADIUS = CHIP_SIZE / 2;
 const std::string NEXT_ROW    = "NEXT_ROW";

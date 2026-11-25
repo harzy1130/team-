@@ -394,7 +394,7 @@ bool Enemy1::HasRetreatGround(float horizontalMove) const
     const float y = GetHitBottom() - 1.0f;
     const int col = static_cast<int>(std::floor((x - LEFT_EDGE + CHIP_RADIUS) / CHIP_SIZE));
     const int row = static_cast<int>(std::floor((TOP_EDGE - y + CHIP_RADIUS) / CHIP_SIZE));
-    return col >= 0 && col < MAP_WIDTH && row >= 0 && row < MAP_HEIGHT
+    return col >= 0 && col < m_map->GetWidth() && row >= 0 && row < m_map->GetHeight()
         && m_map->GetCollisionFlg(row, col);
 }
 
