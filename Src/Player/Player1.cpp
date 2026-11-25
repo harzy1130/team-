@@ -32,6 +32,7 @@ void C_Player1::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor,C_U
 	m_Hp = m_status.maxHp;
 	//通常攻撃
 	InitAtk();
+	InitDef();
 	//矩形の設定
 	SetRect(PTEX_RADIUS, 60);
 	SetRadius(PTEX_RADIUS);
@@ -52,6 +53,7 @@ void C_Player1::Update()
 	GearUpdate();
 	PlayerInput();
 	UpdateAtk();
+	UpdateDef();
 	AnimationUpdate();
 	m_effect.UpdatePlayer();
 	//if (m_pCursor->GetMousePos().x > 0) {
@@ -90,11 +92,16 @@ void C_Player1::Draw()
 {
 	
 	if (!m_bAlive)return;
-	if (m_damageInvincibleFrames > 0 && (m_damageInvincibleFrames / 4) % 2 == 0) return;
+	//if (m_damageInvincibleFrames > 0 && (m_damageInvincibleFrames / 4) % 2 == 0) return;
 	//カメラ座標修正
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(
-		m_pTex, Math::Rectangle(600*(int)m_moveAnimCount, 600*m_moveMode, 600, 600), 1.0f);
+	//SHADER.m_spriteShader.DrawTex(
+	//	m_pTex, Math::Rectangle(600*(int)m_moveAnimCount, 600*m_moveMode, 600, 600), 1.0f);
+	Math::Color color= { 1,1,1,1 };
+	if (m_damageInvincibleFrames > 0 )color = { 0.5,0.5,0.9,1 };
+	Math::Rectangle srcRect = { 600 * (int)m_moveAnimCount,600 * m_moveMode,600,600 };	//テクスチャ座標
+	SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &srcRect, &color);
+
 	//DrawAtk();
 	DrawHitBox();
 	m_sword.Draw(m_pAtkTex);

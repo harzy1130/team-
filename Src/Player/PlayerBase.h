@@ -20,6 +20,7 @@ enum E_MoveMode
 class C_UIManager;
 class C_GearBase;
 class C_Cursor;
+class Scene;
 class C_PlayerBase : public HitBase
 {
 public:
@@ -112,11 +113,16 @@ public:
 	virtual float DmageCalc(bool a_isCritical)final;
 	//スキルのクールタイム計算
 	virtual float CalcSkillHaste(float a_CDMax)final { return a_CDMax * (100.0f / (100.0f + m_status.skillHaste)); }
+	//装備のポインタをセットする関数
+	virtual void SetGearA(std::unique_ptr<C_GearBase> a_pGear)final;
+	virtual void SetGearB(std::unique_ptr<C_GearBase> a_pGear)final;
+
 	//参照する外部クラス
 	virtual void SetHitClass(C_Hit* a_pHit) final { m_pHit = a_pHit; }
 	virtual void SetCameraClass(C_Camera* a_pCamera) final { m_pCamera = a_pCamera; }
 	virtual void SetCursorClass(C_Cursor* a_pCursor)final { m_pCursor = a_pCursor; }
 	virtual void SetUIManagerClass(C_UIManager* a_pUIManager)final { m_pUIManager = a_pUIManager; }
+	virtual void SetSceneClass(Scene* a_pScene)final { m_pScene = a_pScene; }
 
 protected:
     int m_damageInvincibleFrames = 0;
@@ -179,12 +185,16 @@ protected:
 
 	//防御用変数
 	bool m_bDef;
+	bool m_bParry;
+	float m_ParryTime;
+	float m_ParrytimeMax = 20.0f;
 
 	//参照するクラスのポインタ
 	C_Hit* m_pHit;
 	C_Camera* m_pCamera;
 	C_Cursor* m_pCursor;
 	C_UIManager* m_pUIManager;
+	Scene* m_pScene;
 
 	//タイマー変数
 	float m_HPRegeneCD=0;
@@ -217,7 +227,10 @@ protected:
 
 	//防御
 	virtual void PlayerDef();
+	virtual void InitDef();
 	virtual	void UpdateDef();
+	virtual void PlayerParry(HitBase* a_pHit);
+
 
 	//経験値処理
 	virtual void ExpUpdate()final;
@@ -234,6 +247,7 @@ protected:
 	//装備用
 	std::unique_ptr<C_GearBase> m_pGearA;
 	std::unique_ptr<C_GearBase> m_pGearB;
+	
 	//状態異常用
 	C_Effect m_effect;
 };
