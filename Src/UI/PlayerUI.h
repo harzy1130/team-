@@ -39,6 +39,7 @@ private:
 	float m_hpOffset = 0;
 	float m_hpHeadOffset = 0;
 	int m_hpScaleLine = 20;
+	static const int m_hpBorderLine = 100;
 	//======================================================
 	//PlayerÇÃSkillÉQÅ[ÉW===================================
 	KdTexture m_playerSkillFrameTex;

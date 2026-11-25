@@ -25,6 +25,8 @@ public:
 	void CreateDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical);
 	//敵ダメージUI生成
 	void CreateEnemyDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical);
+	//装備追加のダメージUI生成
+	void CreateGearDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical);
 
 	//エフェクトダメージUI生成
 	void CreatePoisonDamageUI(float a_Damage, Math::Vector2 a_Pos);

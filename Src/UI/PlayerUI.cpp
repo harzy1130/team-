@@ -90,8 +90,11 @@ DrawGaugeEnd:;
 	for (int i = 0; i <= m_pPlayer->GetMAXHP(); i += 10)
 	{
 		int x = m_hpGaugePos.x - gaugeRect.width / 2.0f + (gaugeRect.width * i / m_pPlayer->GetMAXHP());
-		int thic = i % m_hpScaleLine == 0 && i != 0 ? 2 : 1;
-		SHADER.m_spriteShader.DrawBox(x, m_hpGaugePos.y, thic, gaugeRect.height / 2, &Math::Color{ 0,0,0,0.2f });
+		int thic = i % m_hpScaleLine == 0 ? 1 : 1;
+		float alpha = i % m_hpScaleLine == 0 ? 0.4f : 0.2f;
+		thic = i % m_hpBorderLine == 0 && i != 0 ? 2 : thic;
+		//alpha = i % m_hpBorderLine == 0 && i != 0 ? 0.6f : alpha;
+		SHADER.m_spriteShader.DrawBox(x, m_hpGaugePos.y, thic, gaugeRect.height / 2, &Math::Color{ 0,0,0,alpha });
 	}
 	//˜g‚Ì•`‰æ
 	DrawTexFromTex(&m_playerHpFrameTex, m_hpGaugePos, { 1.0f, 1.0f }, 0.0f);

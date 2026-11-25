@@ -5,7 +5,7 @@
 #include"Enemy/EnemyBase.h"
 #include"Boss/BossBase.h"
 #include"Gear/GearBase.h"
-
+#include"Application/Scene.h"
 
 void C_PlayerBase::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_Cursor* a_pCursor, C_UIManager* a_pUIManager)
 {
@@ -52,6 +52,7 @@ void C_PlayerBase::Update()
 	GearUpdate();
 	PlayerInput();
 	UpdateAtk();
+	UpdateDef();
 	m_effect.UpdatePlayer();
 	if (m_pCursor->GetMousePos().x > 0) {
 		m_scale = { 1,1 };
@@ -72,10 +73,9 @@ void C_PlayerBase::Update()
 	m_pos += m_move;
 	m_AtkPos = { m_pos.x + (m_scale.x * 55),m_pos.y};
 
-	if (m_pos.y <= -300) {
-		m_pos.y = -300;
+	if (m_pos.y <= -1000) {
+		m_pos = { 0,0 };
         m_move.y = 0.0f;
-		m_bJump = false;
 	}
 	CalcMat();
 }
@@ -121,7 +121,7 @@ void C_PlayerBase::GearOnHitBoss(C_BossBase* a_pBoss)
 		Math::Vector2 uiPos = (a_pBoss->GetPos() + m_pos) * 0.5f;
 		if (dmg > 0) {
 			bool direction = a_pBoss->GetPos().x > m_pos.x;
-			m_pUIManager->CreateDamageUI((int)dmg, {uiPos.x,uiPos.y-30}, direction, false);
+			m_pUIManager->CreateGearDamageUI((int)dmg, {uiPos.x,uiPos.y+30}, direction, false);
 		}
 	}
 	if (m_pGearB != nullptr) {
@@ -129,7 +129,7 @@ void C_PlayerBase::GearOnHitBoss(C_BossBase* a_pBoss)
 		Math::Vector2 uiPos = (a_pBoss->GetPos() + m_pos) * 0.5f;
 		if (dmg > 0) {
 			bool direction = a_pBoss->GetPos().x > m_pos.x;
-			m_pUIManager->CreateDamageUI((int)dmg, {uiPos.x,uiPos.y-30}, direction, false);
+			m_pUIManager->CreateGearDamageUI((int)dmg, {uiPos.x,uiPos.y+30}, direction, false);
 		}
 	}
 }
@@ -141,7 +141,7 @@ void C_PlayerBase::GearOnHitEnemy(EnemyBase* a_pEnemy)
 		float dmg = m_pGearA->OnEnemyHitGear(a_pEnemy);
 		if (dmg > 0) {
 			bool direction = a_pEnemy->GetPos().x > m_pos.x;
-			m_pUIManager->CreateDamageUI((int)dmg, { uiPos.x,uiPos.y - 30 }, direction, false);
+			m_pUIManager->CreateGearDamageUI((int)dmg, { uiPos.x,uiPos.y + 30 }, direction, false);
 		}
 	}
 	if (m_pGearB != nullptr) {
@@ -222,6 +222,17 @@ float C_PlayerBase::DmageCalc(bool a_isCritical)
 	return m_status.atk;;
 }
 
+//装備のポインタをセットする関数
+void C_PlayerBase::SetGearA(std::unique_ptr<C_GearBase> a_pGear)
+{
+	m_pGearA = std::move(a_pGear);
+}
+
+void C_PlayerBase::SetGearB(std::unique_ptr<C_GearBase> a_pGear)
+{
+	m_pGearB = std::move(a_pGear);
+}
+
 //スピード加速
 float C_PlayerBase::MoveSpeedCalc(float a_speed, float a_MS)
 {
@@ -238,6 +249,7 @@ float C_PlayerBase::AtkSpeedCalc()
 void C_PlayerBase::PlayerInput()
 {
 	if (!m_bAlive)return;
+	if (m_bDef)return;
 	if ((GetAsyncKeyState(VK_RIGHT) & 0x8000)||(GetAsyncKeyState('D') & 0x8000))
 	{
 		if (m_moveMode != E_MoveMode::attacking&&m_moveMode != E_MoveMode::defense)
@@ -269,14 +281,13 @@ void C_PlayerBase::PlayerInput()
 	}
 	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000&& m_AttackDelay==0)
 	{
-		// 左クリック時の処理
+		// 左クリック時の処理(攻撃)
 		if (m_moveMode == E_MoveMode::defense)return;
 		PlayerAtk();
-		m_moveMode = E_MoveMode::attacking;
 	}
 	if (GetAsyncKeyState(VK_RBUTTON) & 0x8000)
 	{
-		// 右クリック時の処理
+		// 右クリック時の処理(防御)
 		if (m_moveMode == E_MoveMode::attacking)return;
 		PlayerDef();
 		m_moveMode = E_MoveMode::defense;
@@ -328,23 +339,25 @@ void C_PlayerBase::AnimationUpdate()
 	if (m_moveAnimCount >= 8 && m_moveMode == E_MoveMode::run) m_moveAnimCount = 0;
 	if (m_moveAnimCount >= 3 && m_moveMode == E_MoveMode::stand) m_moveAnimCount = 0;
 	//if (m_moveAnimCount >= 4 && m_moveMode == E_MoveMode::attacking) m_moveAnimCount = 0;
-	if (m_moveAnimCount >= 4 && m_moveMode == E_MoveMode::defense && !(GetAsyncKeyState(VK_RBUTTON) & 0x8000))
-	{
-		m_moveMode = E_MoveMode::stand;
-		m_moveAnimCount = 0;
-	}
-	else if (m_moveAnimCount >= 4 &&m_moveMode == E_MoveMode::defense)
-	{
-		m_moveAnimCount = 3.8;
-	}
+	//if (m_moveAnimCount >= 4 && m_moveMode == E_MoveMode::defense && !(GetAsyncKeyState(VK_RBUTTON) & 0x8000))
+	//{
+	//	m_moveMode = E_MoveMode::stand;
+	//	m_moveAnimCount = 0;
+	//}
+	//else if (m_moveAnimCount >= 4 &&m_moveMode == E_MoveMode::defense)
+	//{
+	//	m_moveAnimCount = 3.8;
+	//}
 }
 
 //通常攻撃
 void C_PlayerBase::PlayerAtk()
 {
 	if (!m_bAlive || m_AttackDelay != 0)return;
+	m_moveMode = E_MoveMode::attacking;
 	m_maxAtkCount = 10;
 	m_AtkCount = m_maxAtkCount;
+	m_atkAnimCount = 0;
 	m_bAtk = true;
 	m_AttackDelay = AtkSpeedCalc();
 }
@@ -374,6 +387,7 @@ void C_PlayerBase::UpdateAtk()
 		m_atkAnimCount = 0;
 		m_bAtk = false;
 		m_moveMode = E_MoveMode::run;
+		m_pScene->SetSlowMotion(false);
 	}
 
 }
@@ -391,11 +405,53 @@ void C_PlayerBase::DrawAtk()
 void C_PlayerBase::PlayerDef()
 {
 	m_bDef = true;
+	m_bParry = true;
+	m_moveAnimCount = 0;
+	m_ParryTime = 0;
+}
+
+void C_PlayerBase::InitDef()
+{
+	m_bDef = false;
+	m_bParry = false;
+	m_ParryTime = 0;
 }
 
 void C_PlayerBase::UpdateDef()
 {
+	if (!m_bDef)return;
+	//if (m_moveAnimCount >= 4)m_bParry = true;
+	if (m_bParry)
+	{
+		m_ParryTime++;
+	}
+	if(m_ParryTime >= m_ParrytimeMax)
+	{
+		//m_bDef = false;
+		m_bParry = false;
+		m_ParryTime = 0;
+		
+	}
+	if (GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
+		m_bDef = true;
+		if (m_moveAnimCount >= 3.0)m_moveAnimCount = 3;
+	}
+	else if (!m_bParry)
+	{
+		m_bDef = false;
+		m_moveMode = E_MoveMode::stand;
+	}
+
+}
+
+//パリィ処理
+void C_PlayerBase::PlayerParry(HitBase* a_pHit)
+{
+	if (!m_bDef || !m_bParry)return;
 	m_bDef = false;
+	m_bParry = false;
+	PlayerAtk();
+	m_pScene->SetSlowMotion(true);
 }
 
 void C_PlayerBase::ExpUpdate()
@@ -438,8 +494,10 @@ EndB:;
 bool C_PlayerBase::TakeDamage(float rawDamage, HitBase* a_pHit)
 {
     if (!m_bAlive || m_Hp <= 0 || m_damageInvincibleFrames > 0 || !std::isfinite(rawDamage) || !(rawDamage > 0) || !std::isfinite(m_status.def)) return false;
+	if (m_bParry){PlayerParry(a_pHit); m_damageInvincibleFrames = 30; return true;}
     const float damage = DefCalc(rawDamage, std::max(0.0f, m_status.def), 0.0f);
     m_Hp = std::max(0, m_Hp - (int)damage);
+	m_pUIManager->CreateEnemyDamageUI((int)damage, { m_pos.x, m_pos.y + 20 }, m_scale.x < 0, false);
     m_damageInvincibleFrames = 30;
 	if(EnemyBase* pEnemy = dynamic_cast<EnemyBase*>(a_pHit))
     {
