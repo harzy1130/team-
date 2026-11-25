@@ -57,6 +57,7 @@ struct S_Particle
     float angle;
     float scale;
     float alpha;
+    float alphaCalc;
     float lifeSpan;
     bool IsActive;
     int data;
@@ -143,8 +144,15 @@ private:
 
     const S_Config* GetConfig(ParticleType a_type);
     int GetUnderChip(Math::Vector2 a_pos);
+    bool GetLandingFlg(C_PlayerBase* player);
     bool IsPlaying(ParticleType a_type);
     float Rnd();
 
     void EraseParticle(std::vector<S_Particle>& a_grain);
+
+
+    //デバッグ用　　　消す
+    const int Dtime = 60;
+    int count = Dtime;
+    bool debug = false;
 };
