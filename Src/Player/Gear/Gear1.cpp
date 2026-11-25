@@ -41,6 +41,7 @@ void C_Gear1::EndActiveGear()
 float C_Gear1::OnBossHitGear(C_BossBase* a_pBoss)
 {
 	a_pBoss->TakeDamage(m_onHitDmg);
+	//m_pUIManager->CreateGearDamageUI((int)m_onHitDmg, a_pBoss->GetPos(), m_pPlayer->GetPos().x < a_pBoss->GetPos().x, false);
 	return m_onHitDmg;
 }
 
@@ -53,14 +54,14 @@ float C_Gear1::OnEnemyHitGear(EnemyBase* a_pEnemy)
 float C_Gear1::OnHurtEnemyGear(EnemyBase* a_pEnemy)
 {
 	a_pEnemy->TakeDamage(m_onHurtDmg, m_pPlayer->GetPos().x);
-	m_pUIManager->CreateDamageUI((int)m_onHurtDmg, a_pEnemy->GetPos(), m_pPlayer->GetPos().x < a_pEnemy->GetPos().x, false );
+	m_pUIManager->CreateGearDamageUI((int)m_onHurtDmg, a_pEnemy->GetPos(), m_pPlayer->GetPos().x < a_pEnemy->GetPos().x, false );
 	return m_onHurtDmg;
 }
 
 float C_Gear1::OnHurtBossGear(C_BossBase* a_pBoss)
 {
 	a_pBoss->TakeDamage(m_onHurtDmg);
-	m_pUIManager->CreateDamageUI((int)m_onHurtDmg, a_pBoss->GetPos(), m_pPlayer->GetPos().x < a_pBoss->GetPos().x, false );	
+	m_pUIManager->CreateGearDamageUI((int)m_onHurtDmg, a_pBoss->GetPos(), m_pPlayer->GetPos().x < a_pBoss->GetPos().x, false );	
 	return m_onHurtDmg;
 }
 
