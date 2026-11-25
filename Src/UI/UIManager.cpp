@@ -56,6 +56,11 @@ void C_UIManager::CreateEnemyDamageUI(float a_Damage, Math::Vector2 a_Pos, bool 
 	m_damageUI.CreateEnemyDamageUI(a_Damage, a_Pos, a_movingDirectionX, a_critical);
 }
 
+void C_UIManager::CreateGearDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical)
+{
+	m_damageUI.CreateGearDamageUI(a_Damage, a_Pos, a_movingDirectionX, a_critical);
+}
+
 void C_UIManager::CreatePoisonDamageUI(float a_Damage, Math::Vector2 a_Pos)
 {
 	m_effectDmgUI.CreatePoisonDamageUI(a_Damage, a_Pos);

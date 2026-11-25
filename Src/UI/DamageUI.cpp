@@ -101,7 +101,21 @@ void C_DamageUI::CreateEnemyDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a
 		{
 			// 通常のダメージUIの生成(敵)
 			m_criticalFlg[i] = false;
-			m_damageUIs[i].Generate(a_Damage, a_Pos, { 5.0f, 4.0f }, { 0.7f, 0.7f }, 0.0f,m_enemyDmgColor,m_frameColor, 30, a_movingDirectionX);
+			m_damageUIs[i].Generate(a_Damage, a_Pos, m_moveSpeed, m_UIsize, 0.0f,m_enemyDmgColor,m_frameColor, m_UiTime, a_movingDirectionX);
+			return;
+		}
+	}
+}
+
+void C_DamageUI::CreateGearDamageUI(float a_Damage, Math::Vector2 a_Pos, bool a_movingDirectionX, bool a_critical)
+{
+	for (int i = 0; i < m_maxDamageUI; i++)
+	{
+		if (!m_damageUIs[i].GetDrawFlg())
+		{
+			// 通常のダメージUIの生成(装備)
+			m_criticalFlg[i] = false;
+			m_damageUIs[i].Generate(a_Damage, a_Pos, m_moveSpeed, m_UIsize*0.9f, 0.0f, m_gearDmgColor, m_frameColor, m_UiTime, a_movingDirectionX);
 			return;
 		}
 	}
