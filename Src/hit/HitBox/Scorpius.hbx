@@ -1,0 +1,10 @@
+FileName,Scorpius
+TextureName,Scorpius1
+TexturePath,C:/‰æ‘œ‘fŞ/Scorpius/
+TexSize,151,100
+Gap,-3,0
+HitRange,114
+MapHitBox,-79,50,79,-50
+Circle,5,-8,18
+Rect,10,-35,-66,16,66,-16
+Rect,-2,26,-13,23,13,-23

@@ -114,7 +114,7 @@ struct S_Status
 };
 //ƒ{ƒX’è”======================================
 
-
+const std::string BOSS_TEX_PATH = "Src/Boss/Texture/";
 
 //HitBase’è”=================================
 struct S_HitBase

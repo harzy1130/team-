@@ -73,6 +73,12 @@ void C_BossBase::Release()
 	m_pHit = nullptr;
 	m_pPlayer = nullptr;
 	m_texture.Release();
+	for(auto parent : m_parents)
+	{
+		if(parent != nullptr) parent->Release();
+		parent = nullptr;
+	}
+	m_parents.clear();
 }
 
 void C_BossBase::Animation(float a_sign)
@@ -94,6 +100,13 @@ bool C_BossBase::TakeDamage(int a_damage)
 	SetHp(m_hp - std::min(a_damage, m_hp));
 	if (!m_bAlive)return true;
 	m_invincibleFrames = 30;
+	return true;
+}
+
+bool C_BossBase::AddParent(C_BossBase* a_pParent)
+{
+	if (a_pParent == nullptr)return false;
+	m_parents.push_back(a_pParent);
 	return true;
 }
 

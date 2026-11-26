@@ -1,0 +1,8 @@
+FileName,ScorpiusNeedle
+TextureName,ScorpiusNeedle
+TexturePath,C:/‰æ‘œ‘fŞ/Scorpius/
+TexSize,34,23
+Gap,12,0
+HitRange,45
+MapHitBox,-1,1,1,-1
+Rect,13,0,-20,11,20,-11

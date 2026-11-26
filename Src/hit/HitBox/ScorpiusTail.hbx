@@ -1,0 +1,8 @@
+FileName,ScorpiusTail
+TextureName,ScorpiusTail
+TexturePath,C:/‰æ‘œ‘fŞ/Scorpius/
+TexSize,45,14
+Gap,16,0
+HitRange,49
+MapHitBox,-1,1,1,-1
+Rect,16,0,-22,8,22,-8

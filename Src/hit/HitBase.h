@@ -2,7 +2,7 @@
 #include"Pch.h"
 #include"Camera/Camera.h"
 #include"Constants/Constants.h"
-
+using namespace std;
 
 class C_Hit;
 class C_Camera;
@@ -63,6 +63,8 @@ public:
     Math::Vector2 GetMove() const { return m_move; }
     // 現在位置に移動量を加えた、移動後の予測座標を返す。
     Math::Vector2 GetFuturePos() const { return m_pos + m_move; }
+	// 物体の中心位置が画像からどれだけずれているかを返す。画像の中心が物体の中心と同じ場合は (0,0) を返す。
+    Math::Vector2 GetGap() const { return m_gap; }
     // 物体の中心を基準としたローカル座標の当たり判定矩形を返す。
     RECT GetRect() const { return m_rect; }
     // 現在位置での当たり判定矩形を返す。RECT の座標は整数に変換される。

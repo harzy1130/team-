@@ -9,7 +9,7 @@ void C_Boss::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlayer)
 	m_animationWait = 8;
 	m_size = 0.5;
 	m_scale = { m_size, m_size };
-	m_texture.Load("Texture/Capricorn.png");
+	m_texture.Load(BOSS_TEX_PATH + "Capricorn.png");
 	if (LoadHitBox("Capricorn"));
 	m_hp = 500;
 	m_atk = 30;

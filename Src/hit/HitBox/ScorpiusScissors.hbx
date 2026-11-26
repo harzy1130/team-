@@ -1,0 +1,8 @@
+FileName,ScorpiusScissors
+TextureName,ScorpiusScissors1
+TexturePath,C:/‰æ‘œ‘fŞ/Scorpius/
+TexSize,86,33
+Gap,36,-3
+HitRange,75
+MapHitBox,-1,1,1,-1
+Rect,32,-1,-32,11,32,-11

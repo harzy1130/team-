@@ -41,3 +41,4 @@ void C_BossManager::SetBoss(int a_bossNum)
 	if (m_pBoss != nullptr)m_pBoss->Init(m_pHit, m_pCamera, m_pPlayer);
 	m_pHit->SetBossClass(m_pBoss.get());
 }
+

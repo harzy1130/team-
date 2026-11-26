@@ -163,8 +163,10 @@
     <ClInclude Include="Src\Application\main.h" />
     <ClInclude Include="Src\Boss\Boss.h" />
     <ClInclude Include="Src\Boss\Boss2.h" />
+    <ClInclude Include="Src\Boss\Boss3.h" />
     <ClInclude Include="Src\Boss\BossBase.h" />
     <ClInclude Include="Src\Boss\BossManager.h" />
+    <ClInclude Include="Src\Boss\BossParts.h" />
     <ClInclude Include="Src\Camera\Camera.h" />
     <ClInclude Include="Src\Constants\Constants.h" />
     <ClInclude Include="Src\Cursor\Cursor.h" />
@@ -172,6 +174,7 @@
     <ClInclude Include="Src\Enemy\Enemy1.h" />
     <ClInclude Include="Src\Enemy\Enemy2.h" />
     <ClInclude Include="Src\Particle\ParticleManager.h" />
+    <ClInclude Include="Src\Player\Gear\Armory.h" />
     <ClInclude Include="Src\Player\Gear\Gear1.h" />
     <ClInclude Include="Src\Player\Gear\Gear2.h" />
     <ClInclude Include="Src\Player\Gear\GearBase.h" />
@@ -223,14 +226,17 @@
     <ClCompile Include="Src\Application\main.cpp" />
     <ClCompile Include="Src\Boss\Boss.cpp" />
     <ClCompile Include="Src\Boss\Boss2.cpp" />
+    <ClCompile Include="Src\Boss\Boss3.cpp" />
     <ClCompile Include="Src\Boss\BossBase.cpp" />
     <ClCompile Include="Src\Boss\BossManager.cpp" />
+    <ClCompile Include="Src\Boss\BossParts.cpp" />
     <ClCompile Include="Src\Camera\Camera.cpp" />
     <ClCompile Include="Src\Cursor\Cursor.cpp" />
     <ClCompile Include="Src\Effect\effect.cpp" />
     <ClCompile Include="Src\Enemy\Enemy1.cpp" />
     <ClCompile Include="Src\Enemy\Enemy2.cpp" />
     <ClCompile Include="Src\Particle\ParticleManager.cpp" />
+    <ClCompile Include="Src\Player\Gear\Armory.cpp" />
     <ClCompile Include="Src\Player\Gear\Gear1.cpp" />
     <ClCompile Include="Src\Player\Gear\Gear2.cpp" />
     <ClCompile Include="Src\Player\Gear\GearBase.cpp" />

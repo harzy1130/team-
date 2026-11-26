@@ -2,6 +2,7 @@
 #include"BossBase.h"
 #include"Boss.h"
 #include"Boss2.h"
+#include"Boss3.h"
 
 class C_BossBase;
 class C_BossManager
