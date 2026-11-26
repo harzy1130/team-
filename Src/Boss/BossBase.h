@@ -28,6 +28,7 @@ public:
 	Math::Vector2 GetMove(){return m_move;}
 	bool GetAlive(){return m_bAlive;}
 	float GetAngle(){return m_angle;}
+	float GetSize() { return m_size; }
 	int GetHp() { return m_hp; };
 	int GetAtk() { return m_atk; };
 	int GetInvincibleFrames() { return m_invincibleFrames; };

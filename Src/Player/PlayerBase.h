@@ -190,8 +190,6 @@ protected:
 	float m_ParrytimeMax = 20.0f;
 
 	//参照するクラスのポインタ
-	C_Hit* m_pHit;
-	C_Camera* m_pCamera;
 	C_Cursor* m_pCursor;
 	C_UIManager* m_pUIManager;
 	Scene* m_pScene;

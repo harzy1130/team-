@@ -45,7 +45,7 @@ void Scene::Update()
 		}
 
 		m_particle.Update();
-		m_camera.SetTurget(m_player.GetPos());
+
 	}
 	if (!m_bSlowMotion)
 	{
@@ -96,6 +96,7 @@ void Scene::Init()
 	m_particle.Init(&m_map, &m_player, &m_camera);
     if (!m_enemies.Init(&m_hit, &m_camera, &m_map))
         OutputDebugStringA("Enemy manager initialization failed.\n");
+	m_player.SelectCameraTarget();
 }
 
 void Scene::Release()

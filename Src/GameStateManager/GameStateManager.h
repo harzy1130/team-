@@ -11,7 +11,9 @@ class C_GameStateManager
 {
 public:
 	C_GameStateManager();
-	~C_GameStateManager() {};
+	~C_GameStateManager() {
+		m_mountainTex.Release();
+	};
 
 	void Init(C_Map* a_pMap, C_PlayerBase* a_pPlayer, C_BossManager* a_pBossManager);
 	void Update();
@@ -34,6 +36,7 @@ private:
 	int m_scaleNum;	     //Šg‘å—¦Ek¬—¦—p
 
 	KdTexture* m_pBackTex;
+	KdTexture m_mountainTex;
 	C_BossManager* m_pBossManager;
 	KdTexture* m_pBlackTex;
 	StageNum m_nextStage{};
