@@ -290,6 +290,12 @@ RECT HitBase::GetFutureRect() const
     return WorldRect(m_rect, GetFuturePos());
 }
 
+void HitBase::SelectCameraTarget()
+{
+	if (m_pCamera == nullptr)return;
+	m_pCamera->SelectTarget(&m_pos);
+}
+
 // 現在位置で相手と矩形が重なるかを調べる。辺が接するだけの場合は false を返す。
 bool HitBase::IsHit(const HitBase& other) const
 {

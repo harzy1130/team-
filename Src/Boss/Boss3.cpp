@@ -98,21 +98,23 @@ void C_Boss3::MainBodyUpdate()
 
 void C_Boss3::TailInit()
 {
+	m_tail1.SetParent(this);
 	m_tail1.Init(m_pHit, m_pCamera, m_pPlayer);
 	m_tail1.LoadHitBox("ScorpiusTail");
-	m_tail1.SetParent(this);
-	m_tail1.SetOffsetPos({ 0, 100 });
+	m_tail1.SetOffsetPos({ 0, 50 * m_size });
 	m_tail1.SetOffsetAngle(60);
 	m_tail1.SetTexturePath(BOSS_TEX_PATH + "ScorpiusTail.png");
+
+	m_tail2.SetParent(&m_tail1);
 	m_tail2.Init(m_pHit, m_pCamera, m_pPlayer);
 	m_tail2.LoadHitBox("ScorpiusTail");
-	m_tail2.SetParent(&m_tail1);
 	m_tail2.SetOffsetPos(Math::Vector2{ m_tail1.GetGap().x * 2,0 });
 	m_tail2.SetOffsetAngle(-30);
 	m_tail2.SetTexturePath(BOSS_TEX_PATH + "ScorpiusTail.png");
+
+	m_needle.SetParent(&m_tail2);
 	m_needle.Init(m_pHit, m_pCamera, m_pPlayer);
 	m_needle.LoadHitBox("ScorpiusNeedle");
-	m_needle.SetParent(&m_tail2);
 	m_needle.SetOffsetPos(Math::Vector2{ m_tail2.GetGap().x * 2,0 });
 	m_needle.SetOffsetAngle(-40);
 	m_needle.SetTexturePath(BOSS_TEX_PATH + "ScorpiusNeedle.png");
@@ -134,16 +136,17 @@ void C_Boss3::TailUpdate()
 
 void C_Boss3::ScissorInit()
 {
+	m_scissor1.SetParent(this);
 	m_scissor1.Init(m_pHit, m_pCamera, m_pPlayer);
 	m_scissor1.LoadHitBox("ScorpiusScissors");
-	m_scissor1.SetTexturePath("Texture/ScorpiusScissors1.png");
-	m_scissor1.SetOffsetPos({ 37, -105 });
-	m_scissor1.SetParent(this);
+	m_scissor1.SetTexturePath(BOSS_TEX_PATH + "ScorpiusScissors1.png");
+	m_scissor1.SetOffsetPos({ 18 * m_size, -52 * m_size });
+	
+	m_scissor2.SetParent(this);
 	m_scissor2.Init(m_pHit, m_pCamera, m_pPlayer);
 	m_scissor2.LoadHitBox("ScorpiusScissors");
-	m_scissor2.SetTexturePath("Texture/ScorpiusScissors2.png");
-	m_scissor2.SetOffsetPos({ 80, -75 });
-	m_scissor2.SetParent(this);
+	m_scissor2.SetTexturePath(BOSS_TEX_PATH + "ScorpiusScissors2.png");
+	m_scissor2.SetOffsetPos({ 40 * m_size, -37 * m_size });
 	m_parents.push_back(&m_scissor1);
 	m_parents.push_back(&m_scissor2);
 }

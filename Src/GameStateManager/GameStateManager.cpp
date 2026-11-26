@@ -15,7 +15,8 @@ void C_GameStateManager::Init(C_Map* a_pMap, C_PlayerBase* a_pPlayer, C_BossMana
 {
 	m_renderTex.CreateRenderTarget(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_renderTex2.CreateRenderTarget(SCREEN_WIDTH, SCREEN_HEIGHT);
-
+	
+	m_mountainTex.Load("Texture/BackMountain.png");
 	m_pMap = a_pMap;
 	m_pBossManager = a_pBossManager;
 	m_pPlayer = a_pPlayer;
@@ -25,6 +26,7 @@ void C_GameStateManager::Draw()
 {
 	SHADER.m_spriteShader.SetMatrix(Math::Matrix::CreateTranslation(0, 0, 0));
 	SHADER.m_spriteShader.DrawTex(m_pBackTex, Math::Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 1.0f);
+	DrawTexFromTex(&m_mountainTex, { 0,0 }, { 1.0f, 1.0f }, 0.0f, Math::Color{ 1.0f, 1.0f, 1.0f, 1.0f });
 
 	switch (m_gameState)
 	{

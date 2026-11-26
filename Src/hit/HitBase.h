@@ -96,6 +96,8 @@ public:
     float GetHitLeft() const { return m_pos.x + m_rect.left; }
     // 現在の当たり判定の右端をワールド座標で返す。
     float GetHitRight() const { return m_pos.x + m_rect.right; }
+    // カメラへのターゲットセットに用いる
+    void SelectCameraTarget();
     // Only positive-area overlap counts as a hit; touching edges do not.
     // 現在位置で相手と矩形が重なるかを調べる。辺が接するだけの場合は false を返す。
     bool IsHit(const HitBase& other) const;
