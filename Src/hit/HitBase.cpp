@@ -93,8 +93,7 @@ void HitBase::DrawObb(Math::Vector2 a_center, Math::Vector2 a_halfSize, float a_
 		a_color);
 }
 
-Math::Matrix HitBase::CalcDrawMatrix
-()
+Math::Matrix HitBase::CalcDrawMatrix()
 {
 	Math::Matrix mat, sMat, rMat, tMat;
 	float x, y;
@@ -381,11 +380,6 @@ bool HitBase::LoadHitBox(const std::string& a_filePath)
 					getline(iss, right, ',');
 					getline(iss, bottom, ',');
 					Math::Vector2 gap = { stof(gapX) * m_scale.x, stof(gapY) * m_scale.y };
-					//RECT rect = {   int(stof(left) * m_scale.x),
-     //                               int(stof(top) * m_scale.y), 
-     //                               int(stof(right) * m_scale.x), 
-     //                               int(stof(bottom) * m_scale.y) };
-					//m_RectObjects.push_back({ gap, rect });
 					Math::Vector2 halfSize = {stof(right) * m_scale.x, stof(bottom) * m_scale.y};
 					m_ObbObjects.push_back({ gap, halfSize, 0 });
 				}

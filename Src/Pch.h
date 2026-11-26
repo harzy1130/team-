@@ -119,3 +119,5 @@ void CreateFanTex(KdTexture* a_pTex,KdTexture* a_pOutTex, Math::Rectangle a_rect
 float ClampSign(float a_value, float a_max, float a_min);
 //srcPos‚©‚çdestPos‚Ü‚Å‚ÌŠp“x‚ğ‹‚ß‚éB
 float CalcAngle(Math::Vector2 a_srcPos, Math::Vector2 a_destPos);
+
+Math::Vector2 GetPosToAngle(Math::Vector2 a_pos, float a_angle, float a_distance);

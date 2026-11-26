@@ -288,6 +288,15 @@
     <ClInclude Include="Src\Boss\BossManager.h">
       <Filter>Src\Boss</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Player\Gear\Armory.h">
+      <Filter>Src\Player\Gear</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Boss\Boss3.h">
+      <Filter>Src\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Boss\BossParts.h">
+      <Filter>Src\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -444,6 +453,15 @@
       <Filter>Src\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Src\Boss\BossManager.cpp">
+      <Filter>Src\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Player\Gear\Armory.cpp">
+      <Filter>Src\Player\Gear</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Boss\Boss3.cpp">
+      <Filter>Src\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Boss\BossParts.cpp">
       <Filter>Src\Boss</Filter>
     </ClCompile>
   </ItemGroup>

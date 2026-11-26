@@ -9,9 +9,9 @@ void C_Boss2::Init(C_Hit* a_pHit, C_Camera* a_pCamera, C_PlayerBase* a_pPlayer)
 	m_animationMaxFrame = 5;
 	m_size = 2;
 	m_scale = { m_size, m_size };
-	m_texture.Load("Texture/Aphrodite.png");
+	m_texture.Load(BOSS_TEX_PATH + "Aphrodite.png");
 	m_projectileTex.Load("Texture/Chara.png");
-	LoadHitBox("Aphrodite");
+	LoadHitBox("AphroditeTest");
 	m_hp = 450;
 	m_atk = 30;
 	m_rawMove = { 0,0 };
@@ -35,10 +35,6 @@ void C_Boss2::Update()
 	ResetAlreadyHit();
 
 	ProjectileUpdate();
-	if (GetAsyncKeyState('B'))
-	{
-		Init(m_pHit, m_pCamera, m_pPlayer);
-	}
 }
 
 void C_Boss2::Draw()

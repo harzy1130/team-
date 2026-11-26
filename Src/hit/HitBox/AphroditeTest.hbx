@@ -1,0 +1,11 @@
+FileName,AphroditeTest
+TextureName,Aphrodite
+TexturePath,C:/ÉQÅ[ÉÄäJî≠áT/teamDev/Texture/
+TexSize,186,98
+Gap,-55,10
+HitRange,166
+MapHitBox,0,0,0,0
+Circle,-122,12,34
+Circle,-54,20,17
+Rect,-48,-1,-51,13,51,-13
+Rect,21,0,-18,8,18,-8

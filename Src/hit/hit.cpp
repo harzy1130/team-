@@ -36,8 +36,10 @@ void C_Hit::MapHitCheck(HitBase* a_pHitBase)
 	RECT now_Rect = a_pHitBase->GetNowRect();
 	RECT fut_Rect = a_pHitBase->GetFutureRect();
 	for(int h = start_h;h <= end_h;h++)
+	//for(int h = 0;h <= m_pMap->GetIdxMaxMin().second;h++)
 	{
 		for(int w = start_w;w <= end_w;w++)
+		//for(int w = 0; w <= m_pMap->GetIdxMaxMin().first;w++)
 		{
 			//当たり判定がない場合はスキップ
 			if (!m_pMap->GetCollisionFlg(h, w))continue;
@@ -82,6 +84,7 @@ bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
 	{
 		EnemyBase* enemy = m_pEnemyManager->GetEnemy(en);
 		if ( !enemy->GetAlive())continue;
+		if (a_pHitBase->GetAlreadyHit(enemy))continue;
 		//すべての当たり判定をチェック
 		bool isHit = CheckHitBox(a_pHitBase, enemy);
 		if (isHit)
@@ -97,9 +100,20 @@ bool C_Hit::EnemyHitCheck(HitBase* a_pHitBase)
 bool C_Hit::BossHitCheck(HitBase* a_pHitBase)
 {
 	if (m_pBoss == nullptr)return false;
-	if (!m_pBoss->GetAlive())return false; 
+	if (!m_pBoss->GetAlive())return false;
+	if (a_pHitBase->GetAlreadyHit(m_pBoss))return false;
 	//すべての当たり判定をチェック
 	bool isHit = CheckHitBox(a_pHitBase, m_pBoss);
+	if(!isHit)
+	{
+		for (int i = 0; i < m_pBoss->GetParentCount(); i++)
+		{
+			C_BossBase* parent = m_pBoss->GetParent(i);
+			if (parent == nullptr || !parent->GetAlive()) continue;
+			isHit = CheckHitBox(a_pHitBase, parent);
+			if (isHit) break;
+		}
+	}
 	if (isHit)
 	{
 		a_pHitBase->SetAlreadyHit(m_pBoss);
@@ -113,6 +127,7 @@ bool C_Hit::PlayerHitCheck(HitBase* a_pHitBase)
 {
 	if (m_pPlayer == nullptr)return false;
 	if (!m_pPlayer->GetAFlg())return false;
+	if (a_pHitBase->GetAlreadyHit(m_pPlayer))return false;
 	bool isHit = CheckHitBox(a_pHitBase, m_pPlayer);
 	if (isHit)
 	{

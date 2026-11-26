@@ -135,3 +135,11 @@ float CalcAngle(Math::Vector2 a_srcPos, Math::Vector2 a_destPos)
 	return ToDegrees(rad);
 }
 
+Math::Vector2 GetPosToAngle(Math::Vector2 a_pos, float a_angle, float a_distance)
+{
+	Math::Vector2 vec = { cosf(ToRadians(a_angle)), sinf(ToRadians(a_angle)) };
+	Math::Vector2 retPos = a_pos + vec * a_distance;
+	return retPos;
+}
+
+
