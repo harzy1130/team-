@@ -47,9 +47,21 @@ struct S_ChipData
 
 const enum MapChip
 {
+	none = 0,
 	dirt = 1,
-	glass = 2,
+	topWall = 2,
 	stone = 3,
+	topLeft = 4,
+	topRight = 5,
+	bottomLeft = 6,
+	bottomRight = 7,
+	leftWall = 8,
+	rightWall = 9,
+	topLeftCorner = 10,
+	topRightCorner = 11,
+	bottomLeftCorner = 12,
+	bottomRightCorner = 13,
+	bottomWall = 14,
 	gate1 = 50,
 	gate2 = 51,
 };
@@ -59,6 +71,9 @@ const enum StageNum
 	stageSelect = 0,
 	stage1      = 1,
 	stage2      = 2,
+	stage3      = 3,
+	stage4      = 4,
+	stage5      = 5,
 	Test        = 10,
 };
 

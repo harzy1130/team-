@@ -38,43 +38,43 @@ void C_Map::Draw()
 			case MapChip::dirt:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case MapChip::glass:
+			case MapChip::topWall:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 2, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
 			case MapChip::stone:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 3, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 4:
+			case MapChip::topLeft:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 4, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 5:
+			case MapChip::topRight:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 5, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 6:
+			case MapChip::bottomLeft:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 6, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 7:
+			case MapChip::bottomRight:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 7, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 8:
+			case MapChip::leftWall:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 8, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 9:
+			case MapChip::rightWall:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 9, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 10:
+			case MapChip::topLeftCorner:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 10, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 11:
+			case MapChip::topRightCorner:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 11, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 12:
+			case MapChip::bottomLeftCorner:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 12, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 13:
+			case MapChip::bottomRightCorner:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 13, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
-			case 14:
+			case MapChip::bottomWall:
 				SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(CHIP_SIZE * 14, 0, CHIP_SIZE, CHIP_SIZE), 1.0f);
 				break;
 			case MapChip::gate1:
@@ -112,17 +112,14 @@ void C_Map::Load()
 			tempList.push_back(tempData);
 
 			bool tempCollFlg;
-			if (tempData != MapChip::dirt &&
-				tempData != MapChip::glass &&
-				tempData != 4 &&
-				tempData != 5 &&
-				tempData != 6 &&
-				tempData != 7 &&
-				tempData != 8 &&
-				tempData != 9 &&
-				tempData != 14 &&
-				tempData != MapChip::stone)tempCollFlg = false;
-			else tempCollFlg = true;
+			if (tempData != MapChip::none &&
+				tempData != MapChip::topRightCorner &&
+				tempData != MapChip::topRightCorner &&
+				tempData != MapChip::bottomLeftCorner &&
+				tempData != MapChip::bottomRightCorner &&
+				tempData != MapChip::gate1 &&
+				tempData != MapChip::gate2)tempCollFlg = true;
+			else tempCollFlg = false;
 			tempCollFlgList.push_back(tempCollFlg);
 		}
 		tempList.push_back(0);
